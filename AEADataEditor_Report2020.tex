@@ -139,7 +139,7 @@ Cornell University, lars.vilhuber@cornell.edu. }
 
 \maketitle
 
-The \ac{AEA} Data Editor's stated mission is to ``design  and  oversee  the  AEA  journals’  strategy for archiving and curating research data and promoting  reproducible  research'' \citep{10.1257/pandp.108.745}. How to follow through on this mission was articulated in the 2018 Report by the Data Editor \citep{10.1257/pandp.109.718}. In 2019, we worked on infrastructure to allow for greater reproducibility of empirical articles in economics, at the \ac{AEA} journals and elsewhere. Since July 2019, we have expanded pre-publication reproducibility checks to all regular AEA journals, and have prepared XX reports for AEA journal editors (Section~\ref{sec:data}).
+The \ac{AEA} Data Editor's  mission is to ``design  and  oversee  the  AEA  journals’  strategy for archiving and curating research data and promoting  reproducible  research'' \citep{10.1257/pandp.108.745}. The 2018 Report by the Data Editor \citep{10.1257/pandp.109.718} articulates how to implement that mission. Since July 2019, we have conducted comprehensive pre-publication reproducibility checks for all regular AEA journals, see , and have prepared XX reports for AEA journal editors (Section~\ref{sec:data}).
 
 Based on the experience from the first full year of reproducibility verification, we implemented several improvements in mid-2020. We provided improved guidance to authors depositing materials, clarified the \ac{DCAP}, expanded and clarified additional policies on third-party reproducibility checks, on post-publication updates to replication packages, and on required replication materials for field and lab experiments  (Section~\ref{sec:policies}). We have reached out to numerous data creators and providers --- both authors who have created unique data resources, and commercial data providers that often provide the data for economic research --- and have discussed with these data providers access to data for reproducibility checks, mechanisms to request publication approval, and generally informed them of the need for reproducibility, provenance tracing, and transparency in economic research (Section~\ref{sec:producers}). 
 We continue to coordinate with other journals, societies, and registries on these topics (Section~\ref{sec:coordination}).
@@ -179,13 +179,7 @@ In July 2019, the AEA began using a data and code repository hosted by \ac{ICPSR
 Deposits receive their own \ac{DOI}, and can be cited on their own (see Figure~\ref{fig:citation}). Authors can and should henceforth cite their data supplement. Conversely, the article that a supplement is associated with is clearly identified on the supplement's landing page. Future enhancements to the platform will be able to display other articles that also cite the supplement. 
 
 
-\begin{figure}
-    \includegraphics[width=0.45\linewidth]{images/Screenshot_aer_data_citation.png}
-    \caption{Supplement citation, as per AEA Style Guide\label{fig:citation}}
-    \begin{minipage}{0.5\linewidth}
-      \footnotesize  Supplement citation as per AEA ``Sample References,'' accessed at \url{https://www.aeaweb.org/journals/policies/sample-references} on February 20, 2020.
-    \end{minipage}
-\end{figure}
+
 
 In addition to own supplements, we are also verifying that authors cite the datasets they have used and accessed. While this has been policy at the Association's journals for several years, enforcement has been difficult: In order to identify a missing data citation, the use of a dataset must be identified first. The verification process under the Data Editor now has the means to do so, and has started to verify that all authors comply with the AEA citation guidelines that require data citations. Data citations also substantially increase findability of data, allow data providers to receive proper credit, and align the Association with broader principles in the academic publishing world \citep{Altman2013-fl,dataone-cite,jddcp,CousijnSci.Data2018}. We have also updated the online  \urlcite{https://www.aeaweb.org/journals/policies/sample-references}{Sample References} with refreshed examples.
 
@@ -235,66 +229,27 @@ Critically, prior to publication of manuscript, data, and code,  members of the 
 
 \subsection{Migrating Historical Supplements}
 \label{sec:migration}
-%The use of ICPSR comes with no loss in availability over time of these supplements. ICPSR is one of many managed repositories that satisfy  preservation criteria no less stringent than those applied by the AEA for its journals. 
-\input{migration_data.tex}
-The process above will apply to all new data supplements. However, we have also started the process of migrating all historical supplements to the new platform. Between Oct 11 and Oct 13, 2019, the staff at openICPSR ingested \numsupplements{} historical supplements (\numsizeMB{}).\footnote{The data for this part of the analysis can be found at \citet{E117873V1}.} This was only the first part of the migration, as there are about \remaining{} more archives that need to be migrated.\footnote{Another 500 supplements were migrated in December 2019.}
 
 
-While the median  supplement is only \nummediansizeMB{} large, and has \nummedianfilecount{} files, the largest supplements can be very large (see Figure~\ref{fig:migration_files}).  The largest in the current batch of migrated supplements has \nummaxsizeMB{} and \nummaxfilecount{} files. The ZIP files in which these supplements had been made available are now expanded, and files can be inspected and downloaded individually, as needed. This makes  data, code, and README files easy to inspect. Migrated supplements come from a range of years (Figure~\ref{fig:migration_doi_by_year}). Most supplements (\numsupplementsstatapct{} percent) use Stata at least partially, followed by Matlab (\numsupplementsmatlabpct{} percent) (Table~\ref{tab:software} and Figure~\ref{fig:migration_software_pkgs}). This distribution is quite persistent across years (Figure~\ref{fig:migration_software_years_pct}). Open-source software packages (R, Python) have only a small presence.
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.4\textheight]{images/figure_migration_files.png}
-    \caption{Supplement statistics, files migrated in October 2019}
-    \label{fig:migration_files}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.4\textheight]{images/figure_migration_doi_by_year.png}
-    \caption{Supplements by year, files migrated in October 2019}
-    \label{fig:migration_doi_by_year}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.4\textheight]{images/figure_migration_software_pkgs.png}
-    \caption{Software by supplement, files migrated in October 2019}
-    \label{fig:migration_software_pkgs}
-\end{figure}
-
-\input{tables/table_software}
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.4\textheight]{images/figure_migration_software_years_pct.png}
-    \caption{Software by supplement, across years, files migrated in October 2019}
-    \label{fig:migration_software_years_pct}
-\end{figure}
-
-Metadata stemming from the articles, such as JEL codes, are incorporated into the new deposit in the \aeadcr{}. Each migrated deposit  obtains their own citable \ac{DOI}, and links back to the article it is associated with. Links on the AEA website that used to point to the ZIP files have been adjusted to point to the new \ac{DOI}. Every deposit is also findable through native search engine on ICPSR and through \href{https://toolbox.google.com/datasetsearch}{Google Dataset Search}. 
-%While it is not possible to create richer metadata, such as information on time periods or geographic coverage, we are looking into the possibility of allowing authors to add this information at a later stage.  
+Report on crowdsourcing of metadata.
 
 \FloatBarrier
 
 \subsection{Pre-publication verification of computational reproducibility}
 \label{sec:verification}
+
+\begin{quote}
+Report on articles (manuscript ID), reports (unique issues = tasks) and published repositories (only when tied to an article, requires transforming manuscript ID into DOI and querying crossref). Redo analysis from 2019.
+
+\end{quote}
+
 The other component of the infrastructure is a scalable implementation of pre-publication verification. We consulted existing pre-publication verifications, for instance at the \urlcite{https://ajps.org/wp-content/uploads/2018/05/ajps_quantitative-data-verification-checklist.pdf}{\ac{AJPS}} and at the Econometric Journal, as well as with verification projects at universities (e.g., Cornell University's \urlcite{https://ciser.cornell.edu/research/results-reproduction-r-squared-service/}{R-Squared Service}). We worked closely with the AEA editorial office to identify opportunities for integration. 
 
-We determined that the pre-publication verification service would do three distinct tasks. The first task involves identifying all data used.  Article and deposited supplements are analyzed as to the data they contain or describe. Tables and figures are scrutinized as to the data used in their creation, and compared to the authors' description. This serves two purposes. First, to verify the presence of data citations, as required by \urlcite{https://www.aeaweb.org/journals/policies/sample-references}{AEA style guides}. Second, to identify whether all data necessary for verification could be made available, and whether the description of where datasets come from (provenance) and how they could be accessed (license, requests, etc.) are well-described. The second task involves analyzing the code provided. Even before executing any code, staff members determine whether the code is complete. Furthermore, they inspect code and README to determine whether the creation of tables and figures can be identified. Finally, the third task  involves bringing all these elements together, and re-executing the computer code provided. The resulting tables and figures are compared to those in the paper. 
 
-There is little support for this workflow within existing academic review systems. We developed and continuously adapted a workflow, using online tools.\footnote{We used \furlcite{https://www.atlassian.com/software/jira}{Jira software}, together with private Git repositories. A detailed description will be available.} Together with the editorial team, we added a \textit{conditional acceptance} stage that did not previously exist in the AEA workflow. During this stage, manuscripts get assigned to the AEA Data Editor, and the verification process described above is initiated. A member of the Replication Lab (see list at end of article) is assigned to a paper, and makes an assessment by moving through the workflow described above. The report they prepare is reviewed by the AEA Data Editor, and then submitted through the traditional manuscript workflow back to the author. This process is similar to, but distinct from the usual refereeing of manuscripts. The process can go through one or more assessment rounds, until the AEA Data Editor confirms that a manuscript and its supplement comply with the \ac{DCAP}. The manuscript is then definitively accepted, and moves forward through the usual publication process. The deposit at the \aeadcr{} is linked to the article once a \ac{DOI} has been assigned to the article, and is then published.
 
-% placeholder for separate file
-% jira_data.tex
-\newcommand{\jiratickets}{216}
-\newcommand{\jiramcs}{138}
-% end jira_data.tex
-
-Between July 16, 2019, and November 28, 2019, the AEA Data Editor team conducted 
+Between Dec 1, 2019, and November 30, 2020, the AEA Data Editor team conducted 
 % needs to be written out from R
-\jiratickets{} assessments for \jiramcs{} manuscripts.
-For comparison, the \ac{AJPS} conducts pre-publication assessments for about 65 manuscripts per year, based on the number of supplements published at \url{https://dataverse.harvard.edu/dataverse/ajps}.
+xxx assessments for yyy manuscripts.
 %
 We collected metrics from the online system.%
 \footnote{Data  can be found at \citet{E117876V1}.}
@@ -340,7 +295,24 @@ Figure~\ref{fig:pre:assessments_journal} shows the distribution of  assessments 
     \label{fig:pre:author_response_time}
 \end{figure}
 
+\begin{quote}
+    Issues with pre-publication verification
+\end{quote}
 
+\paragraph{Self-corrections}
+
+We often find that authors find other errors than those the replication team identified. For instance, the manuscript figures might have come from an earlier version of the dataset, or from an earlier run of the code sequence with slightly different parameters. In other cases, while reviewing issues found by our replication team, authors correct econometric errors, which our process is not designed to find. 
+
+\paragraph{Computational issues}
+
+Numerical differences (Matlab versions, seeds) see \url{https://it.mathworks.com/matlabcentral/answers/
+422349-fmincon-in-new-matlab-version-gives-different-results} as well. Cite the old papers. In some cases, the underlying feature leading to numerical differences is a subtle fragility of the optimization algorithm, or multiple distinct yet close optima that do not fundamentally affect the results.
+
+Fortran challenges (manual compilation instructions, non-open source compile, no Makefiles, no parameter files).
+
+GIS challenges (not considered use of "data", often not described at all, or mostly manual tasks when using ArcGIS - very little python with ArcGIS). 
+
+Robustness checks that are manual
 
 \paragraph{Delays} A recurring concern expressed by editors and staff members was the potential for   delays in publication, due to the verification process. The data presented here indicates that concerns of about a delay in the time-to-publication remain valid, though we have no evidence at this time that the overall time to publication has increased --- the first articles that completed the entire pre-publication verification process were published in late January 2020, after the analysis in this article was completed.
 
@@ -369,61 +341,25 @@ As noted earlier, the move of supplements into the openICPSR-supported repositor
 Over the course of the past year, the AEA has been approached by two research projects that wished to use the full-text versions of AEA articles to enhance the linkage between articles and data. We worked with these teams to establish a policy by which they could legally access the full archive of articles, but also subsequently make their work available to others. AEA counsel is currently working on a full-fledged data and text mining policy.
 
 \subsection{Third-party verification services}
+
+\begin{quote}
+    Write a lot here.
+\end{quote}
 We have started discussions with third-party verification services. In particular, we have trialled using their services, instead of our in-house team, to conduct assessments. This aligns with the discussions among editors about resources and scalability of assessments, and with the educational outreach, which some of these services also conduct. Part of the effort consists in aligning the criteria used by these services with those of the various journals.
 
+\subsection{Commercial providers}
 
-\subsection{AEA RCT Registry}
+Highlight exemplary redistribution agreement at ESRI. Highlight in all cases the need to have access rights for pre-production verification, including to the same access mechanisms. 
 
-The AEA RCT Registry and the AEA Data Editor regularly consult on data and publication-related issues. On August 12, 2019, the Registry announced that henceforth, registrations could be cited using the newly assigned \acp{DOI}. Furthermore, new \urlcite{https://www.aeaweb.org/journals/aer/submissions/accepted-articles/styleguide}{submission guidance at the AEA journals} now requires that registrations be cited, not simply mentioned. As part of the AEA Data Editor's data and code review process, manuscripts are checked for compliance with that requirement. Sample RCT citations have been added to the \urlcite{https://www.aeaweb.org/journals/policies/sample-references}{Sample References} (see also Figure~\ref{fig:rct_citation}).
+\subsection{Non-commercial providers of restricted-access data}
 
-\begin{minipage}{0.45\textwidth}
-
-\begin{tabular}{p{\textwidth}}
-\toprule
-\texttt{
-    Zhang, Kelly. 2017. "Voter Pessimism and Electoral Accountability: Experimental Evidence from Kenya." AEA RCT Registry. May 02. https://doi.org/10.1257/rct.5-8.0.
-}\\
-\bottomrule
-\end{tabular}
-    \captionof{figure}{Example of a RCT citation}
-    \label{fig:rct_citation}
-\end{minipage}
-
-Since its inception in 2012, the Registry has seen significant growth in the number of visitors, registrations, and the number of pre-registrations submitted by researchers in the social sciences. In October 2019, there were 4.4k visitors to the website. The Registry reached 3,000 entries in November 2019 (see Figure~\ref{fig:rct_cumulative}).  The AEA’s decision in early 2018 to \textit{require} registration of all randomized controlled trials prior to submission for journal publication  has been a major contributor to growth. 
-
-\begin{figure}
-	%\missingfigure{RCT cumulative}
-    \includegraphics[height=0.4\textheight]{images/figure_rctgrowth.png}
-    \caption{Cumulative Count of Registrations at AEA RCT Registry\label{fig:rct_cumulative}}
-	
-%	\centering \footnotesize \textsc{Note:} \url{https://openicpsr.icpsr.org/openicpsr/aea}
-\end{figure} 
-
-Two trends emerge from an analysis of the registry data. First, more studies are being registered before their intervention start date. Figure~\ref{fig:rct_pre} compares the number of pre-registered studies to those registered after the intervention start date per quarter over time. 
-
-
-\begin{figure}[h]
-	%\missingfigure{RCT pre-registrations}
-	\includegraphics[height=0.4\textheight]{images/figure_preregistrations.png}
-	\caption{Pre-Registration of Studies\label{fig:rct_pre}}
-	
-	\centering \footnotesize \textsc{Note:} Number of studies, as of September 2019.
-\end{figure} 
-
-Second, the use of \acp{PAP} is becoming increasingly common in economics and other social sciences. Registering a pre-analysis plan is optional on the AEA RCT Registry, but  Figure~\ref{fig:rct_pap} shows that many researchers have registered pre-analysis plans along with their studies.
-
-
-\begin{figure}[h]
-	\includegraphics[width=\textwidth]{images/figure_preanalysisplans.png}
-    \caption{Share of Pre-Analysis Plans Registered\label{fig:rct_pap}}
-	
-	\centering \footnotesize \textsc{Note:} Number of studies, as of September 2019.
-\end{figure} 
-
-Since early 2020, monthly snapshots of the AEA RCT Registry data can be downloaded from the \urlcite{https://dataverse.harvard.edu/dataverse/aearegistry}{AEA RCT Registry Dataverse}. The first release was made on January 27, 2020 \citep{DVN/DFMLIU_2020}.
-% In 2020, when the first manuscripts that cite registrations via DOI will appear in print, the Data Editor will start assessing citation metrics for registrations.
+Increased provision of data citations, clear license/ usage rights. Ongoing work. Briefings of US, Canadian, German, French, UK restricted access centers. Some providers have also reached out to inquire pro-actively how to improve their access mechanisms, distribution mechanisms, and documentation thereof.
 
 \section{Task 4: Working with the Economics Community to Enhance and Broaden Education on Replicable Science}
+
+\begin{quote}
+    write about participation of other journals, as well as nascent efforts around Data-PASS and RDA.
+\end{quote}
 
 From the preliminary verification work has emerged a clear indication that education and training is critical for the adoption of reproducible methods. We are expanding the support materials, and are adapting them to each discipline's idiosyncratic methods. Training materials will be made available by various organizations, with input from the AEA Data Editor. The \urlcite{https://aeadataeditor.github.io/aea-de-guidance/}{AEA Data Editor's website} as well as the website of the \urlcite{https://social-science-data-editors.github.io/guidance/}{Social Science Data Editors} are being regularly updated with additional guidance, and will hopefully allow authors to be responsive to various journals' \ac{DCAP}.
 
@@ -443,25 +379,7 @@ All data and code used to generate figures and tables in this article can be fou
 % The appendix command is issued once, prior to all appendices, if any.
 \appendix
 
-\input{appendix.tex}
-
-\clearpage
-
-\section*{Corrigendum 2020-08-04}
-
-After publication, Alan Riley (Stata) pointed out a discrepancy between Table 1 and Figure 5, which should be depicting (on average) the same data. This was corrected in the code associated with the AEA Repository migration, and carried through to this document. See \href{https://github.com/AEADataEditor/aea-supplement-migration/commit/530f1e9ad8059e68815b5836db33155c990154b0}{the commit implementing the code change}.
-
-Original text (pg. 767, 2nd column):
-\begin{quote}
-Most supplements (48.37 percent) use Stata at least partially, followed by
-Matlab (37.47 percent) (Table 1 and Figure 4).
-\end{quote}
-
-Corrected text:
-\begin{quote}
-Most supplements (72.96 percent) use Stata at least partially, followed by
-Matlab (22.45 percent) (Table 1 and Figure 4).
-\end{quote}
+%\input{appendix.tex}
 
 
 \end{document}
