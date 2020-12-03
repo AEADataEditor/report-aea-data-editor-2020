@@ -31,7 +31,19 @@ pkgTest.github("data.table","Rdatatable")
 # Read in data extracted from Jira, anonymized
 jira <- readRDS(file.path(jiraanon,"jira.anon.RDS"))
 
-#### Number of unique paper processed since July 16
+#### Number of reports processed since December 1, 2019
+## Total
+jira.assess<- jira %>% 
+  select(ticket) %>% distinct() 
+
+assess_total <- nrow(jira.assess)
+
+## By journal
+assess_total_journal <- jira %>%
+  group_by(Journal) %>%
+  summarise(assess_numbers = n_distinct(ticket))
+
+#### Number of unique paper processed since December 1, 2019
 ## Total
 jira.manuscripts<- jira %>% 
   select(mc_number_anon) %>% distinct() 
@@ -45,22 +57,16 @@ unique_total_journal <- jira %>%
 
 #### Length of revision rounds (initial submission to us, and filing to Manuscript Central). 
 # This is the duration of each Jira ticket.
+# Uses start date and resolution date after restricting to the cases "done", "pending OpenICPSR changes", and "pending publications"
 # Need to identify when Lars first changes status to "Submitted to MC" (marked as "mc_final")
+
 duration.data <- jira %>%
-  mutate(Status = ifelse(Status == "Submitted to MC" & Changed.Fields == "Status" & Change.Author.Anon == "Lars Vilhuber", "mc_final", Status)) %>%
-  arrange(ticket, date) %>%
-  distinct() %>%
-  filter(Status %in% c("Open", "mc_final")) %>%
-  filter(Changed.Fields != "Resolution,Status") %>% # Fix problem with 8 tickets that were re-opened after submission to MC
-  group_by(ticket) %>%
-  summarise(date_received = min(date),
-            last_date = max(date)) %>%
-  mutate(length = last_date - date_received) %>%
+  mutate(length=difftime(date_resolved,date_created,units="days")) %>%
   arrange(length) %>% ungroup()
    
 table.duration <- duration.data %>% group_by(length) %>%
   summarise(n_tickets = n_distinct(ticket))
-
+#------
 # Histogram
 #geom_histogram(aes(y=..density..), colour="white", fill="grey", binwidth = 5)+
 
