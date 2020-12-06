@@ -1,8 +1,8 @@
 # Anonymize JIRA process files and construct variables
 # Harry Son
-# 2020-12-02
+# 2020-12-04
 
-## Inputs: export_12-02-2020.csv
+## Inputs: export_12-05-2020.csv
 ## Outputs: file.path(jiraanon,"jira.anon.RDS") and file.path(jiraanon,"jira.anon.csv")
 
 ### Cleans working environment.
@@ -13,11 +13,12 @@ gc()
 ### Requirements: have library *here*
 source(here::here("programs","config.R"),echo=TRUE)
 global.libraries <- c("dplyr")
+library(splitstackshape)
 results <- sapply(as.list(global.libraries), pkgTest)
 
 # double-check
 
-if (! file.exists(file.path(jirabase,"export_12-02-2020.csv"))) {
+if (! file.exists(file.path(jirabase,"export_12-05-2020.csv"))) {
   process_raw = FALSE
   print("Input file for anonymization not found - setting global parameter to FALSE")
 }
@@ -26,22 +27,24 @@ if ( process_raw == TRUE ) {
 # Read in data extracted from Jira
 #base <- here::here()
 
-jira.raw <- read.csv(file.path(jirabase,"export_12-02-2020.csv"), stringsAsFactors = FALSE) %>%
+jira.raw <- read.csv(file.path(jirabase,"export_12-05-2020.csv"), stringsAsFactors = FALSE) %>%
   rename(ticket=ï..Key) %>%
   mutate(training = grepl("TRAINING", ticket, fixed = TRUE)) %>%
   filter(training == FALSE) %>%
-  filter(Status == "Done" | Status=="Pending openICPSR changes" | Status=="Pending publication") %>%  
   mutate(date_created = as.Date(substr(Created, 1,10), "%m/%d/%Y"),
          date_resolved = as.Date(substr(Resolved, 1,10), "%m/%d/%Y"),
+         date_updated = as.Date(substr(Status.Category.Changed, 1,10), "%m/%d/%Y"),
          mc_number = sub('\\..*', '', Manuscript.Central.identifier)) %>%
   filter(date_created >= "2019-12-01") %>%
-  filter(! mc_number == "") %>%
+  filter(date_created <= "2020-12-01") %>%
+  filter(! mc_number == "") %>% 
+  cSplit("Software.used",",")  %>%
   select(-training)
 
 ## Keep only variables needed
 
 jira.conf <- jira.raw %>%
-  select(ticket,date_created,date_resolved,mc_number,Journal,Status,Software.used)
+  select(ticket,date_created,date_resolved,date_updated,mc_number,Journal,Status,Software.used_1,Software.used_2,Software.used_3,Software.used_4)
 
 # anonymize
 jira.tmp <- jira.conf %>% 

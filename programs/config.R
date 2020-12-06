@@ -16,18 +16,15 @@ basepath <- here::here()
 setwd(basepath)
 
 # Main directories
-# From James Turitto
-rctraw <- file.path(basepath, "data","rct","raw")
-rctgen <- file.path(basepath, "data","rct","generated")
-
 # from external git submodule aea-supplement-migration
 # later versions: download of released versions
-migversion <- "20200515"
-migurlbase <- "https://github.com/AEADataEditor/aea-supplement-migration/archive/"
-migbase <- file.path(basepath,"externals")
-migdir <- file.path(migbase,paste0("aea-supplement-migration-",migversion))
-miggen <- file.path(migdir, "data","generated")
-migprog <- file.path(migdir,"programs")
+#migversion <- "20200515"
+#migurlbase <- "https://github.com/AEADataEditor/aea-supplement-migration/archive/"
+#migbase <- file.path(basepath,"externals")
+#migdir <- file.path(migbase,paste0("aea-supplement-migration-",migversion))
+#miggen <- file.path(migdir, "data","generated")
+#migprog <- file.path(migdir,"programs")
+
 # for Jira stuff
 jirabase <- file.path(basepath,"data","jira","confidential")
 jiraanon <- file.path(basepath,"data","jira","anon")
@@ -37,7 +34,7 @@ images <- file.path(basepath, "images" )
 tables <- file.path(basepath, "tables" )
 programs <- file.path(basepath,"programs")
 
-for ( dir in list(images,tables,programs,rctgen,migbase)){
+for ( dir in list(images,tables,programs)){
   if (file.exists(dir)){
   } else {
     dir.create(file.path(dir))

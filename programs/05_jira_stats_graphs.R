@@ -1,6 +1,6 @@
 # Tabulate statistics and make graphs for the AEA data editor report
-# David Wasser
-# 12/7/2019
+# Harry Son
+# 12/5/2020
 
 # Inputs
 #   - file.path(jiraanon,"jira.anon.RDS") 
@@ -13,8 +13,7 @@
 #   - ggsave(file.path(images,"n_rounds_journal_plot.png"), 
 #   - ggsave(file.path(images,"n_assessments_journal_plot.png"), 
 #   - ggsave(file.path(images,"author_response_hist.png"), 
-                                                        
-
+                               
 ### Cleans working environment.
 rm(list = ls())
 gc()
@@ -31,37 +30,43 @@ pkgTest.github("data.table","Rdatatable")
 # Read in data extracted from Jira, anonymized
 jira <- readRDS(file.path(jiraanon,"jira.anon.RDS"))
 
-#### Number of reports processed since December 1, 2019
+#### Number of reports processed (went past submitted to MC) since December 1, 2019
 ## Total
 jira.assess<- jira %>% 
+  filter(Status == "Submitted to MC"|Status ==  "Pending openICPSR changes"|Status == "Pending publication") %>%
   select(ticket) %>% distinct() 
 
 assess_total <- nrow(jira.assess)
 
 ## By journal
 assess_total_journal <- jira %>%
+  filter(Status == "Submitted to MC"|Status ==  "Pending openICPSR changes"|Status == "Pending publication") %>%
   group_by(Journal) %>%
   summarise(assess_numbers = n_distinct(ticket))
 
 #### Number of unique paper processed since December 1, 2019
 ## Total
 jira.manuscripts<- jira %>% 
+  filter(Status == "Submitted to MC"|Status ==  "Pending openICPSR changes"|Status == "Pending publication") %>%
   select(mc_number_anon) %>% distinct() 
 
 unique_total <- nrow(jira.manuscripts)
 
 ## By journal
 unique_total_journal <- jira %>%
+  filter(Status == "Submitted to MC"|Status ==  "Pending openICPSR changes"|Status == "Pending publication") %>%
   group_by(Journal) %>%
   summarise(unique_mc_numbers = n_distinct(mc_number_anon))
 
+
+
 #### Length of revision rounds (initial submission to us, and filing to Manuscript Central). 
 # This is the duration of each Jira ticket.
-# Uses start date and resolution date after restricting to the cases "done", "pending OpenICPSR changes", and "pending publications"
-# Need to identify when Lars first changes status to "Submitted to MC" (marked as "mc_final")
+# Uses start date and date of status update after restricting to the cases "Submitted to MC"
 
 duration.data <- jira %>%
-  mutate(length=difftime(date_resolved,date_created,units="days")) %>%
+  filter(Status == "Submitted to MC") %>%
+  mutate(length=difftime(date_updated,date_created,units="days")) %>%
   arrange(length) %>% ungroup()
    
 table.duration <- duration.data %>% group_by(length) %>%
@@ -105,6 +110,63 @@ ggsave(file.path(images,"revision_round_length_hist_pos.png"),
 revision_round_length
 revision_round_length.bar
 revision_round_length.pos
+
+
+
+#### Length of complete cycle time (initial submission to us, and pending publication).
+# Uses start date and resolution date after restricting to the cases to "pending publications"
+
+cycle.data <- jira %>%
+  filter(Status == "Pending publication") %>%
+  mutate(length=difftime(date_updated,date_created,units="days")) %>%
+  arrange(length) %>% ungroup()
+
+table.cycle <- cycle.data %>% group_by(length) %>%
+  summarise(n_tickets = n_distinct(ticket))
+#------
+# Histogram
+#geom_histogram(aes(y=..density..), colour="white", fill="grey", binwidth = 5)+
+
+cycle_round_length <- ggplot(cycle.data, aes(x = length)) +
+  geom_histogram(aes(y=..density..), colour="white", fill="grey", binwidth = 5)+
+  geom_density(alpha=.2, fill = "black", col="black") +
+  theme_classic() +
+  scale_colour_brewer(palette = "Paired") +
+  labs(x = "Days", y = "Density", title = "Length of complete cycle") 
+
+cycle_round_length.bar <- ggplot(table.cycle, aes(x = length,y=n_tickets)) +
+  geom_bar(stat = "identity") +
+  theme_classic() +
+  scale_colour_brewer(palette = "Paired") +
+  labs(x = "Days", y = "Density", title = "Length of complete cycle") 
+
+cycle_round_length.pos <- ggplot(cycle.data %>% filter(length >= 1), aes(x = length)) +
+  geom_histogram(aes(y=..density..), colour="white", fill="grey", binwidth = 5)+
+  geom_density(alpha=.2, fill = "black", col="black") +
+  theme_classic() +
+  scale_colour_brewer(palette = "Paired") +
+  labs(x = "Days", y = "Density", title = "Length of complete cycle (no zeros)") 
+
+ggsave(file.path(images,"cycle_length_hist.png"), 
+       cycle_round_length +
+         labs(y=element_blank(),title=element_blank()))
+
+ggsave(file.path(images,"cycle_length_hist2.png"), 
+       cycle_round_length.bar +
+         labs(y=element_blank(),title=element_blank()))
+
+ggsave(file.path(images,"cycle_length_hist_pos.png"), 
+       cycle_round_length.pos +
+         labs(y=element_blank(),title=element_blank()))
+
+
+
+
+
+
+
+
+
 
 # Data: overall
 mean(duration.data$length)
