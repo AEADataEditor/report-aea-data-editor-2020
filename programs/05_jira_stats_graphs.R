@@ -44,6 +44,7 @@ assess_total_journal <- jira %>%
   group_by(Journal) %>%
   summarise(assess_numbers = n_distinct(ticket)) 
 
+# Histogram
 n_assessments_journal_plot <- ggplot(assess_total_journal, aes(x = Journal, y = assess_numbers)) +
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Journal", y = "Number of assessments", title = "Total assessments by journal") + 
@@ -71,6 +72,7 @@ unique_total_journal <- jira %>%
   summarise(unique_mc_numbers = n_distinct(mc_number_anon))
 
 
+# Histogram
 n_unique_journal_plot <- ggplot(unique_total_journal, aes(x = Journal, y = unique_mc_numbers)) +
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Journal", y = "Number of papers", title = "Total Papers by journal") + 
@@ -80,11 +82,11 @@ n_unique_journal_plot <- ggplot(unique_total_journal, aes(x = Journal, y = uniqu
 ggsave(file.path(images,"n_unique_journal_plot"), 
        n_unique_journal_plot  +
          labs(y=element_blank(),title=element_blank()))
-n_assessments_journal_plot
+n_unique_journal_plot
 
 
 
-#### Length of revision rounds (initial submission to us, and filing to Manuscript Central). 
+#### Length of an assessment rounds (initial submission to us, and filing to Manuscript Central). 
 # This is the duration of each Jira ticket.
 # Uses start date and date of status update after restricting to the cases "Submitted to MC"
 
@@ -183,15 +185,77 @@ ggsave(file.path(images,"cycle_length_hist_pos.png"),
        cycle_round_length.pos +
          labs(y=element_blank(),title=element_blank()))
 
+cycle_length_hist
+cycle_length_hist2
+cycle_length_hist_pos
+
+-----
+
+#### Number of cases using different statistical packages
+software_used <- jira %>%
+  filter(Status == "Submitted to MC",Software.used_1 != "") %>%
+  filter(Journal != "") %>%
+  select(ticket, Software.used_1, Software.used_2, Software.used_3, Software.used_4, mc_number_anon) %>%
+  distinct() 
+  
+plot_software_used <- reshape2::melt(data = software_used, id.vars = c("ticket"), variable.name="Software.used")
+
+plot_software_used <-  transform(plot_software_used, value = ifelse(value == "r", "R", value)) %>%
+  transform(value = ifelse(value == "Java", "Javascript", value)) %>%
+  transform(value = ifelse(value == "stata", "Stata", value)) %>%
+  transform(value = ifelse(value == "matlab", "Matlab", value)) %>%
+  filter(value != "macbook"& value != "MacBook") %>%
+  filter(value != "texstudio") %>%
+  filter(value != "Visual_Studio") %>%
+  filter(value != "") %>%
+  mutate(software=value)
+
+plot_software_used <- group_by(plot_software_used,software) %>%
+  summarise(n_issues = n_distinct(ticket))
 
 
+# Histogram
+n_software_used_plot <- ggplot(plot_software_used, aes(x = value, y = n_issues)) +
+  geom_bar(stat = "identity", colour="white", fill="grey") +
+  labs(x = "Programs", y = "Number of assessments", title = "Total assessments using statistical package") + 
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45))
+
+ggsave(file.path(images,"n_software_used_plot"), 
+       n_software_used_plot  +
+         labs(y=element_blank(),title=element_blank()))
+n_software_used_plot
 
 
+--------
+
+#### Length of author responses (time between filing report of first assessment, and getting the next submission)
+author_length <- jira %>%
+  filter(mc_number_anon != "",
+         ticket != mc_number_anon,
+         !grepl("#",mc_number_anon, fixed = TRUE)) %>%
+  select(ticket, mc_number_anon, date, Status, Journal) %>%
+  filter(Journal != "") %>%
+  distinct() %>%
+  group_by(mc_number_anon) %>%
+  mutate(rounds = n_distinct(ticket),
+         numeric_ticket = as.numeric(gsub("\\D", "", ticket)),
+         first_ticket = min(numeric_ticket),
+         last_ticket = max(numeric_ticket),
+         ticket_order = ifelse(numeric_ticket == first_ticket, 1, 
+                               ifelse(numeric_ticket == last_ticket & rounds == 2, 2, 
+                                      ifelse(numeric_ticket == last_ticket & rounds == 3, 3,
+                                             ifelse(numeric_ticket == last_ticket & rounds == 4, 4, 0)))),
+         ticket_order = ifelse(ticket_order == 0 & rounds == 3, 2, ticket_order),
+         middle_of_4 = ifelse(rounds == 4 & numeric_ticket != first_ticket & numeric_ticket != last_ticket, 1, 0),
+         max_middle = max(numeric_ticket[middle_of_4 == 1]),
+         ticket_order = ifelse(rounds == 4 & middle_of_4 == 1 & numeric_ticket == max_middle, 3, 
+                               ifelse(rounds == 4 & middle_of_4 == 1 & numeric_ticket != max_middle, 2, ticket_order))) %>%
+  select(-middle_of_4, -max_middle) %>%
+  ungroup 
 
 
-
-
-
+#----------------------------------------
 # Data: overall
 mean(duration.data$length)
 median(duration.data$length)
@@ -231,31 +295,6 @@ ggsave(file.path(images,"total_length_hist.png"),
        fig.total_length  +
          labs(y=element_blank(),title=element_blank()))
 fig.total_length
-
-#### Length of author responses (time between filing report of first assessment, and getting the next submission)
-author_length <- jira %>%
-  filter(mc_number_anon != "",
-         ticket != mc_number_anon,
-         !grepl("#",mc_number_anon, fixed = TRUE)) %>%
-  select(ticket, mc_number_anon, date, Status, Journal) %>%
-  filter(Journal != "") %>%
-  distinct() %>%
-  group_by(mc_number_anon) %>%
-  mutate(rounds = n_distinct(ticket),
-         numeric_ticket = as.numeric(gsub("\\D", "", ticket)),
-         first_ticket = min(numeric_ticket),
-         last_ticket = max(numeric_ticket),
-         ticket_order = ifelse(numeric_ticket == first_ticket, 1, 
-                        ifelse(numeric_ticket == last_ticket & rounds == 2, 2, 
-                        ifelse(numeric_ticket == last_ticket & rounds == 3, 3,
-                        ifelse(numeric_ticket == last_ticket & rounds == 4, 4, 0)))),
-         ticket_order = ifelse(ticket_order == 0 & rounds == 3, 2, ticket_order),
-         middle_of_4 = ifelse(rounds == 4 & numeric_ticket != first_ticket & numeric_ticket != last_ticket, 1, 0),
-         max_middle = max(numeric_ticket[middle_of_4 == 1]),
-         ticket_order = ifelse(rounds == 4 & middle_of_4 == 1 & numeric_ticket == max_middle, 3, 
-                        ifelse(rounds == 4 & middle_of_4 == 1 & numeric_ticket != max_middle, 2, ticket_order))) %>%
-  select(-middle_of_4, -max_middle) %>%
-  ungroup 
 
 ####
 
