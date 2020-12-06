@@ -42,7 +42,19 @@ assess_total <- nrow(jira.assess)
 assess_total_journal <- jira %>%
   filter(Status == "Submitted to MC"|Status ==  "Pending openICPSR changes"|Status == "Pending publication") %>%
   group_by(Journal) %>%
-  summarise(assess_numbers = n_distinct(ticket))
+  summarise(assess_numbers = n_distinct(ticket)) 
+
+n_assessments_journal_plot <- ggplot(assess_total_journal, aes(x = Journal, y = assess_numbers)) +
+  geom_bar(stat = "identity", colour="white", fill="grey") +
+  labs(x = "Journal", y = "Number of assessments", title = "Total assessments by journal") + 
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45))
+
+ggsave(file.path(images,"n_assessments_journal_plot.png"), 
+       n_assessments_journal_plot  +
+         labs(y=element_blank(),title=element_blank()))
+n_assessments_journal_plot
+
 
 #### Number of unique paper processed since December 1, 2019
 ## Total
@@ -57,6 +69,18 @@ unique_total_journal <- jira %>%
   filter(Status == "Submitted to MC"|Status ==  "Pending openICPSR changes"|Status == "Pending publication") %>%
   group_by(Journal) %>%
   summarise(unique_mc_numbers = n_distinct(mc_number_anon))
+
+
+n_unique_journal_plot <- ggplot(unique_total_journal, aes(x = Journal, y = unique_mc_numbers)) +
+  geom_bar(stat = "identity", colour="white", fill="grey") +
+  labs(x = "Journal", y = "Number of papers", title = "Total Papers by journal") + 
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45))
+
+ggsave(file.path(images,"n_unique_journal_plot"), 
+       n_unique_journal_plot  +
+         labs(y=element_blank(),title=element_blank()))
+n_assessments_journal_plot
 
 
 
