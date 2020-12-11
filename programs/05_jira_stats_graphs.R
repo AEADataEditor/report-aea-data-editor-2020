@@ -1,6 +1,6 @@
 # Tabulate statistics and make graphs for the AEA data editor report
 # Harry Son
-# 12/8/2020
+# 12/11/2020
 
 # Inputs
 #   - file.path(jiraanon,"jira.anon.RDS") 
@@ -28,19 +28,23 @@ pkgTest.github("data.table","Rdatatable")
 
 
 # Read in data extracted from Jira, anonymized
-jira <- readRDS(file.path(jiraanon,"jira.anon.RDS"))
+jira <- readRDS(file.path(jiraanon,"jira.anon.RDS")) %>%
+  filter(date_created >= "2019-12-01") %>%
+  filter(date_created < "2020-12-01") %>%
+  filter(Changed.Fields=="Status")
+  
 
 #### Number of reports processed (went past submitted to MC) since December 1, 2019
 ## Total
 jira.assess<- jira %>% 
-  filter(Status == "Submitted to MC"|Status ==  "Pending openICPSR changes"|Status == "Pending publication") %>%
+  filter(Status == "Submitted to MC") %>%
   select(ticket) %>% distinct() 
 
 assess_total <- nrow(jira.assess)
 
 ## By journal
 assess_total_journal <- jira %>%
-  filter(Status == "Submitted to MC"|Status ==  "Pending openICPSR changes"|Status == "Pending publication") %>%
+  filter(Status == "Submitted to MC") %>%
   group_by(Journal) %>%
   summarise(assess_numbers = n_distinct(ticket)) 
 
@@ -60,14 +64,14 @@ n_assessments_journal_plot
 #### Number of unique paper processed since December 1, 2019
 ## Total
 jira.manuscripts<- jira %>% 
-  filter(Status == "Submitted to MC"|Status ==  "Pending openICPSR changes"|Status == "Pending publication") %>%
+  filter(Status == "Submitted to MC") %>%
   select(mc_number_anon) %>% distinct() 
 
 unique_total <- nrow(jira.manuscripts)
 
 ## By journal
 unique_total_journal <- jira %>%
-  filter(Status == "Submitted to MC"|Status ==  "Pending openICPSR changes"|Status == "Pending publication") %>%
+  filter(Status == "Submitted to MC") %>%
   group_by(Journal) %>%
   summarise(unique_mc_numbers = n_distinct(mc_number_anon))
 
@@ -84,6 +88,38 @@ ggsave(file.path(images,"n_unique_journal_plot.png"),
        n_unique_journal_plot  +
          labs(y=element_blank(),title=element_blank()))
 n_unique_journal_plot
+
+
+#### Number of assessment processed by external replicator since December 1, 2019
+## Total
+jira.external<- jira %>% 
+  filter(Status == "Submitted to MC") %>%
+  filter(external == "Yes") %>%
+  select(ticket) %>% distinct() 
+
+external_total <- nrow(jira.external)
+
+## By journal
+external_total_journal <- jira %>%
+  filter(Status == "Submitted to MC") %>%
+  filter(external == "Yes") %>%
+  group_by(Journal) %>%
+  summarise(external_numbers = n_distinct(ticket))
+
+
+# Histogram
+n_external_journal_plot <- ggplot(external_total_journal, aes(x = Journal, y = external_numbers)) +
+  geom_bar(stat = "identity", colour="white", fill="grey") +
+  labs(x = "Journal", y = "Number of cases processed by external replicator", title = "Total usage of external replicators by journal") + 
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45))
+
+
+ggsave(file.path(images,"n_external_journal_plot.png"), 
+       n_external_journal_plot  +
+         labs(y=element_blank(),title=element_blank()))
+
+n_external_journal_plot
 
 
 
