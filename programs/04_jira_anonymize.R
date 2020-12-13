@@ -38,15 +38,27 @@ jira.raw <- read.csv(file.path(jirabase,"export_12-11-2020.csv"), stringsAsFacto
          date_resolved = as.Date(substr(Resolved, 1,10), "%m/%d/%Y"),
          date_updated = as.Date(substr(As.Of.Date, 1,10), "%m/%d/%Y"),
          mc_number = sub('\\..*', '', Manuscript.Central.identifier)) %>%
-  filter(! mc_number == "") %>% 
-  filter(! date_updated=="2020-12-11") %>%
   cSplit("Software.used",",")  %>%
+  cSplit("Changed.Fields",",")  %>%
+  mutate(status_change = ifelse(Changed.Fields_1=="Status","Yes",ifelse(Changed.Fields_2=="Status","Yes",ifelse(Changed.Fields_3=="Status","Yes",ifelse(Changed.Fields_4=="Status","Yes","No"))))) %>%
+  mutate(received = ifelse(Status=="Open"&Change.Author=="","Yes","No")) %>%
+  filter(! date_updated=="2020-12-11") %>%
+  filter(ticket!="AEAREP-365") %>%
   select(-training)
+
+  
+jira.raw.temp <- jira.raw %>%
+  select(ticket, mc_number) %>%
+  distinct(ticket, .keep_all = TRUE) %>%
+  filter(mc_number!="") %>%
+  left_join(jira.raw,by="ticket") %>%
+  rename(mc_number = mc_number.x) ->jira.raw
+
 
 ## Keep only variables needed
 
 jira.conf <- jira.raw %>%
-  select(ticket,date_created,date_resolved,date_updated,mc_number,Journal,Status,Software.used_1,Software.used_2,Software.used_3,Software.used_4,Changed.Fields,external,reason,subtask)
+  select(ticket,date_created,date_resolved,date_updated,mc_number,Journal,Status,Software.used_1,Software.used_2,Software.used_3,Software.used_4,received,status_change,external,reason,subtask)
 
 # anonymize
 jira.tmp <- jira.conf %>% 

@@ -5,15 +5,29 @@
 # Inputs
 #   - file.path(jiraanon,"jira.anon.RDS") 
 # Outputs
+#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
+#   - ggsave(file.path(images,"n_unique_journal_plot.png"),
+#   - ggsave(file.path(images,"n_external_journal_plot.png"),
 #   - ggsave(file.path(images,"revision_round_length_hist.png"), 
 #   - ggsave(file.path(images,"revision_round_length_hist2.png"), 
-#   - ggsave(file.path(images,"revision_round_length_hist_pos.png"), 
-#   - ggsave(file.path(images,"total_length_hist.png"), 
+#   - ggsave(file.path(images,"revision_round_length_hist_pos.png"),
+#   - ggsave(file.path(images,"cycle_length_hist.png"), 
+#   - ggsave(file.path(images,"cycle_length_hist2.png"), 
+#   - ggsave(file.path(images,"cycle_length_hist_pos.png"), 
+#   - ggsave(file.path(images,"n_software_used_plot.png"), 
 #   - ggsave(file.path(images,"n_rounds_plot.png"), 
 #   - ggsave(file.path(images,"n_rounds_journal_plot.png"), 
-#   - ggsave(file.path(images,"n_assessments_journal_plot.png"), 
+
+#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
+#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
+#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
+#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
+#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
+#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
+
 #   - ggsave(file.path(images,"author_response_hist.png"), 
-                               
+#   - ggsave(file.path(images,"total_length_hist.png"), 
+
 ### Cleans working environment.
 rm(list = ls())
 gc()
@@ -31,7 +45,7 @@ pkgTest.github("data.table","Rdatatable")
 jira <- readRDS(file.path(jiraanon,"jira.anon.RDS")) %>%
   filter(date_created >= "2019-12-01") %>%
   filter(date_created < "2020-12-01") %>%
-  filter(Changed.Fields=="Status")
+  filter(status_change=="Yes"|received=="Yes")
   
 
 #### Number of reports processed (went past submitted to MC) since December 1, 2019
@@ -262,30 +276,72 @@ n_software_used_plot
 --------
 
 #### Length of author responses (time between filing report of first assessment, and getting the next submission)
-author_length <- jira %>%
+ author_length <- jira %>%
   filter(mc_number_anon != "",
          ticket != mc_number_anon,
-         !grepl("#",mc_number_anon, fixed = TRUE)) %>%
-  select(ticket, mc_number_anon, date_created, Status, Journal) %>%
-  filter(Journal != "") %>%
-  distinct() %>%
-  group_by(mc_number_anon) %>%
-  mutate(rounds = n_distinct(ticket),
-         numeric_ticket = as.numeric(gsub("\\D", "", ticket)),
-         first_ticket = min(numeric_ticket),
-         last_ticket = max(numeric_ticket),
-         ticket_order = ifelse(numeric_ticket == first_ticket, 1, 
-                               ifelse(numeric_ticket == last_ticket & rounds == 2, 2, 
-                                      ifelse(numeric_ticket == last_ticket & rounds == 3, 3,
-                                             ifelse(numeric_ticket == last_ticket & rounds == 4, 4, 0)))),
-         ticket_order = ifelse(ticket_order == 0 & rounds == 3, 2, ticket_order),
-         middle_of_4 = ifelse(rounds == 4 & numeric_ticket != first_ticket & numeric_ticket != last_ticket, 1, 0),
-         max_middle = max(numeric_ticket[middle_of_4 == 1]),
-         ticket_order = ifelse(rounds == 4 & middle_of_4 == 1 & numeric_ticket == max_middle, 3, 
-                               ifelse(rounds == 4 & middle_of_4 == 1 & numeric_ticket != max_middle, 2, ticket_order))) %>%
-  select(-middle_of_4, -max_middle) %>%
-  filter(Journal!="")
+         !grepl("#",mc_number_anon, fixed = TRUE),
+         subtask=="") %>%
+  filter(Status=="Open"| Status=="Submitted to MC") %>%
+  select(ticket, mc_number_anon, date_created, date_updated,Status, Journal) %>%
+  distinct() 
+
+al1 <- author_length %>%
+  filter(Status=="Submitted to MC") %>%
+  arrange(ticket, date_updated, Status) %>%
+  group_by(ticket) %>%
+  mutate(status_order =  row_number(), st = "Status", st2 = "date_updated") %>%
+  mutate(new1 = paste(st, status_order, sep="")) %>%
+  mutate(new2 = paste(st2, status_order, sep="")) %>%
+  select(ticket,new1,Status) %>%
+  pivot_wider(names_from = new1, values_from = "Status") %>%
+  rename(Status=Status1) %>%
+  select(!Status2)
+
+  
+al2 <- author_length %>%
+  filter(Status=="Submitted to MC") %>%
+  arrange(ticket, date_updated, Status) %>%
+  group_by(ticket) %>%
+  mutate(status_order =  row_number(), st = "Status", st2 = "date_updated") %>%
+  mutate(new1 = paste(st, status_order, sep="")) %>%
+  mutate(new2 = paste(st2, status_order, sep="")) %>%
+    select(ticket,new2,date_updated) %>%
+  pivot_wider(names_from = new2, values_from = "date_updated")%>%
+  rename(date_updated=date_updated1) %>%
+  select(!date_updated2)
+
+  
+author_length <- author_length %>%
+  select(ticket,mc_number_anon, date_created, Journal) %>%
+  distinct(ticket, .keep_all = TRUE) %>%
+  left_join(al1,by="ticket") %>%
+  left_join(al2,by="ticket") %>%
+  group_by(mc_number_anon) %>% 
+  arrange(mc_number_anon,date_created) %>%
+  mutate(rounds_tot = n_distinct(ticket), 
+         round =  row_number(),
+         round_start = date_created,
+        round_end = date_updated,
+        round_end_previous = lag(round_end), 
+        length=difftime(round_start,round_end_previous,units="days"))
   ungroup 
+  
+  
+# Histogram
+#geom_histogram(aes(y=..density..), colour="white", fill="grey", binwidth = 5)+
+  
+  author_response_length <- ggplot(author_length, aes(x = length)) +
+    geom_histogram(aes(y=..density..), colour="white", fill="grey", binwidth = 5)+
+    geom_density(alpha=.2, fill = "black", col="black") +
+    theme_classic() +
+    scale_colour_brewer(palette = "Paired") +
+    labs(x = "Days", y = "Density", title = "Length of author responses") 
+  
+  ggsave(file.path(images,"author_response_length.png"), 
+         author_response_length +
+           labs(y=element_blank(),title=element_blank()))
+  
+  author_response_length
 
 #### Distribution of rounds each paper goes through
 ## Total
@@ -307,6 +363,7 @@ n_rounds_plot <- ggplot(n_rounds, aes(x = rounds, y = frac_papers)) +
   theme_classic() +
   scale_colour_brewer(palette = "Paired") +
   labs(x = "Rounds", y = "Fraction of papers", title = "Distribution of review rounds")
+
 ggsave(file.path(images,"n_rounds_plot.png"), 
        n_rounds_plot  +
          labs(y=element_blank(),title=element_blank()))
