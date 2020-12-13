@@ -6,6 +6,10 @@
 process_raw <- TRUE
 download_raw <- TRUE
 
+## These define the start (and end) dates for processing of data
+firstday <- "2019-12-01"
+lastday  <- "2020-11-30"
+
 # ###########################
 # CONFIG: define paths and filenames for later reference
 # ###########################
@@ -15,15 +19,7 @@ download_raw <- TRUE
 basepath <- here::here()
 setwd(basepath)
 
-# Main directories
-# from external git submodule aea-supplement-migration
-# later versions: download of released versions
-#migversion <- "20200515"
-#migurlbase <- "https://github.com/AEADataEditor/aea-supplement-migration/archive/"
-#migbase <- file.path(basepath,"externals")
-#migdir <- file.path(migbase,paste0("aea-supplement-migration-",migversion))
-#miggen <- file.path(migdir, "data","generated")
-#migprog <- file.path(migdir,"programs")
+
 
 # for Jira stuff
 jirabase <- file.path(basepath,"data","jira","confidential")
@@ -34,6 +30,10 @@ images <- file.path(basepath, "images" )
 tables <- file.path(basepath, "tables" )
 programs <- file.path(basepath,"programs")
 
+# parameters
+latexnums.Rda <- file.path(tables,"latexnums.Rda")
+latexnums.tex <- file.path(tables,"latexnums.tex")
+
 for ( dir in list(images,tables,programs)){
   if (file.exists(dir)){
   } else {
@@ -41,7 +41,8 @@ for ( dir in list(images,tables,programs)){
   }
 }
 
-set.seed(20200201)
+set.seed(20201201)
+
 
 ####################################
 # global libraries used everywhere #
@@ -72,3 +73,30 @@ pkgTest.github <- function(x,source)
   return("OK")
 }
 
+
+## Initialize a file that will be used at the end to write out LaTeX parameters for in-text 
+## reference
+
+pkgTest("tibble")
+if (file.exists(latexnums.Rda)) {
+  print(paste0("File for export to LaTeX found: ",latexnums.Rda))
+} else {
+  latexnums <- tibble(field="version",value=as.character(date()),updated=date())
+  saveRDS(latexnums,latexnums.Rda)
+}
+
+update_latexnums <- function(field,value) {
+  # should test if latexnums is in memory
+  
+  # find out if a field exists
+  if ( any(latexnums$field == field) ) {
+    message("Updating existing field")
+    latexnums[which(latexnums$field == field), ]$value <- as.character(value)
+    latexnums[which(latexnums$field == field), ]$updated <- date()
+    return(latexnums)
+  } else {
+    message("Adding new row")
+    latexnums <- latexnums %>% add_row(field=field,value=as.character(value),updated=date())
+    return(latexnums)
+  }
+}
