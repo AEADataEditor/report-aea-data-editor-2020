@@ -18,6 +18,7 @@
 
 % Uncomment the next line to use the natbib package with bibtex 
 \usepackage{url}
+\urlstyle{same} % makes the font the same
 \usepackage{natbib}
 \usepackage{hyperref}
 \usepackage{acronym}
@@ -29,6 +30,7 @@
 \usepackage{etoolbox}
 \usepackage{geometry}
 \usepackage{caption} % to re-use counters
+\usepackage{threeparttable}
 
 \newtoggle{fancy}
 \togglefalse{fancy}
@@ -118,7 +120,16 @@
 % Different ways to cite URLS
 %\newcommand{\urlcite}[2]{\href{#1}{#2}
 \newcommand{\urlcite}[2]{#2\footnote{\url{#1}}}
+\newcommand{\purlcite}[2]{#2.\footnote{\url{#1}}}
 \newcommand{\furlcite}[2]{#2 (\url{#1})}
+
+%
+% Periods covered by the report 
+% Should be read in from R
+%\input{results/numbers.tex}
+
+\newcommand{\firstday}{Dec 1, 2019}
+\newcommand{\lastday}{Nov 30, 2020}
 
 \begin{document}
 
@@ -142,21 +153,20 @@ Cornell University, lars.vilhuber@cornell.edu. }
 
 The \ac{AEA} Data Editor's  mission is to ``design  and  oversee  the  AEA  journals’  strategy for archiving and curating research data and promoting  reproducible  research'' \citep{10.1257/pandp.108.745}. The 2018 Report by the Data Editor \citep{10.1257/pandp.109.718} articulates how to implement that mission. Since July 2019, we have conducted comprehensive pre-publication reproducibility checks for all regular AEA journals, developed guidance for authors, and worked with peers at societies and groups in economics and elsewhere. 
 
-Based on the experience from the first full year of reproducibility verification, we implemented several improvements in mid-2020. We provided improved guidance to authors depositing materials, clarified the \ac{DCAP}, expanded and clarified additional policies on third-party reproducibility checks, on post-publication updates to replication packages, and on required replication materials for field and lab experiments  (Section~\ref{sec:policies}). We have reached out to numerous data creators and providers --- both authors who have created unique data resources, and commercial data providers that often provide the data for economic research --- and have discussed with these data providers access to data for reproducibility checks, mechanisms to request publication approval, and generally informed them of the need for reproducibility, provenance tracing, and transparency in economic research (Section~\ref{sec:producers}). 
+Based on the experience from the first full year of reproducibility verification, we implemented several improvements in mid-2020. We provided improved guidance to authors depositing materials, clarified the \ac{DCAP}, expanded and clarified additional policies on third-party reproducibility checks, on post-publication updates to replication packages, and on required replication materials for field and lab experiments  (Section~\ref{sec:dcap}). We have reached out to numerous data creators and providers --- both authors who have created unique data resources, and commercial data providers that often provide the data for economic research --- and have discussed with these data providers access to data for reproducibility checks, mechanisms to request publication approval, and generally informed them of the need for reproducibility, provenance tracing, and transparency in economic research (Section~\ref{sec:producers}). 
 We continue to coordinate with other journals, societies, and registries on these topics (Section~\ref{sec:coordination}).
 
-\begin{center}
-	from here on, no changes yet
-\end{center}
 
-\section{Task 1: Reviewing the AEA Data and Code Availability Policy}
+\section{Updating the AEA Data and Code Availability Policy}
 \label{sec:dcap}
 
-After having introduced stronger principles of provenance and transparency into the  \ac{AEA}'s data and code availability policy in 2019 \citep{10.1257/pandp.110.dcap}, we monitored compliance and understanding as evidenced by the replication package submissions we received. It became quickly clear that stronger guidance, and greater clarity were needed to assist authors in complying with the \ac{DCAP}. Authors struggled with the concepts of data citations, how best to document their code and data, and with the process of deposing data and code. The results is a clarified policy, which we released in September 2020, and is reprinted in these proceedings \citep{10.1257/pandp.111.dcap}. We simplified the main policy,  separated out the policy as applied to papers conducting (field and lab) experiments, and expanded the policy to encompass more clearly any primary data collection. We also introduced  supplementary policies that lay out how and when we expect reproducibility checks by third-parties to be conducted, and, as a logical consequence of more transparent data and code deposits, how to revise data and code deposits when post-publication changes become necessary. These policies are reprinted in \citet{10.1257/pandp.111.dcap} and accessible online at \url{https://www.aeaweb.org/journals/data}.
+After having introduced stronger principles of provenance and transparency into the  \ac{AEA}'s data and code availability policy in 2019 \citep{10.1257/pandp.110.dcap}, we monitored compliance and understanding as evidenced by the replication package submissions we received. It became quickly clear that stronger guidance, and greater clarity were needed to assist authors in complying with the \ac{DCAP}. Authors struggled with how best to document their code and data,  with the process of deposing data and code, and the ability to provide clear data provenance, including  data citations. We clarified the policy, and released the revised version in September 2020. The main content remains unchanged, but we simplified the main policy,  separated out the policy as applied to papers conducting (field and lab) experiments, and expanded the policy to encompass more clearly any primary data collection. We also introduced  supplementary policies that lay out how and when we expect reproducibility checks by third-parties to be conducted (also see \hyperref[sec:3rdparty]{our interactions with third-party verifiers}, and, as a logical consequence of more transparent data and code deposits, how to revise data and code deposits when post-publication changes become necessary. These policies are reprinted in \citet{10.1257/pandp.111.dcap} and accessible online at \url{https://www.aeaweb.org/journals/data}.
 
-We also clarified the data and code availability policy as it applies to these proceedings. All empirical and computational articles in the proceedings need to make code and data available in the same AEA Data and Code Repository as articles in the journals. However, other than verifying compliance with the policy (materials were deposited) and conducting basic checks (material can be read, metadata is in order), we do not conduct the same pre-publication reproducibility checks as we do for regular articles (see Section XXX for statistics on compliance).
+We also clarified the data and code availability policy as it applies to papers submitted to these Proceedings. All empirical and computational articles in the proceedings need to make code and data available in the same AEA Data and Code Repository as articles in the journals. However, other than verifying compliance with the policy (materials were deposited) and conducting basic checks (material can be read, metadata is in order), we do not conduct the same pre-publication reproducibility checks as we do for regular articles (see Section \ref{sec:compliance} for statistics on compliance).
 
-But policies only outline what should occur. In order to assist authors in complying with the policy, thus improving turnaround times as well, we developed more detailed step-by-step guidance at \url{https://aeadataeditor.github.io/aea-de-guidance/step-by-step.html}. We also revised the information that authors need to provide when their manuscript is conditionally accepted (or, in some cases, during the review process). We have eliminated the duplicative requirement to provide  README files during the manuscript submission process --- they remain a required element in the data and code deposit process --- replacing it with a simpler form that requires authors to attest to compliance of their manuscript with the data citation requirement, provide details on where the data and code were deposited, and has them alert the Data Editor to any constraints on data access (we return to these access constraints in Section XXXX). A simplified version of the form (reduced to a few checkboxes) is incorporated into the initial manuscript submission workflow. The primary goal of these forms and checkboxes is to alert authors to the need to comply with the policy early on, and hopefully leading to better compliance by the time that manuscripts are conditionally accepted. 
+But policies only outline what should occur, not how authors can achieve compliance. In order to assist authors in complying with the policy, thus improving turnaround times, we developed more detailed step-by-step guidance at \href{https://aeadataeditor.github.io/aea-de-guidance/step-by-step.html}{aeadataeditor.github.io/aea-de-guidance/step-by-step.html}. We also revised the information that authors need to provide when their manuscript is conditionally accepted (or, in some cases, during the review process). We have eliminated the duplicative requirement to provide  README files during the manuscript submission process --- they remain a required element in the data and code deposit process --- replacing it with a simpler form that requires authors to attest to compliance of their manuscript with the data citation requirement, provide details on where the data and code were deposited, and has them alert the Data Editor to any constraints on data access\footnote{The form is available at \href{https://www.aeaweb.org/journals/forms/data-code-availability}{aeaweb.org/journals/forms/data-code-availability}.} At the same time, the form provides hyperlinks to the guidance mentioned above. A simplified version of the form (reduced to a few checkboxes) is incorporated into the initial manuscript submission workflow. The primary goal of these forms and checkboxes is to alert authors to the need to comply with the policy early on, and hopefully leading to better compliance by the time that manuscripts are conditionally accepted. 
+
+Furthermore, in collaboration with data editors at other journals in economics, management, and statistics, we have released a template README \citep{READMEv1.0.0} which helps authors compile all the information required for complete documentation of their data and code deposit.\footnote{The README is available at \href{https://social-science-data-editors.github.io/template_README/}{social-science-data-editors.github.io/template\_README/}.} With the publication of this report in the Proceedings, we will start verifying that authors use the README to document their replication package.
 
 
 \subsection{Improving Findability of Replication Materials at the AEA}
@@ -166,77 +176,74 @@ Since the AEA began using a data and code repository hosted by \ac{ICPSR}, all d
 
 Deposits made prior to July 2019 and since migrated to the AEA Data and Code Repository do not have the rich metadata, since it must be entered interactively by authors. To improve the metadata of older deposits, we ran a campaign in summer and fall of 2020, thanks to the support provided by a research team at the University of Michigan and ICPSR. This campaign targeted several hundred papers, providing authors with a tool to augment the metadata associated with their deposits. A report on the success of the campaign is forthcoming, and the metadata provided by the authors is being incorporated as this report was being compiled. A second campaign will complete the work in Spring or Summer of 2021. 
 
-Deposits receive their own \ac{DOI}, and can be cited on their own (see Figure~\ref{fig:citation}). Authors are required to cite their data supplement if it contains original data; a citation is automatically . Conversely, the article that a supplement is associated with is clearly identified on the supplement's landing page. Future enhancements to the platform will be able to display other articles that also cite the supplement. 
+Deposits receive their own \ac{DOI}, and can be cited in line with the Data Citation Principles \citep{Altman2013-fl,jddcp}. Authors are required to explicitly cite their data supplement if it contains original data; an entry in the references is automatically added in all cases. Conversely, the article that a supplement is associated with is clearly identified on the supplement's landing page. Future enhancements to the platform will be able to display other articles that also cite a supplement. 
 
-
-
-
-In addition to own supplements, we are also verifying that authors cite the datasets they have used and accessed. While this has been policy at the Association's journals for several years, enforcement has been difficult: In order to identify a missing data citation, the use of a dataset must be identified first. The verification process under the Data Editor now has the means to do so, and has started to verify that all authors comply with the AEA citation guidelines that require data citations. Data citations also substantially increase findability of data, allow data providers to receive proper credit, and align the Association with broader principles in the academic publishing world \citep{Altman2013-fl,dataone-cite,jddcp,CousijnSci.Data2018}. We have also updated the online  \urlcite{https://www.aeaweb.org/journals/policies/sample-references}{Sample References} with refreshed examples.
+We continue to verify that authors cite the datasets they have used and accessed, as required by the \ac{DCAP}, the AEA's citation requirements, and in line with the Data Citation Principles.  Data citations increase findability of data, allow data providers to receive proper credit, and align the Association with broader principles in the academic publishing world. The AEA's  \urlcite{https://www.aeaweb.org/journals/policies/sample-references}{Sample References} provide a style reference, and additional guidance for non-standard data sources, such as confidential or proprietary data, has been developed in collaboration with other journals and guidance by librarians.\footnote{\url{social-science-data-editors.github.io/guidance/addtl-data-citation-guidance.html}}.
 
 
 \subsection{Third-party repositories}
-Many other repositories and archives exist, and can be linked to. Archives exist at research institutions (institutional repositories, \urlcite{https://dataverse.harvard.edu/}{Harvard Dataverse} and other Dataverse instances around the world, \urlcite{https://zenodo.org/}{Zenodo}), as non-profits (\urlcite{https://datadryad.org}{Dryad}), and as commercial companies (\urlcite{https://figshare.com/}{Figshare}, \urlcite{https://data.mendeley.com/}{Mendeley Data}).
-These can be open-access data archives created by authors of \ac{AEA} articles \citep{Development2017,Gentzkow2011}, code archives created by authors even before submitting to the AEA journals, or \ac{DOI} for restricted-access data, for instance, at the German \ac{IAB} \citep{10.5164/IAB.BHP7517.de.en.v1,10.5164/iab.fdzd.1801.de.v1} or at the \ac{NACJD} \citep{10.3886/icpsr29721.v1}. By systematically linking out to other platforms, we can accommodate, in a principled fashion, other archives as well. By doing it homogeneously for all archives and repositories, we give the researcher the flexibility to initiate the process early in the research data lifecycle.
-%\misscitep{research lifecycle}{research-lifecycle}
-The AEA \ac{DCAP} allows the use of such archives in lieu of depositing the materials at the \aeadcr{}, as long as the archive is deemed to satisfy certain criteria.\footnote{ \citet{CoreTrustSealCoreTrustSeal2017} defines criteria for trusted archives, though not all reputable archives have such a seal. Several entities  maintain  lists of acceptable archives, including \furlcite{https://fairsharing.org/}{FAIRsharing.org}, \citet{NatureScientificData2018}, and various others.} The final determination will be made by the AEA Data Editor. We note, however, that if the AEA Data Editor determines that data or code can be made publicly available, deposit in a restricted-access archive is not acceptable. For instance, restricted-access research environments such as the \ac{IAB} FDZ and the \ac{FSRDC} routinely release computer code, and all such code must therefore be deposited and made available in an open access repository, before the manuscript is accepted for publication.\footnote{%
-It is worth reiterating that  personal websites, \furlcite{https://github.com}{Github.com}, \furlcite{https://drive.google.com}{Google Drive}, \furlcite{https://dropbox.com}{Dropbox}, and others are \textit{not} \textit{considered} data archives, for two key reasons. For one, however unlikely it may seem, these commercial companies are ephemerous, and do not have data preservation as a primary mission. More importantly, users who keep data on these sites can delete the data at any time, for any reason, including  because they simply did not pay their monthly or annual fee. Such practices are incompatible with proper data curation standards. }
+
+The \ac{DCAP} allows for code and data deposit to be deposited at other trusted repositories, as long as all other elements of the \ac{DCAP} are complied with. In fact, authors are discouraged from duplicating deposits they have made elsewhere in the \aeadcr{}. This is intended to allow others to create replication packages prior to submitting at the AEA's journals, as a component of a reproducible workflow and possibly in compliance with funder data management policies. We have not observed many authors availing themselves of this possibility, with probably less than 10 deposits made in such a way. Authors wishing to deposit replication packages early in the research lifecycle are encouraged to consult the Social Science Data Editors website, where links to trusted repositories are provided.
 	
 \subsection{Post-publication modifications}
 
-At the time of publication, the article will be linked with one (or more) archived supplements, constituting the version of record. What happens when, despite pre-publication scrutiny, an error in the code emerges? For instance, while pre-publication verification uses the same version of software and packages as the authors, software bugs may later emerge. The \aeadcr{} provides a means to do so. Authors can update their supplement, generating a new version, say  ``V2'', that corrects for the error. The earlier version --- ``V1'' -- remains linked to the article as ``the version of record,'' but the new version can be found and used by any reader of the article following the link to the supplemental code. 
-%Whether authors will avail themselves of this possibility remains to be explored. 
+At the time of publication, the article is linked with one (or more) archived supplements, constituting the version of record. What happens when, despite pre-publication scrutiny, an error in the code emerges? The \ac{DCAP} provides for a clear policy on which modifications constitute a minor edit to the version of record, and which modifications lead to a higher version number, without modification of the existing version of record. In particular, any change that potentially changes a computational result will lead to a new version of the deposit being created, without changing or removing the version of record, even if the modifications fixes an error. However, the presence of replication packages that are newer than the version of record is signalled to readers via a banner, and is recorded in the metadata.
 
-
-\subsection{Intellectual Property} 
+\subsection{Intellectual Property and Licenses} 
 \label{sec:ip}
-In moving to author-initiated creation of archives, we  also changed how intellectual property rights associated with  the supplementary materials are handled. For new deposits at the \aeadcr{}, authors retain the copyright. The default license for all repositories based at openICPSR is the  Creative Commons Attribution (CC-BY) \citep{CreativeCommons2017}. Based on guidance  in \citet{StoddenSoftwarePatentsBarrier2012},  and after consultation with the Association's counsel, we suggest CC-BY for databases and an open source license \citep{OpenSourceInitiative2018} for software and code. Authors may choose to license their data and code under a different license, though such licenses will be vetted by the Data Editor for compliance with the \ac{DCAP}. 
-%
-For historical archives, authors transferred the copyright to the AEA upon publication. In migrating to the \aeadcr{}, we are re-licensing these under a mixed license, combining CC-BY for data and ``modified BSD'' license for code. This license  allows for liberal re-use by others, while ensuring that the credit is given to the authors. 
+
+For new deposits at the \aeadcr{}, authors retain  copyright. The default license for all repositories based at openICPSR is the  Creative Commons Attribution (CC-BY) \citep{CreativeCommons2017}, but authors can choose their own license,  though such licenses will be vetted by the Data Editor for compliance with the \ac{DCAP}. We see few authors deviate from the standard license. When deviating, authors tend to choose a different, open source license \citep{OpenSourceInitiative2018} for software and code. In a very small number of cases, we have worked with authors to publish data under more restrictive licenses, due mostly to ethical concerns, while ensuring that replication remains possible.
+
+% Dwayne Benjamin, Toronto/P&P
+% AER/FL Police officers
+
+\subsection{Compliance}
+\label{sec:compliance}
+
+\begin{table}[t]
+    \centering
+    \caption{Compliance}
+    \label{tab:compliance}
+    \begin{threeparttable}
+    \begin{tabular}{lccc}
+    \toprule
+         & Compliant & Incomplete & Non-compliant \\
+    \midrule
+    Papers and Proceedings &  87    &  4 & 1\\
+    AER and journals       & xx    &  1  & 0\\
+    \bottomrule
+    \end{tabular}
+    \begin{tablenotes}
+    \footnotesize
+    \item[] \textit{Note}: Unit of observation are manuscripts assessed between \firstday{} and \lastday{}. ``Incomplete" means the data deposit has not been completed, though the article has been published. ``Non-compliant" means that code or other required materials have not been provided.
+    \end{tablenotes}
+    \end{threeparttable}
+\end{table}
 
 
+Authors have been very compliant with the policy (Table~\ref{tab:compliance}). We note that authors can be compliant with the policy without providing a copy of the data, as long as the reason for the inability to provide the data is acceptable, correct, and documented as part of the replication materials. In some cases, we have requested data that was not initially provided, when such data could be legally and ethically provided; by the second round of assessments, compliance was generally achieved (see also our discussion of outreach to data providers). In a very small number of cases, authors having conducted research in restricted-access data environments did not provide code. In several cases, relying on personal experience or by reaching out to the managers of the restricted-access environment, we were able to inform the authors of their ability to provide code, in compliance with any security requirements of the restricted-access data environment. In several cases, authors were unable to access the restricted-access environment due to COVID-19 lockdowns, which we accommodated in various ways; however, in all cases, code was ultimately provided. For a very small number of articles, compliance was achieved after the manuscript had been published. We are aware of only one case where the authors were unable to provide code because their employer asserted copyright and did not give permission to post code. One case in which the manuscript has been published is currently pending corrections by the authors, and has not been published as of \today, one month after publication of the article.
 
+\begin{center}
+    No changes beyond here
+\end{center}
 
-
-
-
-
-\section{Task 2: Creating Infrastructure at the AEA Journals}
+\section{Infrastructure for Reproducibility}
 \label{sec:infrastructure}
 
-As laid out in \citet{10.1257/pandp.108.745}, the second task consists in creating an infrastructure for enhanced transparency at the AEA journals. This infrastructure has two key components: the \aeadcr{} as a transparent, strongly curated repository, with expanded visibility onto supplements, and greater findability of those supplements through various channels. The second component is the infrastructure necessary to conduct pre-publication verification of computational reproducibility at scale.
+The Data Editor manages the infrastructure needed to access data and code, conduct reproducibility checks, and archive and preserve replication packages. The first two points are provided by the replication team at Cornell University, the latter primarily by the  \aeadcr{} provided by openICPSR at the University of Michigan, with additional support from the AEA's in-house IT staff. 
 
-
-
-
-
-
-
-
-Importantly, the use of a dedicated platform for data storage also allows us to simplify the process of channeling  the materials from authors to the final data publication. Traditionally, authors have  emailed ZIP files to the editorial office, or provided links to folders on shared storage platforms in a variety of ways. The editorial office then had to repackage those materials, before posting them on the AEA website. Going forward, authors  upload their materials directly to the ICPSR platform, being able to preview what they will look like once published. The AEA Data Editor can access the materials prior to their publication. Once both authors and the AEA Data Editor have approved the contents of the data deposit, it is published simultaneously with the article.%
-\footnote{Authors can always publish the supplements earlier.} Authors will also be the primary creators of the metadata about their supplements, ensuring accuracy.
-
-Critically, prior to publication of manuscript, data, and code,  members of the Data Editorial staff will download the materials for the purpose of verifying the completeness, accuracy, and computational reproducibility (see below). The Data Editor staff will also verify the completeness of the metadata provided on the ICPSR website, and correspond with the author if necessary to correct or augment the information. 
-
-\subsection{Migrating Historical Supplements}
-\label{sec:migration}
-
-
-Report on crowdsourcing of metadata.
-
-\FloatBarrier
 
 \subsection{Pre-publication verification of computational reproducibility}
 \label{sec:verification}
+
 
 \begin{quote}
 Report on articles (manuscript ID), reports (unique issues = tasks) and published repositories (only when tied to an article, requires transforming manuscript ID into DOI and querying crossref). Redo analysis from 2019.
 
 \end{quote}
 
-The other component of the infrastructure is a scalable implementation of pre-publication verification. We consulted existing pre-publication verifications, for instance at the \urlcite{https://ajps.org/wp-content/uploads/2018/05/ajps_quantitative-data-verification-checklist.pdf}{\ac{AJPS}} and at the Econometric Journal, as well as with verification projects at universities (e.g., Cornell University's \urlcite{https://ciser.cornell.edu/research/results-reproduction-r-squared-service/}{R-Squared Service}). We worked closely with the AEA editorial office to identify opportunities for integration. 
 
-
-
+Pre-publicaton verification is conducted by the Data Editor's team at Cornell University. 
 Between Dec 1, 2019, and November 30, 2020, the AEA Data Editor team conducted 
 % needs to be written out from R
 \newcommand{\jiramcs}{yyy}
@@ -290,6 +297,8 @@ Figure~\ref{fig:pre:assessments_journal} shows the distribution of  assessments 
     Issues with pre-publication verification
 \end{quote}
 
+
+
 \paragraph{Self-corrections}
 
 We often find that authors find other errors than those the replication team identified. For instance, the manuscript figures might have come from an earlier version of the dataset, or from an earlier run of the code sequence with slightly different parameters. In other cases, while reviewing issues found by our replication team, authors correct econometric errors, which our process is not designed to find. 
@@ -312,7 +321,27 @@ Third, there is anecdotal evidence that other factors affecting the time-to-publ
 
 We note that none of the \jiramcs{} manuscripts we assessed had  fundamental flaws --- all problems identified so far have been fixable (and fixed). 
 
+\subsection{Migrating Historical Supplements}
+\label{sec:migration}
 
+We initially migrated the bulk of historical data (and code) supplements, from ZIP files stored on AEA servers to the \aeadcr{}. As noted earlier, for many of these deposits, we have successfully requested assistance from several hundred authors to update the metadata, improving presentation and findability. A few hundred replication packages are still pending migration, pending reconciliation of duplicates and large-file limitations. Upon demand from readers, we have also sometimes reached out to authors to request materials from articles which were published prior to the original publication of a data availability policy. 
+
+% report on UMich metadata project
+
+\subsection{Improving the \aeadcr{}}
+\label{sec:improvingaeadcr}
+
+We continually assess the performance of the \aeadcr{}. In collaboration with ICPSR, we have increased the default quota from 2GB to 30GB, streamlining the ability of researchers to deposit large replication packages.\footnote{It was previously possible to deposit large replication packages greater than 2GB, but required manual adjustments, resulting in delays and occasionally confusion.} A new workflow has been developed, which provides greater clarity to journal managers on the back-end, and prevents errors that users frequently made. It lays the groundwork for further enhancements in the future. 
+
+% distribution of sizes - email from Jared
+
+\begin{figure}
+    \centering
+    %\includegraphics{} 
+    PLACEHOLDER - 
+    \caption{Size distribution of replication packages deposited between  \firstday{} to \lastday{}}
+    \label{fig:size_packages}
+\end{figure}
 
 
 
@@ -336,6 +365,7 @@ As noted earlier, the move of supplements into the openICPSR-supported repositor
 Over the course of the past year, the AEA has been approached by two research projects that wished to use the full-text versions of AEA articles to enhance the linkage between articles and data. We worked with these teams to establish a policy by which they could legally access the full archive of articles, but also subsequently make their work available to others. AEA counsel is currently working on a full-fledged data and text mining policy.
 
 \subsection{Third-party verification services}
+\label{sec:3rdparty}
 
 \begin{quote}
     Write a lot here.
