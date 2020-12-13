@@ -26,7 +26,9 @@ if (! file.exists(file.path(jirabase,"export_12-11-2020.csv"))) {
 if ( process_raw == TRUE ) {
 # Read in data extracted from Jira
 #base <- here::here()
-
+  
+    
+    
 jira.raw <- read.csv(file.path(jirabase,"export_12-11-2020.csv"), stringsAsFactors = FALSE) %>%
   rename(ticket=ï..Key) %>%
   rename(reason=Reason.for.Failure.to.Fully.Replicate) %>%
@@ -42,9 +44,19 @@ jira.raw <- read.csv(file.path(jirabase,"export_12-11-2020.csv"), stringsAsFacto
   cSplit("Changed.Fields",",")  %>%
   mutate(status_change = ifelse(Changed.Fields_1=="Status","Yes",ifelse(Changed.Fields_2=="Status","Yes",ifelse(Changed.Fields_3=="Status","Yes",ifelse(Changed.Fields_4=="Status","Yes","No"))))) %>%
   mutate(received = ifelse(Status=="Open"&Change.Author=="","Yes","No")) %>%
+  mutate(has_subtask=ifelse(subtask!="","Yes","No")) %>%
   filter(! date_updated=="2020-12-11") %>%
   filter(ticket!="AEAREP-365") %>%
   select(-training)
+
+jira.raw.subtask <- jira.raw %>%
+  select(ticket, subtask) %>%
+  cSplit("subtask",",")  %>%
+  distinct() %>%
+  pivot_longer(!ticket, names_to = "n", values_to = "value") %>%
+    mutate(subtask=ifelse(!value=="","Yes","No")) %>%
+  select(subtask,value) %>%
+  rename(ticket=value) 
 
   
 jira.raw.temp <- jira.raw %>%
@@ -52,7 +64,9 @@ jira.raw.temp <- jira.raw %>%
   distinct(ticket, .keep_all = TRUE) %>%
   filter(mc_number!="") %>%
   left_join(jira.raw,by="ticket") %>%
-  rename(mc_number = mc_number.x) ->jira.raw
+  rename(mc_number = mc_number.x) %>%
+  select(-subtask) %>%
+  left_join(jira.raw.subtask) ->jira.raw
 
 
 ## Keep only variables needed
