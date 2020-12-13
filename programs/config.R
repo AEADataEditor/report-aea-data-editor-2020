@@ -87,16 +87,18 @@ if (file.exists(latexnums.Rda)) {
 
 update_latexnums <- function(field,value) {
   # should test if latexnums is in memory
+  latexnums <- readRDS(latexnums.Rda)
   
   # find out if a field exists
   if ( any(latexnums$field == field) ) {
     message("Updating existing field")
     latexnums[which(latexnums$field == field), ]$value <- as.character(value)
     latexnums[which(latexnums$field == field), ]$updated <- date()
-    return(latexnums)
+    #return(latexnums)
   } else {
     message("Adding new row")
     latexnums <- latexnums %>% add_row(field=field,value=as.character(value),updated=date())
-    return(latexnums)
+    #return(latexnums)
   }
+  saveRDS(latexnums,latexnums.Rda)
 }

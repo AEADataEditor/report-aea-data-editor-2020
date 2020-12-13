@@ -5,64 +5,58 @@
 # Inputs
 #   - file.path(jiraanon,"jira.anon.RDS") 
 # Outputs
-#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
-#   - ggsave(file.path(images,"n_unique_journal_plot.png"),
-#   - ggsave(file.path(images,"n_external_journal_plot.png"),
-#   - ggsave(file.path(images,"revision_round_length_hist.png"), 
-#   - ggsave(file.path(images,"revision_round_length_hist2.png"), 
-#   - ggsave(file.path(images,"revision_round_length_hist_pos.png"),
-#   - ggsave(file.path(images,"cycle_length_hist.png"), 
-#   - ggsave(file.path(images,"cycle_length_hist2.png"), 
-#   - ggsave(file.path(images,"cycle_length_hist_pos.png"), 
-#   - ggsave(file.path(images,"n_software_used_plot.png"), 
-#   - ggsave(file.path(images,"n_rounds_plot.png"), 
-#   - ggsave(file.path(images,"n_rounds_journal_plot.png"), 
 
-#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
-#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
-#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
-#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
-#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
-#   - ggsave(file.path(images,"n_assessments_journal_plot.png"),
-
-#   - ggsave(file.path(images,"author_response_hist.png"), 
-#   - ggsave(file.path(images,"total_length_hist.png"), 
-
-### Cleans working environment.
-rm(list = ls())
-gc()
 
 ### Load libraries 
 ### Requirements: have library *here*
 source(here::here("programs","config.R"),echo=TRUE)
-global.libraries <- c("ggplot2","dplyr","reshape2","here","tidyr")
+global.libraries <- c("ggplot2","dplyr","here","tidyr","tibble","devtools")
 results <- sapply(as.list(global.libraries), pkgTest)
-
 pkgTest.github("data.table","Rdatatable")
+
+## Non-standard - install of a page with same name
+#pkgTest.github("stargazer-booktabs","markwestcott34")
+install_github("markwestcott34/stargazer-booktabs")
+library(stargazer)
 
 
 # Read in data extracted from Jira, anonymized
 jira <- readRDS(file.path(jiraanon,"jira.anon.RDS")) %>%
-  filter(date_created >= "2019-12-01", date_created < "2020-12-01") %>%
+  filter(date_created >= firstday, date_created < lastday) %>%
   filter(status_change=="Yes"|received=="Yes") %>%
   mutate(subtask_y=ifelse(is.na(subtask),"No",ifelse(subtask!="","Yes",""))) %>%
   filter(subtask_y=="No") %>%
-  filter(ticket!="AEAREP-1589")
-  
+  filter(ticket!="AEAREP-1589") ## Explain!
+
+# we used the start and end date here, so write them out
+update_latexnums("firstday",firstday)
+update_latexnums("lastday",lastday)
 
 #### Number of reports processed (went past submitted to MC) since December 1, 2019
-## Total
-jira.assess<- jira %>% 
-  filter(Status == "Submitted to MC") %>%
-  select(ticket) %>% distinct() 
+## Total submitted records
 
-assess_total <- nrow(jira.assess)
+
+jira.filter.submitted <- jira %>% 
+  filter(Status == "Submitted to MC") 
+
+
+
+assess_total <- jira.filter.submitted %>%
+  select(ticket) %>% 
+  distinct() %>%
+  nrow()
+update_latexnums("jiraassess",assess_total)
 
 ## By journal
-assess_total_journal <- jira %>%
-  filter(Status == "Submitted to MC") %>%
+assess_total_journal <- jira.filter.submitted %>%
   group_by(Journal) %>%
   summarise(assess_numbers = n_distinct(ticket)) 
+stargazer(assess_total_journal,style = "aer",
+          summary = FALSE,
+          out = file.path(tables,"assess_total_journal.tex"),
+          out.header = FALSE,
+          float = FALSE
+          )
 
 # Histogram
 n_assessments_journal_plot <- ggplot(assess_total_journal, aes(x = Journal, y = assess_numbers)) +
@@ -77,23 +71,30 @@ ggsave(file.path(images,"n_assessments_journal_plot.png"),
 n_assessments_journal_plot
 
 
+
 #### Number of unique paper processed since December 1, 2019
 ## Total
-jira.manuscripts<- jira %>% 
-  filter(Status == "Submitted to MC") %>%
-  select(mc_number_anon) %>% distinct() 
 
-unique_total <- nrow(jira.manuscripts)
+manuscript_total <- jira.filter.submitted %>%
+  select(mc_number_anon) %>% 
+  distinct() %>% nrow()
+update_latexnums("jiramcs",manuscript_total)
 
 ## By journal
-unique_total_journal <- jira %>%
-  filter(Status == "Submitted to MC") %>%
+mcs_total_journal <- jira.filter.submitted %>%
   group_by(Journal) %>%
   summarise(unique_mc_numbers = n_distinct(mc_number_anon))
 
+# output table
+stargazer(mcs_total_journal,style = "aer",
+          summary = FALSE,
+          out = file.path(tables,"mcs_total_journal.tex"),
+          out.header = FALSE,
+          float = FALSE
+)
 
 # Histogram
-n_unique_journal_plot <- ggplot(unique_total_journal, aes(x = Journal, y = unique_mc_numbers)) +
+n_unique_journal_plot <- ggplot(mcs_total_journal, aes(x = Journal, y = unique_mc_numbers)) +
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Journal", y = "Number of papers", title = "Total Papers by journal") + 
   theme_classic() +
@@ -108,21 +109,26 @@ n_unique_journal_plot
 
 #### Number of assessment processed by external replicator since December 1, 2019
 ## Total
-jira.external<- jira %>% 
-  filter(Status == "Submitted to MC") %>%
-  filter(external == "Yes") %>%
-  select(ticket) %>% distinct() 
 
-external_total <- nrow(jira.external)
+external_total <- jira.filter.submitted %>%
+  filter(external == "Yes") %>%
+  select(ticket) %>% distinct() %>%
+  nrow()
+update_latexnums("jiraexternal",external_total)
 
 ## By journal
-external_total_journal <- jira %>%
-  filter(Status == "Submitted to MC") %>%
+external_total_journal <- jira.filter.submitted %>%
   filter(external == "Yes") %>%
   group_by(Journal) %>%
   summarise(external_numbers = n_distinct(ticket))
 
-
+# output table
+stargazer(external_total_journal,style = "aer",
+          summary = FALSE,
+          out = file.path(tables,"external_total_journal.tex"),
+          out.header = FALSE,
+          float = FALSE
+)
 # Histogram
 n_external_journal_plot <- ggplot(external_total_journal, aes(x = Journal, y = external_numbers)) +
   geom_bar(stat = "identity", colour="white", fill="grey") +
@@ -138,13 +144,26 @@ ggsave(file.path(images,"n_external_journal_plot.png"),
 n_external_journal_plot
 
 
+### Combine three data columns
 
+n_journal_table <- full_join(assess_total_journal,mcs_total_journal,by=c("Journal")) %>%
+                   full_join(external_total_journal,by=c("Journal")) %>%
+                   rename("Assessments" = assess_numbers,
+                          "Manuscripts" = unique_mc_numbers,
+                          "External reports" = external_numbers)
+
+# output table
+stargazer(n_journal_table,style = "aer",
+          summary = FALSE,
+          out = file.path(tables,"n_journal_numbers.tex"),
+          out.header = FALSE,
+          float = FALSE
+)
 #### Length of an assessment rounds (initial submission to us, and filing to Manuscript Central). 
 # This is the duration of each Jira ticket.
 # Uses start date and date of status update after restricting to the cases "Submitted to MC"
 
-duration.data <- jira %>%
-  filter(Status == "Submitted to MC") %>%
+duration.data <- jira.filter.submitted  %>%
   mutate(length=difftime(date_updated,date_created,units="days")) %>%
   arrange(length) %>% ungroup()
    
@@ -244,8 +263,7 @@ cycle_round_length.pos
 
 
 #### Number of cases using different statistical packages
-software_used <- jira %>%
-  filter(Status == "Submitted to MC") %>%
+software_used <- jira.filter.submitted %>%
   transform(Software.used_1 = ifelse(Software.used_1 == "", "None",as.character(Software.used_1))) %>%
   filter(Journal != "") %>%
   select(mc_number_anon, Software.used_1, Software.used_2, Software.used_3, Software.used_4) %>%
