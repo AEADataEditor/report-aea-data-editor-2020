@@ -29,7 +29,7 @@ if ( process_raw == TRUE ) {
     
     
 jira.raw <- read.csv(file.path(jirabase,"export_12-11-2020.csv"), stringsAsFactors = FALSE) %>%
-  rename(ticket=?..Key) %>%
+  rename(ticket=ï..Key) %>%
   rename(reason=Reason.for.Failure.to.Fully.Replicate) %>%
   rename(external=External.validation) %>%
   rename(subtask=Sub.tasks) %>%
@@ -71,7 +71,8 @@ jira.raw.temp <- jira.raw %>%
 ## Keep only variables needed
 
 jira.conf <- jira.raw %>%
-  select(ticket,date_created,date_resolved,date_updated,mc_number,Journal,Status,Software.used_1,Software.used_2,Software.used_3,Software.used_4,received,status_change,external,reason,subtask)
+  select(ticket,date_created,date_resolved,date_updated,mc_number,Journal,Status,Software.used_1,Software.used_2,Software.used_3,Software.used_4,received,status_change,external,reason,subtask,Resolution)
+
 
 # anonymize
 jira.tmp <- jira.conf %>% 
@@ -87,9 +88,14 @@ jira.manuscripts <- jira.tmp %>%
 
 # Now merge the anonymized data on
 jira.conf %>% 
-  left_join(jira.manuscripts,by="mc_number") %>%
-  select(-mc_number) -> jira.anon
+  left_join(jira.manuscripts,by="mc_number")
 
+saveRDS(jira.conf,file=file.path(jirabase,"jira.conf.RDS"))
+write.csv(jira.conf,file=file.path(jirabase,"jira.conf.csv"))
+
+
+jira.conf %>% 
+  select(-mc_number) -> jira.anon
 
 saveRDS(jira.anon,file=file.path(jiraanon,"jira.anon.RDS"))
 write.csv(jira.anon,file=file.path(jiraanon,"jira.anon.csv"))

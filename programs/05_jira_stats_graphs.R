@@ -31,7 +31,7 @@ jira.pyear <- jira.raw %>%
   filter(status_change=="Yes"|received=="Yes") %>%
   mutate(subtask_y=ifelse(is.na(subtask),"No",ifelse(subtask!="","Yes",""))) %>%
   filter(subtask_y=="No") %>%
-  filter(ticket!="AEAREP-1589") ## Explain!
+  filter(ticket!="AEAREP-1589") ## Decision notice of aearep-1523
 
 issues_all <- jira.pyear %>%
   select(ticket) %>%
@@ -356,7 +356,6 @@ ggsave(file.path(images,"n_software_used_plot.png"),
 n_software_used_plot
 
 
-
 #### Length of author responses (time between filing report of first assessment, and getting the next submission)
  author_length <- jira.pyear %>%
   filter(mc_number_anon != "",
@@ -493,5 +492,24 @@ ggsave(file.path(images,"n_rounds_journal_plot.png"),
 n_rounds_journal_plot
 
 
+
+----
+  
+  #### Reason for Failure to Fully Replicate since December 1, 2019
+  reason_failure <- jira.filter.submitted %>%
+  transform(reason = ifelse(ticket=="AEAREP-764", "Bugs in code, Insufficient time available to replicator, Data not available",as.character(reason))) %>%
+  cSplit("reason",",")
+
+# Histogram
+n_reason_failure_plot <- ggplot(reason_failure, aes(x = Journal, y = issues_cplt)) +
+  geom_bar(stat = "identity", colour="white", fill="grey") +
+  labs(x = "Journal", y = "Number of assessments", title = "Total assessments completed, by journal") + 
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45))
+
+ggsave(file.path(images,"n_reason_failure_plot.png"), 
+       n_reason_failure_plot  +
+         labs(y=element_blank(),title=element_blank()))
+n_assessments_journal_plot
 
 
