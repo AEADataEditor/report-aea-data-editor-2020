@@ -203,7 +203,8 @@ n_external_journal_plot
 n_journal_table <- full_join(issues_total_journal,assess_cplt_journal,by=c("Journal")) %>%
                    full_join(external_total_journal,by=c("Journal")) %>%
                    full_join(pendingpub_by_journal,by=c("Journal")) %>%
-                   rename("Issues (rcvd)" = issue_numbers,
+                   mutate(Journal = if_else(Journal=="AEA P&P","AEA P+P",Journal)) %>%
+                   select(Journal,"Issues (rcvd)" = issue_numbers,
                           "Issues (cplt)" = issues_cplt,
                           "Issues (external)" = issues_external,
                           "Manuscripts (rcvd)" = mcs_numbers,
