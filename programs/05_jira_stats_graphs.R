@@ -21,47 +21,84 @@ library(stargazer)
 
 
 # Read in data extracted from Jira, anonymized
-jira <- readRDS(file.path(jiraanon,"jira.anon.RDS")) %>%
+jira.raw <- readRDS(file.path(jiraanon,"jira.anon.RDS")) 
+
+# A list of non-issues, typically for information-only
+
+# This filters for the cases **submitted** in the past 12 months
+jira.pyear <- jira.raw %>%
   filter(date_created >= firstday, date_created < lastday) %>%
   filter(status_change=="Yes"|received=="Yes") %>%
   mutate(subtask_y=ifelse(is.na(subtask),"No",ifelse(subtask!="","Yes",""))) %>%
   filter(subtask_y=="No") %>%
   filter(ticket!="AEAREP-1589") ## Explain!
 
+issues_all <- jira.pyear %>%
+  select(ticket) %>%
+  distinct() %>% nrow()
+
+manuscript_all <- jira.pyear %>%
+  select(mc_number_anon) %>% 
+  distinct() %>% nrow()
+
 # we used the start and end date here, so write them out
 update_latexnums("firstday",firstday)
 update_latexnums("lastday",lastday)
+update_latexnums("jiraissues",issues_all)
+update_latexnums("jiramcs",manuscript_all)
+
+## By journal
+issues_total_journal <- jira.pyear %>%
+  filter(!(Journal=="")) %>%
+  group_by(Journal) %>%
+  summarise(issue_numbers = n_distinct(ticket),
+            mcs_numbers   = n_distinct(mc_number_anon))
+
+stargazer(issues_total_journal,style = "aer",
+          summary = FALSE,
+          out = file.path(tables,"issues_total_journal.tex"),
+          out.header = FALSE,
+          float = FALSE
+)
+
 
 #### Number of reports processed (went past submitted to MC) since December 1, 2019
 ## Total submitted records
 
 
-jira.filter.submitted <- jira %>% 
-  filter(Status == "Submitted to MC") 
+jira.filter.submitted <- jira.pyear %>%  
+  filter(Status == "Submitted to MC" & Journal != "AEA P&P") 
 
-
-
-assess_total <- jira.filter.submitted %>%
+assess_cplt <- jira.filter.submitted %>%
   select(ticket) %>% 
   distinct() %>%
   nrow()
-update_latexnums("jiraassess",assess_total)
+update_latexnums("jiraissuescplt",assess_cplt)
+
+
+manuscript_cplt <- jira.filter.submitted %>%
+  select(mc_number_anon) %>% 
+  distinct() %>% nrow()
+update_latexnums("jiramcscplt",manuscript_cplt)
+
 
 ## By journal
-assess_total_journal <- jira.filter.submitted %>%
+assess_cplt_journal <- jira.filter.submitted %>%
   group_by(Journal) %>%
-  summarise(assess_numbers = n_distinct(ticket)) 
-stargazer(assess_total_journal,style = "aer",
+  summarise(issues_cplt = n_distinct(ticket),
+            mcs_cplt    = n_distinct(mc_number_anon)) 
+
+stargazer(assess_cplt_journal,style = "aer",
           summary = FALSE,
-          out = file.path(tables,"assess_total_journal.tex"),
+          out = file.path(tables,"assess_cplt_journal.tex"),
           out.header = FALSE,
           float = FALSE
           )
 
 # Histogram
-n_assessments_journal_plot <- ggplot(assess_total_journal, aes(x = Journal, y = assess_numbers)) +
+n_assessments_journal_plot <- ggplot(assess_cplt_journal, aes(x = Journal, y = issues_cplt)) +
   geom_bar(stat = "identity", colour="white", fill="grey") +
-  labs(x = "Journal", y = "Number of assessments", title = "Total assessments by journal") + 
+  labs(x = "Journal", y = "Number of assessments", title = "Total assessments completed, by journal") + 
   theme_classic() +
   theme(axis.text.x = element_text(angle=45))
 
@@ -75,28 +112,11 @@ n_assessments_journal_plot
 #### Number of unique paper processed since December 1, 2019
 ## Total
 
-manuscript_total <- jira.filter.submitted %>%
-  select(mc_number_anon) %>% 
-  distinct() %>% nrow()
-update_latexnums("jiramcs",manuscript_total)
-
-## By journal
-mcs_total_journal <- jira.filter.submitted %>%
-  group_by(Journal) %>%
-  summarise(unique_mc_numbers = n_distinct(mc_number_anon))
-
-# output table
-stargazer(mcs_total_journal,style = "aer",
-          summary = FALSE,
-          out = file.path(tables,"mcs_total_journal.tex"),
-          out.header = FALSE,
-          float = FALSE
-)
 
 # Histogram
-n_unique_journal_plot <- ggplot(mcs_total_journal, aes(x = Journal, y = unique_mc_numbers)) +
+n_unique_journal_plot <- ggplot(assess_cplt_journal, aes(x = Journal, y = mcs_cplt)) +
   geom_bar(stat = "identity", colour="white", fill="grey") +
-  labs(x = "Journal", y = "Number of papers", title = "Total Papers by journal") + 
+  labs(x = "Journal", y = "Number of papers", title = "Number of Papers, completed, by journal") + 
   theme_classic() +
   theme(axis.text.x = element_text(angle=45))
 
@@ -107,6 +127,34 @@ ggsave(file.path(images,"n_unique_journal_plot.png"),
 n_unique_journal_plot
 
 
+
+
+
+#### Number of assessments/manuscript that are pending publication
+
+jira.filter.pending <- jira.pyear %>%
+  filter(Status == "Pending publication")
+
+manuscript_pending <- jira.filter.pending %>%
+  select(mc_number_anon) %>% 
+  distinct() %>% nrow()
+update_latexnums("jiramcspending",manuscript_pending)
+
+
+## By journal
+pendingpub_by_journal <- jira.filter.pending %>%
+  group_by(Journal) %>%
+  summarise(mcs_pendingpub   = n_distinct(mc_number_anon))
+
+stargazer(pendingpub_by_journal,style = "aer",
+          summary = FALSE,
+          out = file.path(tables,"pendingpub_by_journal.tex"),
+          out.header = FALSE,
+          float = FALSE
+)
+
+
+
 #### Number of assessment processed by external replicator since December 1, 2019
 ## Total
 
@@ -115,12 +163,18 @@ external_total <- jira.filter.submitted %>%
   select(ticket) %>% distinct() %>%
   nrow()
 update_latexnums("jiraexternal",external_total)
+mcs_external <- jira.filter.submitted %>%
+  filter(external == "Yes") %>%
+  select(mc_number_anon) %>% distinct() %>%
+  nrow()
+update_latexnums("jiramcsexternal",mcs_external)
 
 ## By journal
 external_total_journal <- jira.filter.submitted %>%
   filter(external == "Yes") %>%
   group_by(Journal) %>%
-  summarise(external_numbers = n_distinct(ticket))
+  summarise(mcs_external = n_distinct(mc_number_anon),
+            issues_external=n_distinct(ticket))
 
 # output table
 stargazer(external_total_journal,style = "aer",
@@ -130,7 +184,7 @@ stargazer(external_total_journal,style = "aer",
           float = FALSE
 )
 # Histogram
-n_external_journal_plot <- ggplot(external_total_journal, aes(x = Journal, y = external_numbers)) +
+n_external_journal_plot <- ggplot(external_total_journal, aes(x = Journal, y = issues_external)) +
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Journal", y = "Number of cases processed by external replicator", title = "Total usage of external replicators by journal") + 
   theme_classic() +
@@ -144,13 +198,18 @@ ggsave(file.path(images,"n_external_journal_plot.png"),
 n_external_journal_plot
 
 
-### Combine three data columns
+### Combine five data columns
 
-n_journal_table <- full_join(assess_total_journal,mcs_total_journal,by=c("Journal")) %>%
+n_journal_table <- full_join(issues_total_journal,assess_cplt_journal,by=c("Journal")) %>%
                    full_join(external_total_journal,by=c("Journal")) %>%
-                   rename("Assessments" = assess_numbers,
-                          "Manuscripts" = unique_mc_numbers,
-                          "External reports" = external_numbers)
+                   full_join(pendingpub_by_journal,by=c("Journal")) %>%
+                   rename("Issues (rcvd)" = issue_numbers,
+                          "Issues (cplt)" = issues_cplt,
+                          "Issues (external)" = issues_external,
+                          "Manuscripts (rcvd)" = mcs_numbers,
+                          "Manuscripts (cplt)" = mcs_cplt,
+                          "Manuscripts (ext.)" = mcs_external,
+                          "Manuscripts (pend.)"= mcs_pendingpub)
 
 # output table
 stargazer(n_journal_table,style = "aer",
@@ -214,7 +273,7 @@ revision_round_length.pos
 #### Length of complete cycle time (initial submission to us, and pending publication).
 # Uses start date and resolution date after restricting to the cases to "pending publications"
 
-cycle.data <- jira %>%
+cycle.data <- jira.pyear %>%
   filter(Status == "Pending publication") %>%
   mutate(length=difftime(date_updated,date_created,units="days")) %>%
   arrange(length) %>% ungroup()
@@ -297,7 +356,7 @@ n_software_used_plot
 
 
 #### Length of author responses (time between filing report of first assessment, and getting the next submission)
- author_length <- jira %>%
+ author_length <- jira.pyear %>%
   filter(mc_number_anon != "",
          ticket != mc_number_anon,
          !grepl("#",mc_number_anon, fixed = TRUE)) %>%
@@ -366,7 +425,7 @@ author_length <- author_length %>%
   
 #### Distribution of rounds each paper goes through
 ## Total
-n_rounds <- jira %>%
+n_rounds <- jira.pyear %>%
   mutate(completed = ifelse(grepl("Pending publication", Status, fixed = TRUE) == TRUE, 1, 0)) %>%
   group_by(mc_number_anon) %>%
   mutate(paper_completed = max(completed)) %>%
@@ -397,7 +456,7 @@ ggsave(file.path(images,"n_rounds_plot.png"),
 n_rounds_plot
 
 ## By journal
-n_rounds_journal <- jira %>%
+n_rounds_journal <- jira.pyear %>%
   mutate(completed = ifelse(grepl("Pending publication", Status, fixed = TRUE) == TRUE, 1, 0)) %>%
   group_by(mc_number_anon) %>%
   mutate(paper_completed = max(completed)) %>%

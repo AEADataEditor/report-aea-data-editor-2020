@@ -12,8 +12,7 @@ gc()
 ### Load libraries 
 ### Requirements: have library *here*
 source(here::here("programs","config.R"),echo=TRUE)
-global.libraries <- c("dplyr")
-library(splitstackshape)
+global.libraries <- c("dplyr","splitstackshape")
 results <- sapply(as.list(global.libraries), pkgTest)
 
 # double-check
@@ -30,7 +29,7 @@ if ( process_raw == TRUE ) {
     
     
 jira.raw <- read.csv(file.path(jirabase,"export_12-11-2020.csv"), stringsAsFactors = FALSE) %>%
-  rename(ticket=ï..Key) %>%
+  rename(ticket=?..Key) %>%
   rename(reason=Reason.for.Failure.to.Fully.Replicate) %>%
   rename(external=External.validation) %>%
   rename(subtask=Sub.tasks) %>%
