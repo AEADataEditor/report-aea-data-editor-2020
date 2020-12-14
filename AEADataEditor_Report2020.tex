@@ -126,10 +126,10 @@
 %
 % Periods covered by the report 
 % Should be read in from R
-%\input{results/numbers.tex}
+\input{tables/latexnums.tex}
 
-\newcommand{\firstday}{Dec 1, 2019}
-\newcommand{\lastday}{Nov 30, 2020}
+%\renewcommand{\firstday}{Dec 1, 2019}
+%\renewcommand{\lastday}{Nov 30, 2020}
 
 \begin{document}
 
@@ -242,13 +242,43 @@ Report on articles (manuscript ID), reports (unique issues = tasks) and publishe
 
 \end{quote}
 
+\paragraph{The process}
 
 Pre-publicaton verification is conducted by the Data Editor's team at Cornell University. 
-Between Dec 1, 2019, and November 30, 2020, the AEA Data Editor team conducted 
-% needs to be written out from R
-\newcommand{\jiramcs}{yyy}
-xxx assessments for \jiramcs{} manuscripts.
+Requests for assessment of reproducibility are received, assigned to a team member, who then assesses data availability and compliance with requirements. When some data is available, a full or limited reproducibility check is conducted. If we cannot obtain access to the data or computational resources in a timely fashion, we may reach out to third-parties who can, and request a reproducibility check from them. Once all computations have been completed, a process that can take anywhere from a few minutes to several weeks, a report is compiled, reviewed and approved by the Data Editor, and submitted back to journal editors, who handle most communications with the authors. The report will have  one of four possible recommendations (see Table). A ``conditional acceptance'' implies that a revision will need to be resubmitted to the Data Editor to address any identified shortcomings. An ``acceptance'' means that no further changes are necessary, and both the manuscript (after copy-editing) and the replication package can be scheduled for publications.\footnote{Manuscript and replication package are generally published at the same time, though at the request of either editors or authors, the replication package can be published at any time after acceptance.} However, to streamline processing, we may also recommend an ``acceptance with modifications requested.'' In such a case, the remaining modifications are minor, and can be handled during copy-editing (for instance, a small number of tables need minimal changes) and prior to publication of the replication package (for instance, a fixable error in a program, or a clarification in the README, not affecting any important tables or figures). We have increasingly made use of this feature. While we monitor that authors comply with the request for modifications, no further computational assessment is made. Finally, we may recommend a ``revise and resubmit'' when serious issues have been identified that materially affect the conclusions of the manuscript. In the past year, two manuscripts required conversations with the editors and the authors, and both were resolved to the satisfaction of all involved.
+
+\begin{table}[t]
+    \caption{Response options for recommendations}
+    \label{tab:responses}
+    \centering
+    \begin{tabular}{lr}
+    \toprule
+               & Frequency \\
+               \midrule
+        Accept &  \\
+        Accept with changes &\\
+        Conditional accept &\\
+        Revise-and-resubmit & \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\paragraph{Metrics}
+
+Between \firstday{}, and \lastday{}, the AEA Data Editor team  handled
+\jiraissues{} requests,  for \jiramcs{} manuscripts. Requests typically are channeled to the team by the AEA's journal submission and review system, but others were initiated by authors or editors directly, often while preparing the replication materials. Of these,  responses \jiraissuescplt{} (\jiramcscplt{} manuscripts) were submitted back to editors, and \jiramcspending{} were completed up to the point of publication of the data deposit, including any post-acceptance modifications. A total of \jiraexternal{} issues were sent to external parties with requests for verification (this includes revisions), for \jiramcsexternal{} manuscripts. Table~\ref{tab:jirastats} breaks these numbers down by journal.
 %
+
+\begin{table}[]
+    \caption{Stats}
+    \label{tab:jirastats}
+    \begin{threeparttable}
+    \centering
+    \input{tables/all_by_journal.tex}
+    \end{threeparttable}
+\end{table}
+
+\begin{comment}
 We collected metrics from the online system.%
 \footnote{Data  can be found at \citet{E117876V1}.}
 Figure~\ref{fig:pre:assessments_journal} shows the distribution of  assessments across journals. Figure~\ref{fig:pre:rounds} shows the number of rounds that the \jiramcs{} completed manuscripts have gone through. Assessment take varying amounts of time, depending on the complexity of the paper and the code. Figure~\ref{fig:pre:round_length} shows the distribution of the time it takes to complete each round of assessment. The distribution of the total length of all revision rounds, from the first submission (to the Data Editor) to final acceptance, is shown in Figure~\ref{fig:pre:revision_length}. Figure~\ref{fig:pre:author_response_time} shows the component of the total length that is due to author response time, i.e., the time between the filing of a report by the AEA Data Editor requesting changes, and the time the manuscript is re-assigned to the AEA Data Editor. 
@@ -297,7 +327,7 @@ Figure~\ref{fig:pre:assessments_journal} shows the distribution of  assessments 
     Issues with pre-publication verification
 \end{quote}
 
-
+\end{comment}
 
 \paragraph{Self-corrections}
 
