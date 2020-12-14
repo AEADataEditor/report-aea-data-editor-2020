@@ -217,7 +217,8 @@ stargazer(n_journal_table,style = "aer",
           summary = FALSE,
           out = file.path(tables,"n_journal_numbers.tex"),
           out.header = FALSE,
-          float = FALSE
+          float = FALSE,
+          rownames = FALSE
 )
 #### Length of an assessment rounds (initial submission to us, and filing to Manuscript Central). 
 # This is the duration of each Jira ticket.
