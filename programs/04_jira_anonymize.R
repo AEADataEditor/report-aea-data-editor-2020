@@ -35,6 +35,7 @@ jira.raw <- read.csv(file.path(jirabase,"export_12-11-2020.csv"), stringsAsFacto
   rename(subtask=Sub.tasks) %>%
   mutate(training = grepl("TRAINING", ticket, fixed = TRUE)) %>%
   filter(training == FALSE) %>%
+  filter(Issue.Type=="Task") %>%
   mutate(date_created = as.Date(substr(Created, 1,10), "%m/%d/%Y"),
          date_resolved = as.Date(substr(Resolved, 1,10), "%m/%d/%Y"),
          date_updated = as.Date(substr(As.Of.Date, 1,10), "%m/%d/%Y"),
