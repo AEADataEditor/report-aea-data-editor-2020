@@ -115,7 +115,11 @@
 
 % reset colors
 \definecolor{darkblue}{rgb}{0 0 255}
-\hypersetup{colorlinks,breaklinks,citecolor=darkblue,linkcolor=darkblue,urlcolor=darkblue}
+\hypersetup{colorlinks,
+breaklinks,
+citecolor=darkblue,
+linkcolor=darkblue,
+urlcolor=darkblue}
 
 % Different ways to cite URLS
 %\newcommand{\urlcite}[2]{\href{#1}{#2}
@@ -187,12 +191,16 @@ The \ac{DCAP} allows for code and data deposit to be deposited at other trusted 
 	
 \subsection{Post-publication modifications}
 
-At the time of publication, the article is linked with one (or more) archived supplements, constituting the version of record. What happens when, despite pre-publication scrutiny, an error in the code emerges? The \ac{DCAP} provides for a clear policy on which modifications constitute a minor edit to the version of record, and which modifications lead to a higher version number, without modification of the existing version of record. In particular, any change that potentially changes a computational result will lead to a new version of the deposit being created, without changing or removing the version of record, even if the modifications fixes an error. However, the presence of replication packages that are newer than the version of record is signalled to readers via a banner, and is recorded in the metadata.
+At the time of publication, the article is linked with one (or more) archived supplements, constituting the version of record. What happens when, despite pre-publication scrutiny, an error in the code emerges? The \ac{DCAP} provides for a \href{https://www.aeaweb.org/journals/data/policy-revisions}{clear policy}, identifying which modifications constitute a minor edit to the version of record, and which modifications lead to a higher version number, without modification of the existing version of record. In particular, any change that potentially changes a computational result or adds (untested) code will lead to a new version of the deposit being created, without changing or removing the version of record, even if the modifications fixes an error. However, the presence of replication packages that are newer than the version of record is signalled to readers via a banner, and is recorded in the metadata.
+
+We have had few such post-publication updates. A handful of authors have requested that their historical migrated packages be updated, typically with an improved README. In a few cases, we had published incomplete replication packages when access to the code was not feasible due to COVID-19 related office closures. When authors regained access only after publication of the manuscript, the replication package was updated in a transparent fashion, compliant with our policy. 
 
 \subsection{Intellectual Property and Licenses} 
 \label{sec:ip}
 
-For new deposits at the \aeadcr{}, authors retain  copyright. The default license for all repositories based at openICPSR is the  Creative Commons Attribution (CC-BY) \citep{CreativeCommons2017}, but authors can choose their own license,  though such licenses will be vetted by the Data Editor for compliance with the \ac{DCAP}. We see few authors deviate from the standard license. When deviating, authors tend to choose a different, open source license \citep{OpenSourceInitiative2018} for software and code. In a very small number of cases, we have worked with authors to publish data under more restrictive licenses, due mostly to ethical concerns, while ensuring that replication remains possible.
+For new deposits at the \aeadcr{}, authors retain  copyright. The default license for all repositories based at openICPSR is the  Creative Commons Attribution (CC-BY) \citep{CreativeCommons2017}, but authors can choose their own license,  though such licenses will be vetted by the Data Editor for compliance with the \ac{DCAP}. 
+
+We see few authors deviate from the standard license. When deviating, authors tend to choose a different, open source license \citep{OpenSourceInitiative2018} for software and code. In a very small number of cases, we have worked with authors to publish data under more restrictive licenses, due mostly to ethical concerns, while ensuring that replication remains possible.
 
 % Dwayne Benjamin, Toronto/P&P
 % AER/FL Police officers
@@ -221,13 +229,15 @@ For new deposits at the \aeadcr{}, authors retain  copyright. The default licens
 \end{table}
 
 
-Authors have been very compliant with the policy (Table~\ref{tab:compliance}). We note that authors can be compliant with the policy without providing a copy of the data, as long as the reason for the inability to provide the data is acceptable, correct, and documented as part of the replication materials. In some cases, we have requested data that was not initially provided, when such data could be legally and ethically provided; by the second round of assessments, compliance was generally achieved (see also our discussion of outreach to data providers). In a very small number of cases, authors having conducted research in restricted-access data environments did not provide code. In several cases, relying on personal experience or by reaching out to the managers of the restricted-access environment, we were able to inform the authors of their ability to provide code, in compliance with any security requirements of the restricted-access data environment. In several cases, authors were unable to access the restricted-access environment due to COVID-19 lockdowns, which we accommodated in various ways; however, in all cases, code was ultimately provided. For a very small number of articles, compliance was achieved after the manuscript had been published. We are aware of only one case where the authors were unable to provide code because their employer asserted copyright and did not give permission to post code. One case in which the manuscript has been published is currently pending corrections by the authors, and has not been published as of \today, one month after publication of the article.
+We note that authors can be compliant with the policy without providing a copy of data used, as long as the reason for the inability to provide the data is acceptable, correct, and documented as part of the replication materials. 
+
+Compliance with the policy (Table~\ref{tab:compliance}) has been excellent. In some cases, we have requested data that was not initially provided, when such data could be legally and ethically provided; by the second round of assessments, compliance was generally achieved (see also our discussion of outreach to data providers). In a very small number of cases, authors having conducted research in restricted-access data environments did not provide code. In several cases, relying on personal experience or by reaching out to the managers of the restricted-access environment, we were able to inform the authors of their ability to provide code, in compliance with any security requirements of the restricted-access data environment. In several cases, authors were unable to access the restricted-access environment due to COVID-19 lockdowns, which we accommodated in various ways; however, in all cases, code was ultimately provided. For a very small number of articles, compliance was achieved after the manuscript had been published. We are aware of only one case where the authors were unable to provide code because their employer asserted copyright and did not give permission to post code. One case in which the manuscript has been published is currently pending corrections by the authors, and has not been published as of \today, one month after publication of the article.
 
 \begin{center}
     No changes beyond here
 \end{center}
 
-\section{Infrastructure for Reproducibility}
+\section{Infrastructure for Verification of Reproducibility}
 \label{sec:infrastructure}
 
 The Data Editor manages the infrastructure needed to access data and code, conduct reproducibility checks, and archive and preserve replication packages. The first two points are provided by the replication team at Cornell University, the latter primarily by the  \aeadcr{} provided by openICPSR at the University of Michigan, with additional support from the AEA's in-house IT staff. 
@@ -245,7 +255,11 @@ Report on articles (manuscript ID), reports (unique issues = tasks) and publishe
 \paragraph{The process}
 
 Pre-publicaton verification is conducted by the Data Editor's team at Cornell University. 
-Requests for assessment of reproducibility are received, assigned to a team member, who then assesses data availability and compliance with requirements. When some data is available, a full or limited reproducibility check is conducted. If we cannot obtain access to the data or computational resources in a timely fashion, we may reach out to third-parties who can, and request a reproducibility check from them. Once all computations have been completed, a process that can take anywhere from a few minutes to several weeks, a report is compiled, reviewed and approved by the Data Editor, and submitted back to journal editors, who handle most communications with the authors. The report will have  one of four possible recommendations (see Table). A ``conditional acceptance'' implies that a revision will need to be resubmitted to the Data Editor to address any identified shortcomings. An ``acceptance'' means that no further changes are necessary, and both the manuscript (after copy-editing) and the replication package can be scheduled for publications.\footnote{Manuscript and replication package are generally published at the same time, though at the request of either editors or authors, the replication package can be published at any time after acceptance.} However, to streamline processing, we may also recommend an ``acceptance with modifications requested.'' In such a case, the remaining modifications are minor, and can be handled during copy-editing (for instance, a small number of tables need minimal changes) and prior to publication of the replication package (for instance, a fixable error in a program, or a clarification in the README, not affecting any important tables or figures). We have increasingly made use of this feature. While we monitor that authors comply with the request for modifications, no further computational assessment is made. Finally, we may recommend a ``revise and resubmit'' when serious issues have been identified that materially affect the conclusions of the manuscript. In the past year, two manuscripts required conversations with the editors and the authors, and both were resolved to the satisfaction of all involved.
+Requests for assessment of reproducibility are received, assigned to a team member, who then assesses data availability and compliance with requirements. When some data is available, a full or limited reproducibility check is conducted. If we cannot obtain access to the data or computational resources in a timely fashion, we may reach out to third-parties who can, and request a reproducibility check from them. Once all computations have been completed, a process that can take anywhere from a few minutes to several weeks, a report is compiled, reviewed and approved by the Data Editor, and submitted back to journal editors, who handle most communications with the authors. The report will have  one of four possible recommendations (see Table). A ``conditional acceptance'' implies that a revision will need to be resubmitted to the Data Editor to address any identified shortcomings. An ``acceptance'' means that no further changes are necessary, and both the manuscript (after copy-editing) and the replication package can be scheduled for publications.%
+%
+\footnote{Manuscript and replication package are generally published at the same time, though at the request of either editors or authors, the replication package can be published at any time after acceptance.} 
+%
+However, to streamline processing, we may also recommend an ``acceptance with modifications requested.'' In such a case, the remaining modifications are minor, and can be handled during copy-editing (for instance, a small number of tables need minimal changes) and prior to publication of the replication package (for instance, a fixable error in a program, or a clarification in the README, not affecting any important tables or figures). We have increasingly made use of this feature. While we monitor that authors comply with the request for modifications, no further computational assessment is made. Finally, we may recommend a ``revise and resubmit'' when serious issues have been identified that materially affect the conclusions of the manuscript. In the past year, two manuscripts required conversations with the editors and the authors, and both were resolved to the satisfaction of all involved.
 
 \begin{table}[t]
     \caption{Response options for recommendations}
@@ -263,93 +277,71 @@ Requests for assessment of reproducibility are received, assigned to a team memb
     \end{tabular}
 \end{table}
 
-\paragraph{Metrics}
+\paragraph{Reproducibility reports}
 
-Between \firstday{}, and \lastday{}, the AEA Data Editor team  handled
-\jiraissues{} requests,  for \jiramcs{} manuscripts. Requests typically are channeled to the team by the AEA's journal submission and review system, but others were initiated by authors or editors directly, often while preparing the replication materials. Of these,  responses \jiraissuescplt{} (\jiramcscplt{} manuscripts) were submitted back to editors, and \jiramcspending{} were completed up to the point of publication of the data deposit, including any post-acceptance modifications. A total of \jiraexternal{} issues were sent to external parties with requests for verification (this includes revisions), for \jiramcsexternal{} manuscripts. Table~\ref{tab:jirastats} breaks these numbers down by journal.
+Between \firstday{} and \lastday{}, the AEA Data Editor team  received
+\jiraissues{} requests,  for \jiramcs{} manuscripts.%
+%
+\footnote{This includes only requests submitted between those dates, and does not take into account in-progress requests on \firstday{}.}
+%
+Requests typically are channeled to the team by the AEA's journal submission and review system, but others were initiated by authors or editors directly, often while preparing the replication materials. Of these,  \jiraissuescplt{} reports (\jiramcscplt{} manuscripts) were submitted back to editors,\footnote{The balance are either in progress or are not coded in the adminstrative system as having been submitted to ScholarOne, such as replication packages for Papers and Proceedings.} and \jiramcspending{} were completed up to the point of publication of the data deposit, including any post-acceptance modifications.  Table~\ref{tab:jirastats} breaks these numbers down by journal.
 %
 
 \begin{table}[]
     \caption{Stats}
     \label{tab:jirastats}
+    \footnotesize
     \begin{threeparttable}
     \centering
-    \input{tables/n_journal_numbers}
-    \end{threeparttable}
-\end{table}
+    \input{tables/n_journal_numbers_mod}
+    \begin{tablenotes}
+    \item[] \textit{Notes:} Data for requests received between \firstday{} and \lastday{}. AEA P+P do not generate a report, and are thus not counted under completed (cplt). (pend.) indicates that a manuscript has been marked ready for publication, and may have been published (separate report forthcoming).
+    \end{tablenotes}
+ \end{threeparttable}
+   \end{table}
 
-\begin{comment}
-We collected metrics from the online system.%
-\footnote{Data  can be found at \citet{E117876V1}.}
-Figure~\ref{fig:pre:assessments_journal} shows the distribution of  assessments across journals. Figure~\ref{fig:pre:rounds} shows the number of rounds that the \jiramcs{} completed manuscripts have gone through. Assessment take varying amounts of time, depending on the complexity of the paper and the code. Figure~\ref{fig:pre:round_length} shows the distribution of the time it takes to complete each round of assessment. The distribution of the total length of all revision rounds, from the first submission (to the Data Editor) to final acceptance, is shown in Figure~\ref{fig:pre:revision_length}. Figure~\ref{fig:pre:author_response_time} shows the component of the total length that is due to author response time, i.e., the time between the filing of a report by the AEA Data Editor requesting changes, and the time the manuscript is re-assigned to the AEA Data Editor. 
 
-\begin{figure}
-    \centering
-%    \includegraphics[height=0.4\textheight]{images/n_assessments_journal_plot.png}
-    \caption{Number of assessments}
-    \label{fig:pre:assessments_journal}
-\end{figure}
+\paragraph{Third-party replicators}
+
+A total of \jiraexternal{} issues were sent to external parties with requests for verification (this includes revisions), for \jiramcsexternal{} manuscripts (see Table~\ref{tab:jirastats} for statistics by journal, Appendix~\ref{app:3rdparty} for a list of third-party replicators). We appreciate the willingness of all third-party replicators to provide us with their time and effort in reproducing papers. In particular, \href{https://cascad.tech}{cascad}, a French reproducibility certification agency, generously provided us with 21 reports.
 
 
 
-\begin{figure}
+\begin{table}
     \centering
 %    \includegraphics[height=0.4\textheight]{images/n_rounds_plot.png}
+    See Liz Braunstein's tables - the final publication will have these numbers.
     \caption{Assessment rounds for completed manuscripts}
-    \label{fig:pre:rounds}
-\end{figure}
+    \label{tab:pre:rounds}
+\end{table}
 
-\begin{figure}
+\begin{table}
     \centering
 %    \includegraphics[height=0.4\textheight]{images/revision_round_length_hist.png}
+See Liz Braunstein's tables - the final publication will have these numbers.
     \caption{Length of an assessment round in days}
-    \label{fig:pre:round_length}
-\end{figure}
-
-\begin{figure}
-    \centering
-%    \includegraphics[height=0.4\textheight]{images/total_length_hist.png}
-    \caption{Length of revisions for completed manuscripts}
-    \label{fig:pre:revision_length}
-\end{figure}
+    \label{tab:pre:round_length}
+\end{table}
 
 
+\paragraph{Frequent issues}
 
+We provide a heuristic overview of notable issues  encountered when attempting to reproduce results. We note that none of the \jiramcs{} manuscripts we assessed had  fundamental flaws --- all problems identified so far have been fixable (and fixed). 
 
-\begin{figure}
-    \centering
-%    \includegraphics[height=0.4\textheight]{images/author_response_hist.png}
-    \caption{Author response time}
-    \label{fig:pre:author_response_time}
-\end{figure}
+\subparagraph{Computational issues:}  We still encounter mostly preventable issues of computational instability (see \citet{mccullough_numerical_1999} for one of the earlier observations in this vein). In most cases, authors fail to set a random seed, though this is a requirement of the policy. In some cases, differences in software versions can generate numerical differences despite having fixed a pseudo-random seed generator, for instance optimization routines in Matlab\footnote{\href{https://it.mathworks.com/matlabcentral/answers/422349-fmincon-in-new-matlab-version-gives-different-results}{mathworks.com/matlabcentral/answers/422349-fmincon-in-new-matlab-version-gives-different-results}} and Julia v1.5's faster random number generator.\footnote{\href{https://web.archive.org/web/20201216032133/https://docs.julialang.org/en/v1/NEWS/}{docs.julialang.org/en/v1/NEWS/}} We have also run into issues when Fortran compilations require specific versions of libraries, when versions of \href{https://www.dynare.org/}{Dynare} are not backward-compatible, or when simple data import (Stata) or export (Matlab) functionality does not work the same way on different operating systems. In the past year, we did not encounter use of newer technologies such as ``containers,'' and almost never the use of ``manifest''-like files in R, Python, and Julia, which alleviate some of these issues.  
 
-\begin{quote}
-    Issues with pre-publication verification
-\end{quote}
+\subparagraph{Incomplete instructions and manual manipulation:} While mechanisms such as \texttt{make} files and similar systems have been in use in software development for decades, they are very rarely used in replication packages in economics, even when it would seem a natural fit (Fortran compilations). We have encountered very manual (and tedious) instructions on how to assemble a compilable project for Fortran code, or how to generate a map using GIS software, despite the availability of reproducible tools in all cases. We encountered instructions to repeatedly change small parameters in multiple places in code prior to recompilation, or to manually move datasets between two directories, when the use of parameter files, function calls, or relative directory paths are basic mechanisms of programming. These inefficient mechanisms, while at least initially tolerated, are not just wasteful of replicator time, they are an inefficient use of the author's time as well, and can (and has) lead to errors being introduced into the manuscript's tables and figures. 
 
-\end{comment}
+\subparagraph{Incomplete data provenance and data availability:} Most articles still provide imprecise or incorrect information regarding access to data that is not provided. In some cases, authors fail to provide data that should be provided, in other cases, authors inadvertently provide data for which they do not have redistribution rights. 
 
-\paragraph{Self-corrections}
+\paragraph{Delays} 
 
-We often find that authors find other errors than those the replication team identified. For instance, the manuscript figures might have come from an earlier version of the dataset, or from an earlier run of the code sequence with slightly different parameters. In other cases, while reviewing issues found by our replication team, authors correct econometric errors, which our process is not designed to find. 
+A recurring concern expressed by editors and staff members are delays in publication, due to the verification process. Table~\ref{tab:pre:rounds} shows that the median number of times a manuscript is reviewed by the AEA Data Editor is 2 - far too few manuscripts are given a rating of "acceptable" upon first pass. This leads to substantial time before the manuscript can proceed to copy-editing. We are currently making an analysis of the total time to publication (not yet available).
 
-\paragraph{Computational issues}
+\paragraph{Process improvements}
 
-Numerical differences (Matlab versions, seeds) see \url{https://it.mathworks.com/matlabcentral/answers/
-422349-fmincon-in-new-matlab-version-gives-different-results} as well. Cite the old papers. In some cases, the underlying feature leading to numerical differences is a subtle fragility of the optimization algorithm, or multiple distinct yet close optima that do not fundamentally affect the results.
+In order to increase the initial acceptance rate, we set out in Summer 2020 to review the entire process that authors face. We made several changes aimed at (a) providing authors with the information as early as possible, when it is still easy to include reproducible practices in projects at relatively low cost and (b) providing authors with better information, to reduce frictions and uncertainty. As noted  \hyperref[sec:dcap]{earlier}, we introduced informational forms upon submission, and a brief required information sheet with links to updated and detailed guidance on how to prepare and submit replication packages. We also provide links to the reproducibility checks that our team uses, so authors know in advance what checks will be applied to their replication package. These changes were rolled out in September 2020, but have not yet been incorporated into all journal communications. Finally, the new template README \citep{READMEv1.0.0} introduced in December 2020 with other data editors will hopefully also reduce uncertainty and increase the completeness of the information. 
 
-Fortran challenges (manual compilation instructions, non-open source compile, no Makefiles, no parameter files).
-
-GIS challenges (not considered use of "data", often not described at all, or mostly manual tasks when using ArcGIS - very little python with ArcGIS). 
-
-Robustness checks that are manual
-
-\paragraph{Delays} A recurring concern expressed by editors and staff members was the potential for   delays in publication, due to the verification process. The data presented here indicates that concerns of about a delay in the time-to-publication remain valid, though we have no evidence at this time that the overall time to publication has increased --- the first articles that completed the entire pre-publication verification process were published in late January 2020, after the analysis in this article was completed.
-
-We are addressing these concerns in a variety of ways. First, the current set of manuscripts moving through the assessment process did not anticipate the process --- the manuscripts were written and refereed prior to the July announcement. They thus could not incorporate stronger guidance as easily as future submissions will be able to. Second, we are expanding guidance, as well as preparing template README and project structures that will assist future manuscript submissions to be more rapidly compliant with the \ac{DCAP}, ideally in a first pass. This may include stronger requirements about the information to be provided by authors, including detailed information about the length of time it takes to execute the computer code.
-Third, there is anecdotal evidence that other factors affecting the time-to-publication have been reduced, due to the move to conditional acceptance. Thus, manuscript materials are being completed earlier than before. 
-
-We note that none of the \jiramcs{} manuscripts we assessed had  fundamental flaws --- all problems identified so far have been fixable (and fixed). 
 
 \subsection{Migrating Historical Supplements}
 \label{sec:migration}
@@ -357,15 +349,18 @@ We note that none of the \jiramcs{} manuscripts we assessed had  fundamental fla
 We initially migrated the bulk of historical data (and code) supplements, from ZIP files stored on AEA servers to the \aeadcr{}. As noted earlier, for many of these deposits, we have successfully requested assistance from several hundred authors to update the metadata, improving presentation and findability. A few hundred replication packages are still pending migration, pending reconciliation of duplicates and large-file limitations. Upon demand from readers, we have also sometimes reached out to authors to request materials from articles which were published prior to the original publication of a data availability policy. 
 
 % report on UMich metadata project
+% data provided by email
+
+Thanks to support from a research team at the University of Michigan, we were able to enlist the aid of authors of migrated replication package to improve the attached metadata.  As part of the project, we sent 8,538 email to 3,005 authors of 1,460 studies. Out of the 1,000 authors (35\%) who responded, 911 (30\%) provided additional metadata for 522 studies. An article is expected at the conclusion of the experiment.
 
 \subsection{Improving the \aeadcr{}}
 \label{sec:improvingaeadcr}
 
-We continually assess the performance of the \aeadcr{}. In collaboration with ICPSR, we have increased the default quota from 2GB to 30GB, streamlining the ability of researchers to deposit large replication packages.\footnote{It was previously possible to deposit large replication packages greater than 2GB, but required manual adjustments, resulting in delays and occasionally confusion.} A new workflow has been developed, which provides greater clarity to journal managers on the back-end, and prevents errors that users frequently made. It lays the groundwork for further enhancements in the future. 
+We continually assess the technical performance of the \aeadcr{}. In collaboration with ICPSR, we have increased the default quota from 2GB to 30GB, streamlining the ability of researchers to deposit large replication packages.\footnote{It was previously possible to deposit large replication packages greater than 2GB, but required manual adjustments, resulting in delays and occasionally confusion.} A new workflow has been developed, which provides greater clarity to journal managers on the back-end, and prevents errors that users frequently made. It lays the groundwork for further enhancements in the future. 
 
 % distribution of sizes - email from Jared
 
-\begin{figure}
+\begin{figure}[t]
     \centering
     %\includegraphics{} 
     PLACEHOLDER - 
@@ -375,53 +370,43 @@ We continually assess the performance of the \aeadcr{}. In collaboration with IC
 
 
 
-\section{Task 3: Working with Other Providers of Scientific Infrastructure to Improve Support for Documenting Provenance and Replicability}
+\section{Working with Other Providers of Scientific Infrastructure to Improve Support for Documenting Provenance and Replicability}
 \label{sec:coordination}
 
 An important component of the AEA Data Editor's position is to interact with other providers of scientific infrastructure. This involves other publishers and journals, archives such as ICPSR, providers of restricted or proprietary data, the AEA RCT Registry, metadata harvesters, and third-party verification services. 
-% for exec summary: Also briefing to staff members of the House and Senate Science committees.
 
 \subsection{Highlighting Data Resources}
 
-NEW: See Ganapati \url{https://www.aeaweb.org/articles?id=10.1257/mic.20190029} and Harari \url{https://www.aeaweb.org/articles?id=10.1257/aer.20171673} data extracts, deposits. Also 200GB of NASA data, IPUMS terms of use, citations, and conundrum of copying data when (easy) retrieval from the original provider is not possible.
+While reviewing replication packages, we occasionally identify data, prepared in the course of the research, which could be of greater value if separately archived and professionally curated. This may be because of significant value-added, or because the data would have been difficult to access, if not for the author's data collection or data preparation efforts. Examples include digitized maps of India made amenable for GIS software \citep{10.1257/aer.20171673} or historical Economic Census data for the United States \citep{ganapati2020}. These data are then processed by professional data librarians at ICPSR, and ultimately made available to the broader research community via the regular (non-AEA) ICPSR repository, while providing proper attribution to the author. The collaboration of the authors is voluntary, and we appreciate their efforts. Authors who believe that their data is unique and of value should contact the AEA Data Editor early enough in the research process, even when acceptance at the AEA journals may be uncertain. 
+
+\subsection{Data Providers}
+\label{sec:producers}
+
+We regularly meet and communicate with academic and commercial data providers, on behalf of specific authors or because we have identified a data provider as a frequently used resource. Discussion topics include making data citations easier, clarifying licenses, requesting blanket or streamlined data redistribution authorizations, or suggesting improved curation of data to avoid repeatedly copying data from uncurated websites to the curated \aeadcr{}. As an example, after an email exchange with the leadership of the Economic Policy Uncertainty website \citep{10.1093/qje/qjw024}, the website changed its license to a liberal Creative Commons license, which allows broad re-use and facilitates reproducibility.
+
+In the course of the past year, we have talked about some or all of these topics with IPUMS, EPU, the UNCTAD Division on International Trade and Commodities (TRAINS data), the World Bank, Standard and Poor's, Bloomberg, Tick Data, Haver Analytics, Federal Reserve of St. Louis data librarians\footnote{I am indebted to  Adrienne Brennecke at the St. Louis Fed, who facilitated many of these conversations.}, the World Management Survey, Ben Zipperer at the Economic Policy Institute, Jim Poterba and Dan Feenberg at the NBER, Lucia Foster (U.S. Census Bureau), Barbara Downs (U.S. Census Bureau and Federal Statistical Research Data Centers), the Research Data Centre (FDZ) of the German Federal Employment Agency (BA) at the Institute for Employment Research (IAB), the German Research Data Center of the SOEP, Research Data Center of the German Pension Insurance, the UK Data Archive, the Ministério da economia do Brasil, and the French Centre d'accès sécurisé de données (CASD). 
 
 \subsection{Economics Journals}
 
-We have coordinated with other data editors conducting similar activities at other journals. In 2019, both the \ac{ReStud} and the \ac{EJ}  appointed data editors, tasked among other things with pre-publication verification. The \ac{CJE} is currently revising its \ac{DCAP}. The \ac{JASA} is expanding the scope of its pre-publication verification to all sections of the journal. In all cases, either the AEA Data Editor or an ad-hoc group of ``Social Science Data Editors'' initiate by the AEA Data Editor, was consulted. The ``Social Science Data Editors'' group includes  editors from journals that do not (yet) have a pre-publication verification service. A  \urlcite{socialsciencedataeditors.github.io}{website} provides examples, checklists, and links to training materials, to assist authors in  improving data and code archives prior to submission, regardless of the journal they may be submitting to.
+We continue to coordinate with other data editors conducting similar activities at other journals. An informal mailing list managed by the AEA Data Editor is used occasionally to interact with others.\footnote{Journal editors wishing to join the mailing list should contact the AEA Data Editor.} Mailing list members who wish to be more actively involved can participate in the development of the \urlcite{socialsciencedataeditors.github.io}{website of the S ocial Science Data Editors}. The website contains guidance on data citations and data availability statements, best practices for coding and data preparation, and links to various tools useful to replicators. The recently released template README is one example of collaboration, having benefited from contributions from Miklos Kóren (\ac{ReStud}), Joan Llull (\ac{EJ}), Peter Morrow and Marie Connolly (\ac{CJE}), Chris Paciorek (JASA), Ben Greiner (Management Science),  Kevin Lang (JOLE), Harald Uhlig (JPE). A somewhat newer group emerging from a group of data repositories at Data-PASS has also initiated a mailing list called the Journal Editors Discussion Interface (\urlcite{https://dpjedi.org/}{JEDI}).
 
-\subsection{Search services, text mining access}
-As noted earlier, the move of supplements into the openICPSR-supported repository enables broad dissemination of metadata on supplements. Among others, Google Dataset Search harvests and then displays such metadata. Staff from openICPSR and the AEA Data Editor have been discussing informally with the Google Dataset Search team on how to correctly display metadata as it moves through the various scrapers. 
-
-Over the course of the past year, the AEA has been approached by two research projects that wished to use the full-text versions of AEA articles to enhance the linkage between articles and data. We worked with these teams to establish a policy by which they could legally access the full archive of articles, but also subsequently make their work available to others. AEA counsel is currently working on a full-fledged data and text mining policy.
 
 \subsection{Third-party verification services}
 \label{sec:3rdparty}
 
-\begin{quote}
-    Write a lot here.
-\end{quote}
-We have started discussions with third-party verification services. In particular, we have trialled using their services, instead of our in-house team, to conduct assessments. This aligns with the discussions among editors about resources and scalability of assessments, and with the educational outreach, which some of these services also conduct. Part of the effort consists in aligning the criteria used by these services with those of the various journals.
 
-\subsection{Commercial providers}
+We continue to rely on and have discussions with third-party verification services. As noted earlier, \jiramcsexternal{} reports were provided by some sort of external replicator. Of those, several were provided by institutions that already are organized as a reproducibility service (R-squared at Cornell University, cascad in France). The AEA Data Editor has had preliminary discussions with several institutions about the interest and possibilities of formalizing such services. Issues of cost, frequency, and at what point such services would be involved in the research lifecycle remain unresolved. 
 
-Highlight exemplary redistribution agreement at ESRI. Highlight in all cases the need to have access rights for pre-production verification, including to the same access mechanisms. 
 
-\subsection{Non-commercial providers of restricted-access data}
 
-Increased provision of data citations, clear license/ usage rights. Ongoing work. Briefings of US, Canadian, German, French, UK restricted access centers. Some providers have also reached out to inquire pro-actively how to improve their access mechanisms, distribution mechanisms, and documentation thereof.
+\section{Working with the Economics Community to Enhance and Broaden Education on Replicable Science}
 
-\section{Task 4: Working with the Economics Community to Enhance and Broaden Education on Replicable Science}
-
-\begin{quote}
-    write about participation of other journals, as well as nascent efforts around Data-PASS and RDA.
-\end{quote}
-
-From the preliminary verification work has emerged a clear indication that education and training is critical for the adoption of reproducible methods. We are expanding the support materials, and are adapting them to each discipline's idiosyncratic methods. Training materials will be made available by various organizations, with input from the AEA Data Editor. The \urlcite{https://aeadataeditor.github.io/aea-de-guidance/}{AEA Data Editor's website} as well as the website of the \urlcite{https://social-science-data-editors.github.io/guidance/}{Social Science Data Editors} are being regularly updated with additional guidance, and will hopefully allow authors to be responsive to various journals' \ac{DCAP}.
+We have already noted the outreach to other journals and repositories above. Educating the current and future generations of economists is one of the longer-term goals for improving reproducibility of research. The AEA Data Editor has presented at TIER, and at various regional economics conferences that connect to communities of junior and later-career economists. One of the successful CSWEP "Fireside chats" is scheduled with the AEA Data Editor in late January. Various recordings of such presentations by the AEA Data Editor are available on Youtube. Together with BITSS (UC Berkeley), a framework and platform to support teaching reproducibility is being developed, complementing other existing services such as the ReplicationWiki. Presentations at the CTREE conference are planned. 
 
 \section{Data and Code Availability Statement}
 \label{sec:dcas}
 
-All data and code used to generate figures and tables in this article can be found at \citet{E117884V1}, with some data archived as \citet{E117873V1} and \citet{E117876V1}. Data on the AEA RCT Registry was extracted by JT and KW from internal systems, but can now be downloaded directly \citep{DVN/DFMLIU_2020}. The data provided here as part of \citet{E117884V1} may differ.
+All data and code used to generate figures and tables in this article can be found at TBD.
 
 \FloatBarrier
 % Remove or comment out the next two lines if you are not using bibtex.
@@ -435,6 +420,26 @@ All data and code used to generate figures and tables in this article can be fou
 \appendix
 
 %\input{appendix.tex}
+
+\section{Replication team at Cornell University}
+\label{app:replicators}
+
+The following students have provided excellent assistance in reproducing the results from the \jiramcs{} articles processed by the Replication Lab:
+
+(LIST TO COME)
+
+Graduate students David Wasser, Meredith Welch, and Hyuk Harry Son (all Cornell University) and Research Aide Michael Darisse (Cornell University) have been invaluable assistants in training and coordinating the work as well as developing the methods and procedures which we have made public. 
+
+\section{Third-party replicators}
+\label{app:3rdparty}
+
+We are grateful to the following third-party replicators (individuals\footnote{We do not name individuals when doing so would reveal information not already known to the manuscript's authors, naming the institution instead.} and institutions, in no particular order) who assisted us with verifications when we were unable to access data or, in some cases, computing resources:
+%
+Peri Weisberg (San Francisco Human Services Agency), Research Data Centre (FDZ) of the German Federal Employment Agency (BA) at the Institute for Employment Research (IAB), Majken Stenberg, CHRR at The Ohio State University, Florio Arguillas at the Results Reproduction (R-Squared) service at Cornell University, Kan Yao (Yale University),  Yulia Zhestkova (University of Chicago), Kamen Velichkov (Wharton), Ian Schmutte (University of Georgia), Paulo Guimarães (Banco de Portugal Microdata Research Laboratory - BPLIM), Arpita Patnaik (University of Wisconsin), Joint Committee on Taxation of the Congress of the United States, Upjohn Institute (2x), Kevin McKinney (U.S. Census Bureau), Vítor Costa (Cornell University, 2x), Rahul Kasar and Andrea Garcia (Federal Reserve Board). We in particular want to thank Olivier Akmansoy, Christophe Hurlin (Université d'Orléans), and Christophe Pérignon (HEC Paris), all of \href{https://cascad.tech}{cascad}, a certification agency for scientific code and data, who have been generous of their time and resources, and have provided us with 21 reports. They have been able to leverage their access to confidential French administrative data (customs and labor market data), and have served as our proxies when data access was only available to European residents for Swedish administrative data. 
+
+We thank the following individuals who provided us with direct access to data and computing resources under their control, in order to prepare a reproducibility report. In such cases, we were able to conduct our checks ourselves, with full independence: Marc-Andreas Muendler (UCSD), Dan Feenberg (NBER).
+
+We do not name the authors with whom we signed non-disclosure agreements, or who otherwise provided us with access to data that could not be published. We are grateful for their flexibility and patience.
 
 
 \end{document}
