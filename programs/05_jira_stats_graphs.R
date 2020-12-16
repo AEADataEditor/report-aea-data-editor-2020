@@ -24,8 +24,6 @@ library(stargazer)
 jira.raw <- readRDS(file.path(jiraanon,"jira.anon.RDS")) 
 
 # A list of non-issues, typically for information-only
-
-# This filters for the cases **submitted** in the past 12 months
 jira.pyear <- jira.raw %>%
   filter(date_created >= firstday, date_created < lastday) %>%
   filter(status_change=="Yes"|received=="Yes") %>%
@@ -33,33 +31,6 @@ jira.pyear <- jira.raw %>%
   filter(subtask_y=="No") %>%
   filter(ticket!="AEAREP-1589") ## Decision notice of aearep-1523
 
-issues_all <- jira.pyear %>%
-  select(ticket) %>%
-  distinct() %>% nrow()
-
-manuscript_all <- jira.pyear %>%
-  select(mc_number_anon) %>% 
-  distinct() %>% nrow()
-
-# we used the start and end date here, so write them out
-update_latexnums("firstday",firstday)
-update_latexnums("lastday",lastday)
-update_latexnums("jiraissues",issues_all)
-update_latexnums("jiramcs",manuscript_all)
-
-## By journal
-issues_total_journal <- jira.pyear %>%
-  filter(!(Journal=="")) %>%
-  group_by(Journal) %>%
-  summarise(issue_numbers = n_distinct(ticket),
-            mcs_numbers   = n_distinct(mc_number_anon))
-
-stargazer(issues_total_journal,style = "aer",
-          summary = FALSE,
-          out = file.path(tables,"issues_total_journal.tex"),
-          out.header = FALSE,
-          float = FALSE
-)
 
 #### Break out of the issues
 jira.issues.breakout <- jira.pyear %>%
@@ -70,22 +41,26 @@ jira.issues.breakout <- jira.pyear %>%
   select(ticket,Status,new1) %>%
   pivot_wider(names_from = new1, values_from = "Status")
 
+# identifying the list of received tickets
 ji <- jira.pyear %>%
   select(ticket,Journal) %>%
   distinct(ticket, .keep_all = TRUE) 
 
+# identifying the list of issues went through alternate workflow
 ji_alt <- jira.pyear %>%
   filter(Status == "Alternate"|Status=="Alternate workflow") %>%
   select(ticket) %>%
   distinct() %>%
   mutate(alternate="Yes")
 
+# identifying the list of submitted issues 
 jis <- jira.pyear %>%
   filter(Status == "Submitted to MC" & Journal != "AEA P&P") %>%
   select(ticket) %>%
   distinct() %>%
   mutate(submitted="Yes")
 
+# figure out the final status of the issue as of 12/01/2020
 jib <- jira.issues.breakout %>%
   left_join(jis,by="ticket") %>%
   transform(submitted=ifelse(is.na(submitted),"No",as.character(submitted))) %>%
@@ -118,6 +93,7 @@ jib <- jira.issues.breakout %>%
                                                                                                                                                                                                  ifelse(!is.na(Status1),as.character(Status1),"")))))))))))))))))))))))))) %>%
   select(ticket,final_status)
 
+# categorize issues: P&P, Submitted, Not yet submitted, Alternate workflow, Others.
 jira.issues.breakout <- jira.issues.breakout %>%  
   left_join(jis,by="ticket") %>%
   left_join(ji,by="ticket") %>%
@@ -131,10 +107,51 @@ jira.issues.breakout <- jira.issues.breakout %>%
                                   ifelse(alternate=="Yes","Alternate","Others"))))  %>%
   transform(outcome=ifelse(submitted=="Yes","Submitted",as.character(outcome)))
 
+# summarize the breakdown of the cases
 summary.breakout <- jira.issues.breakout %>%  
   group_by(outcome) %>%
   summarise(n_outcome = n_distinct(ticket)) 
 
+## separate the "Others" case
+jira.others <- jira.issues.breakout %>%
+  filter(outcome=="Others"|outcome=="Alternate") %>%
+  select(ticket) %>%
+  mutate(others="Yes")
+
+## filter out the "others" case
+jira.pyear <- jira.pyear %>%
+  left_join(jira.others,by="ticket") %>%
+  transform(others=ifelse(is.na(others),"No",as.character(others))) %>%
+  filter(others=="No") 
+
+# This filters for the cases **submitted** in the past 12 months
+issues_all <- jira.pyear %>%
+  select(ticket) %>%
+  distinct() %>% nrow()
+
+manuscript_all <- jira.pyear %>%
+  select(mc_number_anon) %>% 
+  distinct() %>% nrow()
+
+# we used the start and end date here, so write them out
+update_latexnums("firstday",firstday)
+update_latexnums("lastday",lastday)
+update_latexnums("jiraissues",issues_all)
+update_latexnums("jiramcs",manuscript_all)
+
+## By journal
+issues_total_journal <- jira.pyear %>%
+  filter(!(Journal=="")) %>%
+  group_by(Journal) %>%
+  summarise(issue_numbers = n_distinct(ticket),
+            mcs_numbers   = n_distinct(mc_number_anon))
+
+stargazer(issues_total_journal,style = "aer",
+          summary = FALSE,
+          out = file.path(tables,"issues_total_journal.tex"),
+          out.header = FALSE,
+          float = FALSE
+)
 
 #### Number of reports processed (went past submitted to MC) since December 1, 2019
 ## Total submitted records
