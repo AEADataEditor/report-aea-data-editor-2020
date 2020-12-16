@@ -86,7 +86,7 @@ jis <- jira.pyear %>%
   distinct() %>%
   mutate(submitted="Yes")
 
-jira.issues.breakout2 <- jira.issues.breakout %>%
+jib <- jira.issues.breakout %>%
   left_join(jis,by="ticket") %>%
   transform(submitted=ifelse(is.na(submitted),"No",as.character(submitted))) %>%
   filter(submitted=="No") %>%
@@ -129,7 +129,9 @@ jira.issues.breakout <- jira.issues.breakout %>%
   transform(outcome=ifelse(Journal=="AEA P&P","P&P",
                            ifelse(final_status=="Open"|final_status=="Assigned"|final_status=="In Progress"|final_status=="Report Under Review"|final_status=="Write Preliminary Report"|final_status=="Verification"|final_status=="Pre-Approved"|final_status=="Approved"|final_status=="Data"|final_status=="Waiting for info"|final_status=="Waiting for external report","Not yet submitted",
                                   ifelse(alternate=="Yes","Alternate","Others"))))  %>%
-  transform(outcome=ifelse(submitted=="Yes","Submitted",as.character(outcome)))  %>%
+  transform(outcome=ifelse(submitted=="Yes","Submitted",as.character(outcome)))
+
+summary.breakout <- jira.issues.breakout %>%  
   group_by(outcome) %>%
   summarise(n_outcome = n_distinct(ticket)) 
 
