@@ -101,7 +101,7 @@ jira.issues.breakout <- jira.issues.breakout %>%
   transform(submitted=ifelse(is.na(submitted),"No",as.character(submitted))) %>%
   transform(alternate=ifelse(is.na(alternate),"No",as.character(alternate))) %>%
   select(ticket,Journal,submitted,alternate) %>%
-  left_join(jira.issues.breakout2, by="ticket") %>%
+  left_join(jib, by="ticket") %>%
   transform(outcome=ifelse(Journal=="AEA P&P","P&P",
                            ifelse(final_status=="Open"|final_status=="Assigned"|final_status=="In Progress"|final_status=="Report Under Review"|final_status=="Write Preliminary Report"|final_status=="Verification"|final_status=="Pre-Approved"|final_status=="Approved"|final_status=="Data"|final_status=="Waiting for info"|final_status=="Waiting for external report","Not yet submitted",
                                   ifelse(alternate=="Yes","Alternate","Others"))))  %>%
@@ -311,6 +311,8 @@ stargazer(n_journal_table,style = "aer",
           float = FALSE,
           rownames = FALSE
 )
+
+
 #### Length of an assessment rounds (initial submission to us, and filing to Manuscript Central). 
 # This is the duration of each Jira ticket.
 # Uses start date and date of status update after restricting to the cases "Submitted to MC"
@@ -445,6 +447,60 @@ ggsave(file.path(images,"n_software_used_plot.png"),
        n_software_used_plot  +
          labs(y=element_blank(),title=element_blank()))
 n_software_used_plot
+
+
+
+#### Number of submitted cases by different reasons of failure to replicate
+reasons_failure <- jira.filter.submitted %>%
+  select(ticket, reason1, reason2, reason3, reason4, reason5, reason6, reason7) %>%
+  distinct(ticket, .keep_all = TRUE) %>%
+  pivot_longer(!ticket, names_to = "n", values_to = "reason") %>%
+  filter(reason!="") %>%
+  select(-n)
+
+summary_reasons <- reasons_failure %>%
+  group_by(reason) %>%
+  summarise(n_issues = n_distinct(ticket))
+
+# Histogram
+n_reasons_plot <- ggplot(summary_reasons, aes(x = reason, y = n_issues)) +
+  geom_bar(stat = "identity", colour="white", fill="grey") +
+  labs(x = "Reason for failure to replicate", y = "Number of issues", title = "Number of issues by reasons for failure") + 
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45))
+
+ggsave(file.path(images,"n_reasons_plot.png"), 
+       n_reasons_plot  +
+         labs(y=element_blank(),title=element_blank()))
+n_reasons_plot
+
+
+
+
+#### Number of submitted cases by MC recommendations
+recommendation <- jira.filter.submitted %>%
+  select(ticket, MCRecommendation, MCRecommendationV2) %>%
+  distinct(ticket, .keep_all = TRUE) %>%
+  transform(mcrec=ifelse(MCRecommendationV2!="",as.character((MCRecommendationV2)),
+                         ifelse(MCRecommendation!="",as.character(MCRecommendation),""))) %>%
+  select(ticket,mcrec)
+
+summary_recommendation <- recommendation %>%
+  group_by(mcrec) %>%
+  summarise(n_issues = n_distinct(ticket))
+
+# Histogram
+n_recommendation_plot <- ggplot(summary_recommendation, aes(x = mcrec, y = n_issues)) +
+  geom_bar(stat = "identity", colour="white", fill="grey") +
+  labs(x = "Recommendation", y = "Number of issues", title = "Number of issues by recommendation") + 
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45))
+
+ggsave(file.path(images,"n_recommendation_plot.png"), 
+       n_recommendation_plot  +
+         labs(y=element_blank(),title=element_blank()))
+n_recommendation_plot
+
 
 
 #### Length of author responses (time between filing report of first assessment, and getting the next submission)
