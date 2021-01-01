@@ -28,8 +28,8 @@ if ( process_raw == TRUE ) {
   
     
     
-jira.raw <- read.csv(file.path(jirabase,"export_12-22-2020.csv"), stringsAsFactors = FALSE) %>%
-  rename(ticket=ï..Key) %>%
+jira.conf.raw <- read.csv(file.path(jirabase,"export_12-22-2020.csv"), stringsAsFactors = FALSE) %>%
+  rename(ticket=Key) %>%
   rename(reason.failure=Reason.for.Failure.to.Fully.Replicate) %>%
   rename(external=External.validation) %>%
   rename(subtask=Sub.tasks) %>%
@@ -50,7 +50,7 @@ jira.raw <- read.csv(file.path(jirabase,"export_12-22-2020.csv"), stringsAsFacto
   select(-training)
 
 ## split out the reasons 
-jira.raw <- jira.raw %>%
+jira.conf.raw <- jira.conf.raw %>%
 cSplit("reason.failure",",") %>% 
   transform(reason1 = ifelse(reason.failure_01=="Discrepancy"|reason.failure_02=="Discrepancy"|
                                reason.failure_03=="Discrepancy"|reason.failure_04=="Discrepancy"|
@@ -217,7 +217,7 @@ cSplit("reason.failure",",") %>%
          -reason.failure_11,-reason.failure_12,-reason.failure_13,-reason.failure_14,-reason.failure_15,
          -reason.failure_16,-reason.failure_17,-reason.failure_18,-reason.failure_19,-reason.failure_20)
 
-jira.raw.subtask <- jira.raw %>%
+jira.conf.subtask <- jira.conf.raw %>%
   select(ticket, subtask) %>%
   cSplit("subtask",",")  %>%
   distinct() %>%
@@ -227,19 +227,19 @@ jira.raw.subtask <- jira.raw %>%
   rename(ticket=value) 
 
   
-jira.raw.temp <- jira.raw %>%
+jira.conf.temp <- jira.conf.raw %>%
   select(ticket, mc_number) %>%
   distinct(ticket, .keep_all = TRUE) %>%
   filter(mc_number!="") %>%
-  left_join(jira.raw,by="ticket") %>%
+  left_join(jira.conf.raw,by="ticket") %>%
   rename(mc_number = mc_number.x) %>%
   select(-subtask) %>%
-  left_join(jira.raw.subtask) ->jira.raw
+  left_join(jira.conf.subtask) ->jira.conf.raw
 
 
 ## Keep only variables needed
 
-jira.conf <- jira.raw %>%
+jira.conf <- jira.conf.raw %>%
   select(ticket,date_created,date_resolved,date_updated,mc_number,Journal,Status,
          Software.used_1,Software.used_2,Software.used_3,Software.used_4,received,
          status_change,external,subtask,Resolution,
