@@ -29,6 +29,7 @@ jira.pyear <- jira.raw %>%
   filter(status_change=="Yes"|received=="Yes") %>%
   mutate(subtask_y=ifelse(is.na(subtask),"No",ifelse(subtask!="","Yes",""))) %>%
   filter(subtask_y=="No") %>%
+  filter(Journal != "AEA P&P") %>% ## Removing all P&P
   filter(ticket!="AEAREP-1589") ## Decision notice of aearep-1523
 
 
@@ -191,7 +192,8 @@ n_assessments_journal_plot <- ggplot(assess_cplt_journal, aes(x = Journal, y = i
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Journal", y = "Number of assessments", title = "Total assessments completed, by journal") + 
   theme_classic() +
-  theme(axis.text.x = element_text(angle=45))
+  geom_text(aes(label=issues_cplt), hjust=1.3, size=3.5) +
+  coord_flip()
 
 ggsave(file.path(images,"n_assessments_journal_plot.png"), 
        n_assessments_journal_plot  +
@@ -209,7 +211,8 @@ n_unique_journal_plot <- ggplot(assess_cplt_journal, aes(x = Journal, y = mcs_cp
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Journal", y = "Number of papers", title = "Number of Papers, completed, by journal") + 
   theme_classic() +
-  theme(axis.text.x = element_text(angle=45))
+  geom_text(aes(label=mcs_cplt), hjust=1.3, size=3.5) +
+  coord_flip()
 
 
 ggsave(file.path(images,"n_unique_journal_plot.png"), 
@@ -279,7 +282,8 @@ n_external_journal_plot <- ggplot(external_total_journal, aes(x = Journal, y = i
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Journal", y = "Number of cases processed by external replicator", title = "Total usage of external replicators by journal") + 
   theme_classic() +
-  theme(axis.text.x = element_text(angle=45))
+  geom_text(aes(label=issues_external), hjust=1.5, size=3.5) +
+  coord_flip()
 
 
 ggsave(file.path(images,"n_external_journal_plot.png"), 
@@ -323,6 +327,8 @@ duration.data <- jira.filter.submitted  %>%
    
 table.duration <- duration.data %>% group_by(length) %>%
   summarise(n_tickets = n_distinct(ticket))
+mode <- table.duration %>% filter(n_tickets == max(n_tickets)) %>% select(n_tickets)
+mode.days <- table.duration %>% filter(n_tickets == max(n_tickets)) %>% select(length) %>% as.numeric()
 #------
 # Histogram
 #geom_histogram(aes(y=..density..), colour="white", fill="grey", binwidth = 5)+
@@ -330,6 +336,10 @@ table.duration <- duration.data %>% group_by(length) %>%
 revision_round_length <- ggplot(duration.data, aes(x = length)) +
   geom_histogram(aes(y=..density..), colour="white", fill="grey", binwidth = 5)+
   geom_density(alpha=.2, fill = "black", col="black") +
+  geom_vline(aes(xintercept=mode.days),
+             linetype="dashed", size=0.5) +
+  annotate("text",x=as.numeric(mode.days)+20,y=0.03,
+              label=paste("Mode:",mode.days,"days"),size=3.5) +
   theme_classic() +
   scale_colour_brewer(palette = "Paired") +
   labs(x = "Days", y = "Density", title = "Length of revision rounds") 
@@ -367,6 +377,9 @@ revision_round_length.pos
 
 #### Length of complete cycle time (initial submission to us, and pending publication).
 # Uses start date and resolution date after restricting to the cases to "pending publications"
+#
+#  THIS IS NOT RELIABLE - many of the older issues were not transitioned 
+#                         to "Pending openICPSR" nor to "Pending publication"
 
 cycle.data <- jira.pyear %>%
   filter(Status == "Pending publication") %>%
@@ -441,7 +454,7 @@ n_software_used_plot <- ggplot(plot_software_used, aes(x = software_used, y = n_
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Statistical Packages", y = "Number of papers", title = "Number of papers by statistical packages used") + 
   theme_classic() +
-  theme(axis.text.x = element_text(angle=45))
+  coord_flip()
 
 ggsave(file.path(images,"n_software_used_plot.png"), 
        n_software_used_plot  +
@@ -451,6 +464,9 @@ n_software_used_plot
 
 
 #### Number of submitted cases by different reasons of failure to replicate
+## 
+##  Why does this not have "Code missing"?
+## 
 reasons_failure <- jira.filter.submitted %>%
   select(ticket, reason1, reason2, reason3, reason4, reason5, reason6, reason7) %>%
   distinct(ticket, .keep_all = TRUE) %>%
@@ -467,7 +483,7 @@ n_reasons_plot <- ggplot(summary_reasons, aes(x = reason, y = n_issues)) +
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Reason for failure to replicate", y = "Number of issues", title = "Number of issues by reasons for failure") + 
   theme_classic() +
-  theme(axis.text.x = element_text(angle=45))
+  coord_flip()
 
 ggsave(file.path(images,"n_reasons_plot.png"), 
        n_reasons_plot  +
@@ -478,12 +494,16 @@ n_reasons_plot
 
 
 #### Number of submitted cases by MC recommendations
+## Only for Conditional Accept
+
 recommendation <- jira.filter.submitted %>%
-  select(ticket, MCRecommendation, MCRecommendationV2) %>%
+  select(ticket, MCRecommendationV2,Journal,date_resolved) %>%
+  filter(MCRecommendationV2!="") %>%
+  filter(!ticket %in% c("AEAREP-924","AEAREP-758","AEAREP-710","AEAREP-701","AEAREP-502","AEAREP-470","AEAREP-454","AEAREP-451","AEAREP-405")) %>%
   distinct(ticket, .keep_all = TRUE) %>%
-  transform(mcrec=ifelse(MCRecommendationV2!="",as.character((MCRecommendationV2)),
-                         ifelse(MCRecommendation!="",as.character(MCRecommendation),""))) %>%
-  select(ticket,mcrec)
+  transform(mcrec=as.character(MCRecommendationV2),
+            yq=paste(year(date_resolved),quarter(date_resolved),sep="Q")) %>%
+  select(ticket,mcrec,Journal,date_resolved,yq)
 
 summary_recommendation <- recommendation %>%
   group_by(mcrec) %>%
@@ -494,13 +514,23 @@ n_recommendation_plot <- ggplot(summary_recommendation, aes(x = mcrec, y = n_iss
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Recommendation", y = "Number of issues", title = "Number of issues by recommendation") + 
   theme_classic() +
-  theme(axis.text.x = element_text(angle=45))
+  coord_flip()
+
+n_recommendation_plot_evo <- ggplot(recommendation %>% filter(yq > "2019Q4"), aes(x = yq)) +
+  geom_bar(aes(fill=mcrec),position="fill",colour="white") +
+  labs(x = "Recommendation", y = "Number of issues", title = "Number of issues by recommendation") + 
+  theme_classic() +
+  coord_flip()
+
 
 ggsave(file.path(images,"n_recommendation_plot.png"), 
        n_recommendation_plot  +
          labs(y=element_blank(),title=element_blank()))
 n_recommendation_plot
 
+ggsave(file.path(images,"n_recommendation_plot_evo.png"), 
+       n_recommendation_plot_evo  +
+         labs(y=element_blank(),title=element_blank()))
 
 
 #### Length of author responses (time between filing report of first assessment, and getting the next submission)
@@ -550,7 +580,7 @@ author_length <- author_length %>%
          round_start = date_created,
         round_end = date_updated,
         round_end_previous = lag(round_end), 
-        length=difftime(round_start,round_end_previous,units="days"))
+        length=difftime(round_start,round_end_previous,units="days")) %>%
   ungroup 
   
   
@@ -572,7 +602,9 @@ author_length <- author_length %>%
 
   
 #### Distribution of rounds each paper goes through
+## THIS NEEDS DATA FROM BEFORE DEC 2019 - jira.pyear is not the right data.
 ## Total
+
 n_rounds <- jira.pyear %>%
   mutate(completed = ifelse(grepl("Pending publication", Status, fixed = TRUE) == TRUE, 1, 0)) %>%
   group_by(mc_number_anon) %>%
@@ -631,7 +663,7 @@ n_rounds_journal_plot <- ggplot(n_rounds_journal, aes(x = rounds_tot, y = frac_p
   scale_colour_brewer(palette = "Paired") +
   labs(x = "Rounds", y = "Fraction of papers", title = "Distribution of review rounds by journal") + 
   facet_grid(Journal ~ .) +
-  theme(axis.text.x = element_text(angle=45))
+  coord_flip()
 
 ggsave(file.path(images,"n_rounds_journal_plot.png"), 
        n_rounds_journal_plot  +
@@ -640,11 +672,14 @@ n_rounds_journal_plot
 
 
 
-----
+---- below does not work - break here
   
-  #### Reason for Failure to Fully Replicate since December 1, 2019
-  reason_failure <- jira.filter.submitted %>%
-  transform(reason = ifelse(ticket=="AEAREP-764", "Bugs in code, Insufficient time available to replicator, Data not available",as.character(reason))) %>%
+  
+#### Reason for Failure to Fully Replicate since December 1, 2019
+reason_failure <- jira.filter.submitted %>%
+    transform(reason = if_else(ticket=="AEAREP-764",
+                             "Bugs in code, Insufficient time available to replicator, Data not available",
+                             as.character(reason))) %>%
   cSplit("reason",",")
 
 # Histogram
@@ -652,7 +687,7 @@ n_reason_failure_plot <- ggplot(reason_failure, aes(x = Journal, y = issues_cplt
   geom_bar(stat = "identity", colour="white", fill="grey") +
   labs(x = "Journal", y = "Number of assessments", title = "Total assessments completed, by journal") + 
   theme_classic() +
-  theme(axis.text.x = element_text(angle=45))
+  coord_flip()
 
 ggsave(file.path(images,"n_reason_failure_plot.png"), 
        n_reason_failure_plot  +

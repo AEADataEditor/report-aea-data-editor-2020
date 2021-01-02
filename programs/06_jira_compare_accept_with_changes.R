@@ -137,8 +137,8 @@ recommendation <- jira.pyear %>%
   select(ticket,mc_number_anon,mcrec,date_created,date_updated,Journal,Status) %>%
   mutate(length_issue = difftime(date_updated,date_created,units="days"),
          awc=ifelse(mcrec=="Accept - with Changes",1,0),
-         y_created = ifelse(date_created >= "2019-07-01"&date_created < "2020-01-01","2019",
-                            ifelse(date_created >= "2020-07-01"&date_created < lastday,"2020",""))) %>%
+         period = ifelse(date_created >= "2019-07-01"&date_created < "2020-01-01","2019H2",
+                            ifelse(date_created >= "2020-07-01"&date_created < lastday,"2020H2",""))) %>%
   group_by(mc_number_anon) %>%
   mutate(paper_initial = min(date_created),
          paper_last = max(date_updated),
@@ -152,7 +152,7 @@ recommendation <- jira.pyear %>%
 
 ### Summary
 summary.recommendation <- recommendation %>%
-  group_by(y_created) %>%
+  group_by(period) %>%
   summarise(n_papers = n_distinct(mc_number_anon),
             n_rounds = mean(rounds),
             mean_length_paper = mean(length_total),
@@ -161,7 +161,7 @@ summary.recommendation <- recommendation %>%
 
   
 ### histogram
- plot_length_total <- ggplot(recommendation, aes(x = length_total,color=y_created, group=y_created,fill=y_created)) +
+ plot_length_total <- ggplot(recommendation, aes(x = length_total,color=period, group=period,fill=period)) +
     geom_histogram(position="dodge",aes(y=..density..), colour="white", binwidth = 5)+
     geom_density(alpha=.2, col="black") +
     theme_classic() +
