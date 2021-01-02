@@ -10,7 +10,7 @@
 ### Load libraries 
 ### Requirements: have library *here*
 source(here::here("programs","config.R"),echo=TRUE)
-global.libraries <- c("ggplot2","dplyr","here","tidyr","tibble","devtools")
+global.libraries <- c("ggplot2","dplyr","here","tidyr","tibble","devtools","lubridate")
 results <- sapply(as.list(global.libraries), pkgTest)
 
 
@@ -30,7 +30,7 @@ inout <- jira.aer %>%
   distinct(ticket,Status, .keep_all = TRUE) %>% 
   mutate(ym = format(date_updated,"%Y-%m"))
 
-ggplot(inout %>% filter(month(date_updated) != 12),
+issue_flows <- ggplot(inout %>% filter(month(date_updated) != 12),
        aes(x=ym)) + 
   geom_bar(aes(fill=flow),position="fill") + 
   labs(x = "Flows",  title = "Inflow/outflow") + 
@@ -41,7 +41,7 @@ ggplot(inout %>% filter(month(date_updated) != 12),
   coord_flip() 
 
 ggsave(file.path(images,"issue_flows_aer.png"), 
-       n_recommendation_plot  +
+       issue_flows  +
          labs(y=element_blank(),title=element_blank()))
 
 # look at recommendations
