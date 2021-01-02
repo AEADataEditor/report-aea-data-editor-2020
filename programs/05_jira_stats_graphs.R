@@ -497,13 +497,13 @@ n_reasons_plot
 ## Only for Conditional Accept
 
 recommendation <- jira.filter.submitted %>%
-  select(ticket, MCRecommendationV2,Journal,date_resolved) %>%
+  select(ticket, MCRecommendationV2,Journal,date_updated) %>%
   filter(MCRecommendationV2!="") %>%
   filter(!ticket %in% c("AEAREP-924","AEAREP-758","AEAREP-710","AEAREP-701","AEAREP-502","AEAREP-470","AEAREP-454","AEAREP-451","AEAREP-405")) %>%
   distinct(ticket, .keep_all = TRUE) %>%
   transform(mcrec=as.character(MCRecommendationV2),
-            yq=paste(year(date_resolved),quarter(date_resolved),sep="Q")) %>%
-  select(ticket,mcrec,Journal,date_resolved,yq)
+            yq=paste(year(date_updated),quarter(date_updated),sep="Q")) %>%
+  select(ticket,mcrec,Journal,date_updated,yq)
 
 summary_recommendation <- recommendation %>%
   group_by(mcrec) %>%
