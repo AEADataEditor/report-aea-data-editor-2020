@@ -23,6 +23,9 @@ library(stargazer)
 # Read in data extracted from Jira, anonymized
 jira.raw <- readRDS(file.path(jiraanon,"jira.anon.RDS")) 
 
+# Read in data extracted from openICPSR,
+icpsr <- read.csv(file.path(icpsrbase,"AEA Report Fedora.csv"), stringsAsFactors = FALSE)
+
 # A list of non-issues, typically for information-only
 jira.pyear <- jira.raw %>%
   filter(date_created >= firstday, date_created < lastday) %>%
@@ -692,6 +695,31 @@ n_reason_failure_plot <- ggplot(reason_failure, aes(x = Journal, y = issues_cplt
 ggsave(file.path(images,"n_reason_failure_plot.png"), 
        n_reason_failure_plot  +
          labs(y=element_blank(),title=element_blank()))
-n_assessments_journal_plot
+n_reason_failure_plot
 
+## response options
+jira.response.options <- jira.filter.submitted  %>%  
+  distinct(mc_number_anon, .keep_all=TRUE) %>%
+  unite(response,c(MCRecommendationV2,MCRecommendation),remove=FALSE,sep="") %>%
+  group_by(response) %>%
+  summarise(freq=n_distinct(mc_number_anon))
 
+## Distribution of replication packages
+dist_size <- icpsr %>% 
+  cSplit("Created.Date","T") %>%
+  mutate(date_created=as.Date(substr(Created.Date_1, 1,10), "%Y-%m-%d")) %>%
+  filter(date_created >= firstday, date_created < lastday) %>%
+  transform(filesize=Total.File.Size/(1024^2)) %>%
+  transform(filesize=ifelse(filesize>2048,2048,filesize))
+  
+
+plot_filesize_dist <- ggplot(dist_size, aes(x = filesize)) +
+  geom_histogram(aes(y=..density..), colour="white", fill="grey", binwidth = 50)+
+  theme_classic() +
+  scale_colour_brewer(palette = "Paired") +
+  labs(x = "File Size (MB)", y = "Density", title = "Size distribution of replication packages") 
+
+ggsave(file.path(images,"plot_filesize_dist.png"), 
+       plot_filesize_dist  +
+         labs(y=element_blank(),title=element_blank()))
+plot_filesize_dist
