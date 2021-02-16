@@ -34,8 +34,8 @@ jira.conf.raw <- read.csv(file.path(jirabase,"export_12-22-2020.csv"), stringsAs
   rename(external=External.validation) %>%
   rename(subtask=Sub.tasks) %>%
   mutate(training = grepl("TRAINING", ticket, fixed = TRUE)) %>%
-  filter(training == FALSE) %>%
-  filter(Issue.Type=="Task") %>%
+  filter(training == FALSE) %>% # filter out training cases
+  filter(Issue.Type=="Task") %>% # leave issue type "Task"
   mutate(date_created = as.Date(substr(Created, 1,10), "%m/%d/%Y"),
          date_resolved = as.Date(substr(Resolved, 1,10), "%m/%d/%Y"),
          date_updated = as.Date(substr(As.Of.Date, 1,10), "%m/%d/%Y"),
@@ -45,9 +45,9 @@ jira.conf.raw <- read.csv(file.path(jirabase,"export_12-22-2020.csv"), stringsAs
   mutate(status_change = ifelse(Changed.Fields_1=="Status","Yes",ifelse(Changed.Fields_2=="Status","Yes",ifelse(Changed.Fields_3=="Status","Yes",ifelse(Changed.Fields_4=="Status","Yes","No"))))) %>%
   mutate(received = ifelse(Status=="Open"&Change.Author=="","Yes","No")) %>%
   mutate(has_subtask=ifelse(subtask!="","Yes","No")) %>%
-  filter(! date_updated=="2020-12-22") %>%
-  filter(ticket!="AEAREP-365") %>%
-  select(-training)
+  filter(! date_updated=="2020-12-22") %>% #export is counted as an action, drop
+  filter(ticket!="AEAREP-365") %>% # duplicate with aearep-364
+  select(-training) 
 
 ## split out the reasons 
 jira.conf.raw <- jira.conf.raw %>%
