@@ -201,7 +201,7 @@ jira.pyear <- jira.raw %>%
   filter(status_change=="Yes"|received=="Yes") %>%
   mutate(subtask_y=ifelse(is.na(subtask),"No",ifelse(subtask!="","Yes",""))) %>%
   filter(subtask_y=="No") %>%
-  filter(Journal != "AEA P&P") %>% ## Removing all P&P
+  filter(Journal != "AEA P&P")  ## Removing all P&P
 
 
 #### Break out of the issues
