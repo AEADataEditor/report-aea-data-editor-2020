@@ -51,9 +51,8 @@ set.seed(20201201)
 # global libraries used everywhere #
 ####################################
 
-# Not using it here
-# mran.date <- "2019-09-01"
-# options(repos=paste0("https://cran.microsoft.com/snapshot/",mran.date,"/"))
+mran.date <- "2021-01-01"
+options(repos=paste0("https://cran.microsoft.com/snapshot/",mran.date,"/"))
 
 
 pkgTest <- function(x)

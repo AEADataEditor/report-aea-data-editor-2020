@@ -10,7 +10,7 @@
 ### Load libraries 
 ### Requirements: have library *here*
 source(here::here("programs","config.R"),echo=TRUE)
-global.libraries <- c("ggplot2","dplyr","here","tidyr","tibble","remotes")
+global.libraries <- c("ggplot2","dplyr","here","tidyr","tibble","remotes","splitstackshape")
 results <- sapply(as.list(global.libraries), pkgTest)
 pkgTest.github("data.table","Rdatatable")
 
