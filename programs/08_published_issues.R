@@ -35,13 +35,13 @@ jira.publish <- readRDS(file.path(jiraanon,"jira.anon.RDS"))  %>%
   transform(pending_pub = ifelse(Status=="Pending publication",1,0),
             done = ifelse(Status=="Done",1,0)) %>%
   group_by(mc_number_anon) %>%
-  transform(pending_pub = max(pending_pub), 
+  mutate(pending_pub = max(pending_pub), 
             done = max(done)) %>%
-  select(mc_number_anon,Journal,pending_pub, done) %>%
+  select(ticket, mc_number_anon,Journal,pending_pub, done) %>%
   filter(pending_pub==1&done==1) %>%
+  distinct(mc_number_anon, .keep_all=TRUE)  %>%
   ungroup %>%
-  distinct(mc_number_anon, .keep_all=TRUE) %>%
-  transform(journal_group = ifelse(Journal=="AEA P&P","Papers and Proceedings","AER and journals")) %>%
+  mutate(journal_group = ifelse(Journal=="AEA P&P","Papers and Proceedings","AER and journals")) %>%
   group_by(journal_group) %>%
   summarise(issues = n_distinct(mc_number_anon)) 
 
