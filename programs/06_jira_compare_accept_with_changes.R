@@ -26,6 +26,9 @@ jira.raw <- readRDS(file.path(jiraanon,"jira.anon.RDS"))
 # A list of non-issues, typically for information-only 
 ## Select issues created in July-December period of 2019 and of 2020.
 jira.pyear <- jira.raw %>%
+  cSplit("Changed.Fields",",")  %>%
+  mutate(status_change = ifelse(Changed.Fields_1=="Status","Yes",ifelse(Changed.Fields_2=="Status","Yes",ifelse(Changed.Fields_3=="Status","Yes",ifelse(Changed.Fields_4=="Status","Yes","No"))))) %>%
+  select(-Changed.Fields_1,-Changed.Fields_2,-Changed.Fields_3,-Changed.Fields_4) %>%
   filter(date_created >= "2019-07-01"&date_created < "2020-01-01"|
            date_created >= "2020-07-01"&date_created < lastday) %>%
   filter(status_change=="Yes"|received=="Yes") %>%
