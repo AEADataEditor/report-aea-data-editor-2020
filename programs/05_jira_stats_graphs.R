@@ -10,7 +10,7 @@
 ### Load libraries 
 ### Requirements: have library *here*
 source(here::here("programs","config.R"),echo=TRUE)
-global.libraries <- c("ggplot2","dplyr","here","tidyr","tibble")
+global.libraries <- c("ggplot2","dplyr","here","tidyr","tibble","remotes")
 results <- sapply(as.list(global.libraries), pkgTest)
 pkgTest.github("data.table","Rdatatable")
 
@@ -843,7 +843,7 @@ n_rounds_journal_plot
 
 
 
----- below does not work - break here
+# ---- below does not work - break here
   
   
 #### Reason for Failure to Fully Replicate since December 1, 2019
