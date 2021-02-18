@@ -849,6 +849,13 @@ jira.response.options <- jira.filter.submitted  %>%
   group_by(response) %>%
   summarise(freq=n_distinct(mc_number_anon))
 
+stargazer(jira.response.options,style = "aer",
+          summary = FALSE,
+          out = file.path(tables,"jira_response_options.tex"),
+          out.header = FALSE,
+          float = FALSE
+)
+
 ## Distribution of replication packages
 dist_size <- icpsr %>% 
   cSplit("Created.Date","T") %>%
