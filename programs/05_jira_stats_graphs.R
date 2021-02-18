@@ -663,7 +663,6 @@ n_reasons_plot
 
 
 
-
 #### Number of submitted cases by MC recommendations
 ## Only for Conditional Accept
 
@@ -840,30 +839,6 @@ ggsave(file.path(images,"n_rounds_journal_plot.png"),
        n_rounds_journal_plot  +
          labs(y=element_blank(),title=element_blank()))
 n_rounds_journal_plot
-
-
-
----- below does not work - break here
-  
-  
-#### Reason for Failure to Fully Replicate since December 1, 2019
-reason_failure <- jira.filter.submitted %>%
-    transform(reason = if_else(ticket=="AEAREP-764",
-                             "Bugs in code, Insufficient time available to replicator, Data not available",
-                             as.character(reason))) %>%
-  cSplit("reason",",")
-
-# Histogram
-n_reason_failure_plot <- ggplot(reason_failure, aes(x = Journal, y = issues_cplt)) +
-  geom_bar(stat = "identity", colour="white", fill="grey") +
-  labs(x = "Journal", y = "Number of assessments", title = "Total assessments completed, by journal") + 
-  theme_classic() +
-  coord_flip()
-
-ggsave(file.path(images,"n_reason_failure_plot.png"), 
-       n_reason_failure_plot  +
-         labs(y=element_blank(),title=element_blank()))
-n_reason_failure_plot
 
 ## response options
 jira.response.options <- jira.filter.submitted  %>%  
