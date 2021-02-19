@@ -63,9 +63,15 @@ jira.compliance <- left_join(jira.publish,
                    select(journal_group,Compliant,Incomplete,`Non-compliant`)
 
 # store some numbers
-update_latexnums("mcpubtotal",jira.publish$Published[1])
-update_latexnums("mcpubincmplt",jira.compliance$Incomplete[1])
-update_latexnums("pppubnoncompl",jira.compliance$`Non-compliant`[2])
+summary_compliance <- jira.compliance %>% 
+  summarize(Incomplete = sum(Incomplete),
+            `Non-compliant` = sum(`Non-compliant`))
+all.pubs <- jira.publish %>%
+  summarize(Published = sum(Published))
+
+update_latexnums("mcpubtotal",all.pubs$Published)
+update_latexnums("mcpubincmplt",summary_compliance$Incomplete)
+update_latexnums("mcpubnoncompl",summary_compliance$`Non-compliant`)
 
 # create table
 
