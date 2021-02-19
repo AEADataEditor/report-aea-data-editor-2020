@@ -128,6 +128,10 @@ urlcolor=darkblue}
 \newcommand{\curlcite}[2]{#2,\footnote{\url{#1}}}
 \newcommand{\furlcite}[2]{#2 (\url{#1})}
 
+% redefine subparagraph
+
+\renewcommand{\subparagraph}[1]{\textbf{#1}}
+
 %
 % Periods covered by the report 
 % Should be read in from R
@@ -252,46 +256,38 @@ Requests for assessment of reproducibility are received, assigned to a team memb
 %
 \footnote{Manuscript and replication package are generally published at the same time, though at the request of either editors or authors, the replication package can be published at any time after acceptance.} 
 %
-However, to streamline processing, we may also recommend an ``acceptance with modifications requested.'' In such a case, the remaining modifications are minor, and can be handled during copy-editing (for instance, a small number of tables need minimal changes) and prior to publication of the replication package (for instance, a fixable error in a program, or a clarification in the README, not affecting any important tables or figures). We have increasingly made use of this feature. While we monitor that authors comply with the request for modifications, no further computational assessment is made. Finally, we may recommend a ``revise and resubmit'' when serious issues have been identified that materially affect the conclusions of the manuscript. In the past year, two manuscripts required conversations with the editors and the authors, and both were resolved to the satisfaction of all involved.
+However, to streamline processing, we may also recommend an ``acceptance with modifications requested.'' In such a case, the remaining modifications are minor, and can be handled during copy-editing (for instance, a small number of tables need minimal changes) and prior to publication of the replication package (for instance, a fixable error in a program, or a clarification in the README, not affecting any important tables or figures). We have increasingly made use of this feature. While we monitor that authors comply with the request for modifications, no further computational assessment is made. A recommendation of  ``revise and resubmit'' is recorded when we receive a request prior to a conditional acceptance, i.e., during the ``R\&R'' phase. When we have serious concerns, we will reach out directly to the responsible editor, and discuss solutions with the authors. In the past year, two manuscripts required conversations with the editors and the authors, and both were resolved to the satisfaction of all involved.
 
-\begin{table}[t]
-    \caption{Response options for recommendations}
-    \label{tab:responses}
-    \centering
-    \begin{tabular}{lr}
-    \toprule
-               & Frequency \\
-               \midrule
-        Accept &  \\
-        Accept with changes &\\
-        Conditional accept &\\
-        Revise-and-resubmit & \\
-        \bottomrule
-    \end{tabular}
-\end{table}
 
-\paragraph{Reproducibility reports}
+\paragraph{Assessments made}
 
 Between \firstday{} and \lastday{}, the AEA Data Editor team  received
 \jiraissues{} requests,  for \jiramcs{} manuscripts.%
 %
 \footnote{This includes only requests submitted between those dates, and does not take into account in-progress requests on \firstday{}.}
 %
-Requests typically are channeled to the team by the AEA's journal submission and review system, but others were initiated by authors or editors directly, often while preparing the replication materials. Of these,  \jiraissuescplt{} reports (\jiramcscplt{} manuscripts) were submitted back to editors,\footnote{The balance are either in progress or are not coded in the adminstrative system as having been submitted to ScholarOne, such as replication packages for Papers and Proceedings.} and \jiramcspending{} were completed up to the point of publication of the data deposit, including any post-acceptance modifications.  Table~\ref{tab:jirastats} breaks these numbers down by journal.
+Requests typically are channeled to the team by the AEA's journal submission and review system, but others were initiated by authors or editors directly, often while preparing the replication materials. Of these,  \jiraissuescplt{} reports (\jiramcscplt{} manuscripts) were submitted back to editors,\footnote{The balance are either in progress or are not coded in the adminstrative system as having been submitted to ScholarOne, such as replication packages for Papers and Proceedings.} and \jiramcspending{} were completed up to the point of publication of the data deposit, including any post-acceptance modifications.  Table~\ref{tab:responses} shows the distribution of the last recommendation on record for manuscripts as of \lastday{}.  Table~\ref{tab:jirastats} breaks these numbers down by journal, showing the number of requests received (``rcvd'') and  reports completed (``cplt'') in the left panel. The right panel shows the number of manuscripts for which one or more requests were received (``rcvd'') and reports completed (``cplt''). The columns ``external'' / ``ext.'' identify cases where we reached out to external replicators, which we discuss later. Finally, the last column identifies manuscripts for which the entire process has been completed, and which are ``pending'' publication.
 %
 
 \begin{table}[]
     \caption{Stats}
     \label{tab:jirastats}
-    \footnotesize
+    \small
     \begin{threeparttable}
     \centering
     \input{tables/n_journal_numbers_mod}
     \begin{tablenotes}
-    \item[] \textit{Notes:} Data for requests received between \firstday{} and \lastday{}. AEA P+P are excluded from this table.
+    \item[] \textit{Notes:} Data for requests received by the AEA Data Editor between \firstday{} and \lastday{}. AEA P+P are excluded from this table. See text for details.
     \end{tablenotes}
  \end{threeparttable}
    \end{table}
+
+\begin{table}[t]
+    \caption{Recommendations}
+    \label{tab:responses}
+    \centering
+    \input{tables/jira_response_options_mod}
+\end{table}
 
 
 \paragraph{Third-party replicators}
