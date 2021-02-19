@@ -4,6 +4,7 @@
 
 # Inputs
 #   - file.path(jiraanon,"jira.anon.RDS") 
+#   - file.path(temp,"jira.others.RDS)
 # Outputs
 
 
@@ -19,6 +20,8 @@ pkgTest.github("data.table","Rdatatable")
 install_github("markwestcott34/stargazer-booktabs")
 library(stargazer)
 
+# Get an intermediate file
+jira.others <- readRDS(file.path(temp,"jira.others.RDS"))
 
 # Read in data extracted from Jira, anonymized
 jira.publish <- readRDS(file.path(jiraanon,"jira.anon.RDS"))  %>%
@@ -47,7 +50,7 @@ jira.publish <- readRDS(file.path(jiraanon,"jira.anon.RDS"))  %>%
 
 stargazer(jira.publish,style = "aer",
           summary = FALSE,
-          out = file.path(tables,"n_pulished_manuscript.tex"),
+          out = file.path(tables,"n_published_manuscript.tex"),
           out.header = FALSE,
           float = FALSE
 )

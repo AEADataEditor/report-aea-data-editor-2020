@@ -32,12 +32,14 @@ icpsrbase <- file.path(basepath,"data","icpsr")
 images <- file.path(basepath, "images" )
 tables <- file.path(basepath, "tables" )
 programs <- file.path(basepath,"programs")
+temp   <- file.path(basepath,"data","temp")
+
 
 # parameters
 latexnums.Rda <- file.path(tables,"latexnums.Rda")
 latexnums.tex <- file.path(tables,"latexnums.tex")
 
-for ( dir in list(images,tables,programs)){
+for ( dir in list(images,tables,programs,temp)){
   if (file.exists(dir)){
   } else {
     dir.create(file.path(dir))
