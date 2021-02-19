@@ -11,7 +11,7 @@
 ### Load libraries 
 ### Requirements: have library *here*
 source(here::here("programs","config.R"),echo=TRUE)
-global.libraries <- c("ggplot2","dplyr","here","tidyr","tibble","remotes","splitstackshape")
+global.libraries <- c("dplyr","here","tidyr","tibble","remotes","splitstackshape")
 results <- sapply(as.list(global.libraries), pkgTest)
 pkgTest.github("data.table","Rdatatable")
 
@@ -24,6 +24,9 @@ library(stargazer)
 jira.others <- readRDS(file.path(temp,"jira.others.RDS"))
 
 # Read in data extracted from Jira, anonymized
+# 
+#  We capture those where the transition is from "pending publication"  to "done" at some point
+# 
 jira.publish <- readRDS(file.path(jiraanon,"jira.anon.RDS"))  %>%
   cSplit("Changed.Fields",",")  %>%
   mutate(status_change = ifelse(Changed.Fields_1=="Status","Yes",ifelse(Changed.Fields_2=="Status","Yes",ifelse(Changed.Fields_3=="Status","Yes",ifelse(Changed.Fields_4=="Status","Yes","No"))))) %>%
@@ -46,13 +49,24 @@ jira.publish <- readRDS(file.path(jiraanon,"jira.anon.RDS"))  %>%
   ungroup %>%
   mutate(journal_group = ifelse(Journal=="AEA P&P","Papers and Proceedings","AER and journals")) %>%
   group_by(journal_group) %>%
-  summarise(issues = n_distinct(mc_number_anon)) 
+  summarise(Published = n_distinct(mc_number_anon)) 
 
-stargazer(jira.publish,style = "aer",
+# let's get the noncompliant 
+noncompliance <- read_excel(file.path(manual,"noncompliance2020.xlsx"),
+  sheet = "Noncompliance")
+
+jira.compliance <- left_join(jira.publish,
+                             noncompliance %>% rename(journal_group=Journal),
+                             by="journal_group") %>%
+                   mutate(Compliant = Published - Incomplete - `Non-compliant`) %>%
+                   select(journal_group,Compliant,Incomplete,`Non-compliant`)
+
+stargazer(jira.compliance,style = "aer",
           summary = FALSE,
-          out = file.path(tables,"n_published_manuscript.tex"),
+          out = file.path(tables,"n_compliance_manuscript.tex"),
           out.header = FALSE,
-          float = FALSE
+          float = FALSE,
+          rownames = FALSE
 )
 
   

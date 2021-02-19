@@ -24,6 +24,7 @@ setwd(basepath)
 # for Jira stuff
 jirabase <- file.path(basepath,"data","jira","confidential")
 jiraanon <- file.path(basepath,"data","jira","anon")
+manual   <- file.path(basepath,"data","manual")
 
 # for openICPSR stuff
 icpsrbase <- file.path(basepath,"data","icpsr")
