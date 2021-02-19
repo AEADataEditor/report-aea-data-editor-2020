@@ -18,8 +18,6 @@ pkgTest.github("data.table","Rdatatable")
 # Read in data extracted from Jira, anonymized
 jira.raw <- readRDS(file.path(jiraanon,"jira.anon.RDS")) 
 
-# Read in data extracted from openICPSR,
-icpsr <- read.csv(file.path(icpsrbase,"AEA Report Fedora.csv"), stringsAsFactors = FALSE)
 
 # A list of non-issues, typically for information-only
 jira.pyear <- jira.raw %>%
