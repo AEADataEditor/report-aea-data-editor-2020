@@ -51,6 +51,7 @@ jira.publish <- readRDS(file.path(jiraanon,"jira.anon.RDS"))  %>%
   group_by(journal_group) %>%
   summarise(Published = n_distinct(mc_number_anon)) 
 
+
 # let's get the noncompliant 
 noncompliance <- read_excel(file.path(manual,"noncompliance2020.xlsx"),
   sheet = "Noncompliance")
@@ -60,6 +61,13 @@ jira.compliance <- left_join(jira.publish,
                              by="journal_group") %>%
                    mutate(Compliant = Published - Incomplete - `Non-compliant`) %>%
                    select(journal_group,Compliant,Incomplete,`Non-compliant`)
+
+# store some numbers
+update_latexnums("mcpubtotal",jira.publish$Published[1])
+update_latexnums("mcpubincmplt",jira.compliance$Incomplete[1])
+update_latexnums("pppubnoncompl",jira.compliance$`Non-compliant`[2])
+
+# create table
 
 stargazer(jira.compliance,style = "aer",
           summary = FALSE,
