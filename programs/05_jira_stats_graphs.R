@@ -289,6 +289,8 @@ jira.others <- jira.issues.breakout %>%
   filter(outcome=="Others"|outcome=="Alternate") %>%
   select(ticket) %>%
   mutate(others="Yes")
+# we will need it again
+saveRDS(jira.others,file=file.path(temp,"jira.others.RDS"))
 
 ## filter out the "others" case
 jira.pyear <- jira.pyear %>%
@@ -857,21 +859,37 @@ stargazer(jira.response.options,style = "aer",
 )
 
 ## Distribution of replication packages
-dist_size <- icpsr %>% 
+icpsr.file_size <- icpsr %>% 
   cSplit("Created.Date","T") %>%
   mutate(date_created=as.Date(substr(Created.Date_1, 1,10), "%Y-%m-%d")) %>%
   filter(date_created >= firstday, date_created < lastday) %>%
-  transform(filesize=Total.File.Size/(1024^2)) %>%
-  transform(filesize=ifelse(filesize>2048,2048,filesize))
-  
+  transform(filesize=Total.File.Size/(1024^3)) %>% # in GB
+  transform(intfilesize=pmin(round(filesize),10,na.rm = TRUE))
 
-plot_filesize_dist <- ggplot(dist_size, aes(x = filesize)) +
-  geom_histogram(aes(y=..density..), colour="white", fill="grey", binwidth = 50)+
+# get some stats
+icpsr.file_size %>% 
+  summarize(mean=round(mean(filesize),2),
+            median=round(median(filesize),2),
+            q75=round(quantile(filesize,0.9),2)) -> icpsr.stats
+update_latexnums("pkgsizemean",icpsr.stats$mean)
+update_latexnums("pkgsizeq50x",icpsr.stats$median)
+update_latexnums("pkgsizeq90x",icpsr.stats$q75)
+
+# graph it all
+
+dist_size <- icpsr.file_size %>%
+  group_by(intfilesize) %>%
+  summarise(count=n())
+
+plot_filesize_dist <- ggplot(dist_size, aes(x = intfilesize,y=count)) +
+  geom_bar(stat="identity", colour="black", fill="grey")+
   theme_classic() +
-  scale_colour_brewer(palette = "Paired") +
-  labs(x = "File Size (MB)", y = "Density", title = "Size distribution of replication packages") 
+  labs(x = "GB",
+       y = "Number of Packages", 
+       title = "Size distribution of replication packages") +
+  coord_flip()
 
 ggsave(file.path(images,"plot_filesize_dist.png"), 
        plot_filesize_dist  +
          labs(y=element_blank(),title=element_blank()))
-plot_filesize_dist
+#plot_filesize_dist
