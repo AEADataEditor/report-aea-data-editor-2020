@@ -307,6 +307,17 @@ manuscript_all <- jira.pyear %>%
   select(mc_number_anon) %>% 
   distinct() %>% nrow()
 
+## Total submitted records
+
+
+jira.filter.submitted <- jira.pyear %>%  
+  filter(Status == "Submitted to MC" & Journal != "AEA P&P") 
+
+# we will re-use these 
+saveRDS(jira.pyear,file=file.path(temp,"jira.pyear.RDS"))
+saveRDS(jira.filter.submitted,file=file.path(temp,"jira.submitted.RDS"))
+
+
 # we used the start and end date here, so write them out
 update_latexnums("firstday",firstday)
 update_latexnums("lastday",lastday)
@@ -328,11 +339,6 @@ stargazer(issues_total_journal,style = "aer",
 )
 
 #### Number of reports processed (went past submitted to MC) since December 1, 2019
-## Total submitted records
-
-
-jira.filter.submitted <- jira.pyear %>%  
-  filter(Status == "Submitted to MC" & Journal != "AEA P&P") 
 
 assess_cplt <- jira.filter.submitted %>%
   select(ticket) %>% 
@@ -849,13 +855,15 @@ jira.response.options <- jira.filter.submitted  %>%
   distinct(mc_number_anon, .keep_all=TRUE) %>%
   unite(response,c(MCRecommendationV2,MCRecommendation),remove=FALSE,sep="") %>%
   group_by(response) %>%
-  summarise(freq=n_distinct(mc_number_anon))
+  summarise(freq=n_distinct(mc_number_anon)) %>%
+  select(`Response option`=response,`Frequency`=freq)
 
 stargazer(jira.response.options,style = "aer",
           summary = FALSE,
           out = file.path(tables,"jira_response_options.tex"),
           out.header = FALSE,
-          float = FALSE
+          float = FALSE,
+          rownames = FALSE
 )
 
 ## Distribution of replication packages
