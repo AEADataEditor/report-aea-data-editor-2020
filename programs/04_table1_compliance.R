@@ -11,7 +11,7 @@
 ### Load libraries 
 ### Requirements: have library *here*
 source(here::here("programs","config.R"),echo=TRUE)
-global.libraries <- c("dplyr","here","tidyr","tibble","remotes","splitstackshape")
+global.libraries <- c("dplyr","here","tidyr","tibble","remotes","splitstackshape","readxl")
 results <- sapply(as.list(global.libraries), pkgTest)
 pkgTest.github("data.table","Rdatatable")
 

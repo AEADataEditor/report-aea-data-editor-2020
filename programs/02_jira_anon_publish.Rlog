@@ -1,0 +1,88 @@
+
+> process_raw <- TRUE
+
+> download_raw <- TRUE
+
+> firstday <- "2019-12-01"
+
+> lastday <- "2020-11-30"
+
+> basepath <- here::here()
+
+> setwd(basepath)
+
+> jirabase <- file.path(basepath, "data", "jira", "confidential")
+
+> jiraanon <- file.path(basepath, "data", "jira", "anon")
+
+> manual <- file.path(basepath, "data", "manual")
+
+> icpsrbase <- file.path(basepath, "data", "icpsr")
+
+> images <- file.path(basepath, "images")
+
+> tables <- file.path(basepath, "tables")
+
+> programs <- file.path(basepath, "programs")
+
+> temp <- file.path(basepath, "data", "temp")
+
+> latexnums.Rda <- file.path(tables, "latexnums.Rda")
+
+> latexnums.tex <- file.path(tables, "latexnums.tex")
+
+> for (dir in list(images, tables, programs, temp)) {
++     if (file.exists(dir)) {
++     }
++     else {
++         dir.create(file.path(dir))
++     }
+ .... [TRUNCATED] 
+
+> set.seed(20201201)
+
+> mran.date <- "2021-01-01"
+
+> options(repos = paste0("https://cran.microsoft.com/snapshot/", 
++     mran.date, "/"))
+
+> pkgTest <- function(x) {
++     if (!require(x, character.only = TRUE)) {
++         install.packages(x, dep = TRUE)
++         if (!require(x, charact .... [TRUNCATED] 
+
+> pkgTest.github <- function(x, source) {
++     if (!require(x, character.only = TRUE)) {
++         install_github(paste(source, x, sep = "/"))
++      .... [TRUNCATED] 
+
+> pkgTest("tibble")
+Loading required package: tibble
+[1] "OK"
+
+> if (file.exists(latexnums.Rda)) {
++     print(paste0("File for export to LaTeX found: ", latexnums.Rda))
++ } else {
++     latexnums <- tibble(field  .... [TRUNCATED] 
+[1] "File for export to LaTeX found: /mnt/local/slow_home/vilhuber/Workspace-non-encrypted/git/AEA/report-aea-data-editor-2020/tables/latexnums.Rda"
+
+> update_latexnums <- function(field, value) {
++     latexnums <- readRDS(latexnums.Rda)
++     if (any(latexnums$field == field)) {
++         message( .... [TRUNCATED] 
+Loading required package: dplyr
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: tidyr
+Loading required package: splitstackshape
+Loading required package: codebook
+Joining, by = "ticket"

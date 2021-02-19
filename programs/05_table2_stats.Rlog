@@ -1,0 +1,132 @@
+
+> process_raw <- TRUE
+
+> download_raw <- TRUE
+
+> firstday <- "2019-12-01"
+
+> lastday <- "2020-11-30"
+
+> basepath <- here::here()
+
+> setwd(basepath)
+
+> jirabase <- file.path(basepath, "data", "jira", "confidential")
+
+> jiraanon <- file.path(basepath, "data", "jira", "anon")
+
+> manual <- file.path(basepath, "data", "manual")
+
+> icpsrbase <- file.path(basepath, "data", "icpsr")
+
+> images <- file.path(basepath, "images")
+
+> tables <- file.path(basepath, "tables")
+
+> programs <- file.path(basepath, "programs")
+
+> temp <- file.path(basepath, "data", "temp")
+
+> latexnums.Rda <- file.path(tables, "latexnums.Rda")
+
+> latexnums.tex <- file.path(tables, "latexnums.tex")
+
+> for (dir in list(images, tables, programs, temp)) {
++     if (file.exists(dir)) {
++     }
++     else {
++         dir.create(file.path(dir))
++     }
+ .... [TRUNCATED] 
+
+> set.seed(20201201)
+
+> mran.date <- "2021-01-01"
+
+> options(repos = paste0("https://cran.microsoft.com/snapshot/", 
++     mran.date, "/"))
+
+> pkgTest <- function(x) {
++     if (!require(x, character.only = TRUE)) {
++         install.packages(x, dep = TRUE)
++         if (!require(x, charact .... [TRUNCATED] 
+
+> pkgTest.github <- function(x, source) {
++     if (!require(x, character.only = TRUE)) {
++         install_github(paste(source, x, sep = "/"))
++      .... [TRUNCATED] 
+
+> pkgTest("tibble")
+Loading required package: tibble
+[1] "OK"
+
+> if (file.exists(latexnums.Rda)) {
++     print(paste0("File for export to LaTeX found: ", latexnums.Rda))
++ } else {
++     latexnums <- tibble(field  .... [TRUNCATED] 
+[1] "File for export to LaTeX found: /mnt/local/slow_home/vilhuber/Workspace-non-encrypted/git/AEA/report-aea-data-editor-2020/tables/latexnums.Rda"
+
+> update_latexnums <- function(field, value) {
++     latexnums <- readRDS(latexnums.Rda)
++     if (any(latexnums$field == field)) {
++         message( .... [TRUNCATED] 
+Loading required package: ggplot2
+Loading required package: dplyr
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: here
+here() starts at /mnt/local/slow_home/vilhuber/Workspace-non-encrypted/git/AEA/report-aea-data-editor-2020
+Loading required package: tidyr
+Loading required package: remotes
+Loading required package: splitstackshape
+Loading required package: data.table
+
+Attaching package: ‘data.table’
+
+The following objects are masked from ‘package:dplyr’:
+
+    between, first, last
+
+[1] "OK"
+Skipping install of 'stargazer' from a github remote, the SHA1 (e93c8d2d) has not changed since last install.
+  Use `force = TRUE` to force installation
+
+Please cite as: 
+
+ Hlavac, Marek (2015). stargazer: Well-Formatted Regression and Summary Statistics Tables.
+ R package version 5.2. http://CRAN.R-project.org/package=stargazer 
+
+`summarise()` ungrouping output (override with `.groups` argument)
+Adding new row
+Adding new row
+`summarise()` ungrouping output (override with `.groups` argument)
+Adding new row
+`summarise()` ungrouping output (override with `.groups` argument)
+Adding new row
+Adding new row
+`summarise()` ungrouping output (override with `.groups` argument)
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Fri, Feb 19, 2021 - 06:10:27 PM
+\begin{tabular}{@{\extracolsep{5pt}} cccccccc} 
+\toprule 
+Journal & Issues (rcvd) & Issues (cplt) & Issues (external) & Manuscripts (rcvd) & Manuscripts (cplt) & Manuscripts (ext.) & Manuscripts (pend.) \\ 
+\midrule AEJ:Applied Economics & 111 & 107 & 3 & 63 & 60 & 3 & 42 \\ 
+AEJ:Economic Policy & 122 & 115 & 13 & 70 & 65 & 8 & 51 \\ 
+AEJ:Macro & 131 & 126 & 3 & 67 & 64 & 2 & 46 \\ 
+AEJ:Micro & 81 & 78 & 4 & 45 & 44 & 3 & 33 \\ 
+AER & 182 & 176 & 12 & 108 & 103 & 10 & 80 \\ 
+AER:Insights & 56 & 55 & NA & 31 & 31 & NA & 26 \\ 
+JEL & 33 & 31 & 1 & 18 & 17 & 1 & 16 \\ 
+JEP & 28 & 27 & NA & 19 & 18 & NA & 13 \\ 
+\bottomrule 
+\end{tabular} 
