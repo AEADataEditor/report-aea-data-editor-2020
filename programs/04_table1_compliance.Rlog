@@ -111,7 +111,7 @@ Adding new row
 Adding new row
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Fri, Feb 19, 2021 - 06:10:25 PM
+% Date and time: Fri, Feb 19, 2021 - 08:16:28 PM
 \begin{tabular}{@{\extracolsep{5pt}} cccc} 
 \toprule 
 journal\_group & Compliant & Incomplete & Non-compliant \\ 

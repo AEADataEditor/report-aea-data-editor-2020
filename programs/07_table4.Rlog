@@ -154,7 +154,7 @@ Please cite as:
 Adding new row
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Fri, Feb 19, 2021 - 06:10:30 PM
+% Date and time: Fri, Feb 19, 2021 - 08:16:33 PM
 \begin{tabular}{@{\extracolsep{5pt}} ccccccc} 
 \toprule 
 Rounds & AEJ Micro & AER & AEJ Applied & AEJ Macro & AEJ Policy & AER Insights \\ 

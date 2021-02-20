@@ -44,10 +44,10 @@ icpsr.file_size %>%
   ungroup() %>% 
   mutate(percent=100*n/sum(n)) -> icpsr.stats1
 
-update_latexnums("pkgsize2g",icpsr.stats1 %>% 
-                             filter(intfilesize < 2) %>% 
+update_latexnums("pkgsizetwog",icpsr.stats1 %>% 
+                             filter(intfilesize > 2) %>% 
                              summarize(percent=sum(percent)) %>% round(0))
-update_latexnums("pkgsize20g",icpsr.stats1 %>% 
+update_latexnums("pkgsizetwentyg",icpsr.stats1 %>% 
                               filter(intfilesize >19) %>% 
                               summarize(percent=sum(percent)) %>% round(0))
 
