@@ -292,20 +292,6 @@ Requests typically are channeled to the team by the AEA's journal submission and
 
 
 
-\begin{table}
-    \centering
-    \caption{Assessment rounds for completed manuscripts}
-    \label{tab:pre:rounds}
-    \begin{threeparttable}
-    \centering
-    \input{tables/n_rounds_mod}
-    \begin{tablenotes}
-    \item[] \textit{Notes:} Data for requests received by the AEA Data Editor between \firstday{} and \lastday{}. AEA P+P are excluded from this table. See text for details.
-    \end{tablenotes}
- \end{threeparttable}
-\end{table}
-
-
 \paragraph{Frequent issues}
 
 We provide a heuristic overview of notable issues  encountered when attempting to reproduce results. We note that none of the \jiramcs{} manuscripts we assessed had  fundamental flaws --- all problems identified so far have been fixable (and fixed). 
@@ -318,29 +304,45 @@ We provide a heuristic overview of notable issues  encountered when attempting t
 
 \paragraph{Delays} 
 
-A recurring concern expressed by editors and staff members are delays in publication, due to the verification process. Table~\ref{tab:pre:rounds} shows that the median number of times a manuscript is reviewed by the AEA Data Editor is \medianrounds() --- far too few manuscripts are given a rating of "acceptable" upon first pass. This leads to substantial time before the manuscript can proceed to copy-editing.
+A recurring concern expressed by editors and staff members are delays in publication, due to the verification process. Table~\ref{tab:pre:rounds} shows that the median number of times a manuscript is reviewed by the AEA Data Editor is \medianrounds{}. Not enough manuscripts are given a rating of "acceptable" upon first pass. This leads to substantial time before the manuscript can proceed to copy-editing.
+
+
+
+\begin{table}
+    \centering
+    \caption{Assessment rounds for completed manuscripts}
+    \label{tab:pre:rounds}
+    \begin{threeparttable}
+    \centering
+    \input{tables/n_rounds}
+    \begin{tablenotes}
+    \item[] \textit{Notes:} Data for requests received by the AEA Data Editor between \firstday{} and \lastday{}. AEA P+P are excluded from this table. See text for details.
+    \end{tablenotes}
+ \end{threeparttable}
+\end{table}
+
 
 \paragraph{Process improvements}
 
 In order to increase the initial acceptance rate, we set out in Summer 2020 to review the entire process that authors face. We made several changes aimed at (a) providing authors with the information as early as possible, when it is still easy to include reproducible practices in projects at relatively low cost and (b) providing authors with better information, to reduce frictions and uncertainty. 
 
-As noted  \hyperref[sec:dcap]{earlier}, we introduced informational forms upon submission, and a brief required information sheet with links to updated and detailed guidance on how to prepare and submit replication packages. We also provide links to the reproducibility checks that our team uses, so authors know in advance what checks will be applied to their replication package. These changes were rolled out in September 2020, but have not yet been incorporated into all journal communications. Finally, the new template README \citep{READMEv1.0.0} introduced in December 2020 with other data editors will hopefully also reduce uncertainty and increase the completeness of the information. 
+As noted  \hyperref[sec:dcap]{earlier}, we introduced informational forms upon submission, and a new short form, requested upon conditional acceptance, collecting salient information about the replication package. Each of these forms has   links to updated and detailed guidance on how to prepare and submit replication packages. We also provide links to the reproducibility checks that our team uses, so authors know in advance what checks will be applied to their replication package. These changes were rolled out in September 2020. In addition, a new template ``README'' \citep{READMEv1.0.0} was introduced in December 2020 as a joint effort with other data editors, and will hopefully also reduce uncertainty about content of such a README, and increase the completeness of the information upon first submission. First impressions, both at the AEA's journals as well as at the Canadian Journal of Economics, suggest that the README is achieving that goal.
 
 
 \subsection{Migrating Historical Supplements}
 \label{sec:migration}
 
-We initially migrated the bulk of historical data (and code) supplements, from ZIP files stored on AEA servers to the \aeadcr{}. As noted earlier, for many of these deposits, we have successfully requested assistance from several hundred authors to update the metadata, improving presentation and findability. A few hundred replication packages are still pending migration, pending reconciliation of duplicates and large-file limitations. Upon demand from readers, we have also sometimes reached out to authors to request materials from articles which were published prior to the original publication of a data availability policy. 
+We  migrated the bulk of historical data (and code) supplements in 2019, from ZIP files stored on AEA servers to the \aeadcr{}. A few hundred replication packages are still awaiting migration, pending reconciliation of duplicates and large-file limitations. Upon demand from readers, we have also sometimes reached out to authors to request materials from articles which were published prior to the original publication of a data availability policy. 
 
 % report on UMich metadata project
 % data provided by email
 
-Thanks to support from a research team at the University of Michigan, we were able to enlist the aid of authors of migrated replication package to improve the attached metadata.  As part of the project, we sent 8,538 email to 3,005 authors of 1,460 studies. Out of the 1,000 authors (35\%) who responded, 911 (30\%) provided additional metadata for 522 studies. An article is expected at the conclusion of the experiment.
+Thanks to support from a research team at the University of Michigan, we were able to enlist the aid of authors of migrated replication package to improve the attached metadata.  As part of the project, we sent 8,538 email to 3,005 authors of 1,460 studies. Out of the 1,000 authors (35\%) who responded, 911 (30\%) provided additional metadata for 522 studies. An article is expected at the conclusion of the experiment. 
 
 \subsection{Improving the \aeadcr{}}
 \label{sec:improvingaeadcr}
 
-We continually assess the technical performance of the \aeadcr{}. In collaboration with ICPSR, we have increased the default quota from 2GB to 30GB, streamlining the ability of researchers to deposit large replication packages.\footnote{It was previously possible to deposit large replication packages greater than 2GB, but required manual adjustments, resulting in delays and occasionally confusion.} A new workflow has been developed, which provides greater clarity to journal managers on the back-end, and prevents errors that users frequently made. It lays the groundwork for further enhancements in the future. 
+We continually assess the technical performance of the \aeadcr{}. One of the pain points was that a significant number (\pkgsize2gof authors ran into a quota limit of 2GB, requiring manual adjustments, and resulting in delays and occasionally confusion. The default quota has been increased to 30GB, which  A new workflow has been developed, which provides greater clarity to journal managers on the back-end, and prevents errors that users frequently made. It lays the groundwork for further enhancements in the future. 
 
 % distribution of sizes - email from Jared
 
