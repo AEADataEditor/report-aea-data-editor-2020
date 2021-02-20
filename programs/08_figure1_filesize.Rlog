@@ -105,8 +105,11 @@ Please cite as:
  Hlavac, Marek (2015). stargazer: Well-Formatted Regression and Summary Statistics Tables.
  R package version 5.2. http://CRAN.R-project.org/package=stargazer 
 
-Adding new row
-Adding new row
-Adding new row
+`summarise()` ungrouping output (override with `.groups` argument)
+Updating existing field
+Updating existing field
+Updating existing field
+Updating existing field
+Updating existing field
 `summarise()` ungrouping output (override with `.groups` argument)
 Saving 7 x 7 in image

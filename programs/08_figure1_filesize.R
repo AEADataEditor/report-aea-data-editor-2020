@@ -30,13 +30,28 @@ icpsr.file_size <- icpsr %>%
   mutate(date_created=as.Date(substr(Created.Date_1, 1,10), "%Y-%m-%d")) %>%
   filter(date_created >= firstday, date_created < lastday) %>%
   transform(filesize=Total.File.Size/(1024^3)) %>% # in GB
-  transform(intfilesize=pmin(round(filesize),10,na.rm = TRUE))
+  transform(intfilesize=round(filesize))
 
 # get some stats
 icpsr.file_size %>% 
   summarize(mean=round(mean(filesize),2),
             median=round(median(filesize),2),
             q75=round(quantile(filesize,0.9),2)) -> icpsr.stats
+
+icpsr.file_size %>% 
+  group_by(intfilesize) %>% 
+  summarise(n=n()) %>% 
+  ungroup() %>% 
+  mutate(percent=100*n/sum(n)) -> icpsr.stats1
+
+update_latexnums("pkgsize2g",icpsr.stats1 %>% 
+                             filter(intfilesize < 2) %>% 
+                             summarize(percent=sum(percent)) %>% round(0))
+update_latexnums("pkgsize20g",icpsr.stats1 %>% 
+                              filter(intfilesize >19) %>% 
+                              summarize(percent=sum(percent)) %>% round(0))
+
+
 update_latexnums("pkgsizemean",icpsr.stats$mean)
 update_latexnums("pkgsizeq50x",icpsr.stats$median)
 update_latexnums("pkgsizeq90x",icpsr.stats$q75)
@@ -44,8 +59,10 @@ update_latexnums("pkgsizeq90x",icpsr.stats$q75)
 # graph it all
 
 dist_size <- icpsr.file_size %>%
+  transform(intfilesize=pmin(round(filesize),10,na.rm = TRUE)) %>%
   group_by(intfilesize) %>%
   summarise(count=n())
+
 
 plot_filesize_dist <- ggplot(dist_size, aes(x = intfilesize,y=count)) +
   geom_bar(stat="identity", colour="black", fill="grey")+
