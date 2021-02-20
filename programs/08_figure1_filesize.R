@@ -22,22 +22,30 @@ library(stargazer)
 
 # Get the data
 # Read in data extracted from openICPSR,
-icpsr <- read.csv(file.path(icpsrbase,"AEA Report Fedora.csv"), stringsAsFactors = FALSE)
+icpsr <- read.csv(file.path(icpsrbase,"AEA Report Fedora.csv"), stringsAsFactors = FALSE) %>%
+  select(-starts_with("X"))
 
 ## Distribution of replication packages
 icpsr.file_size <- icpsr %>% 
+  distinct(Project.ID,.keep_all = TRUE) %>%
   cSplit("Created.Date","T") %>%
   mutate(date_created=as.Date(substr(Created.Date_1, 1,10), "%Y-%m-%d")) %>%
-  filter(date_created >= firstday, date_created < lastday) %>%
+  filter(date_created >= as.Date(firstday)-30, date_created <= lastday) %>%
   transform(filesize=Total.File.Size/(1024^3)) %>% # in GB
+  transform(filesizemb=Total.File.Size/(1024^2)) %>% # in MB
   transform(intfilesize=round(filesize))
 
 # get some stats
 icpsr.file_size %>% 
   summarize(mean=round(mean(filesize),2),
             median=round(median(filesize),2),
-            q75=round(quantile(filesize,0.9),2)) -> icpsr.stats
+            q75=round(quantile(filesize,0.9),2)) -> icpsr.stats.gb
 
+icpsr.file_size %>% 
+    summarize(mean=round(mean(filesizemb),2),
+            median=round(median(filesizemb),2),
+            q75=round(quantile(filesizemb,0.9),2)) -> icpsr.stats.mb
+  
 icpsr.file_size %>% 
   group_by(intfilesize) %>% 
   summarise(n=n()) %>% 
@@ -52,9 +60,9 @@ update_latexnums("pkgsizetwentyg",icpsr.stats1 %>%
                               summarize(percent=sum(percent)) %>% round(0))
 
 
-update_latexnums("pkgsizemean",icpsr.stats$mean)
-update_latexnums("pkgsizemedian",icpsr.stats$median)
-update_latexnums("pkgsizeqsvntyfv",icpsr.stats$q75)
+update_latexnums("pkgsizemean",icpsr.stats.mb$mean)
+update_latexnums("pkgsizemedian",icpsr.stats.mb$median)
+update_latexnums("pkgsizeqsvntyfv",icpsr.stats.mb$q75)
 
 # graph it all
 
