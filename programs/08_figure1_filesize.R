@@ -53,8 +53,8 @@ update_latexnums("pkgsizetwentyg",icpsr.stats1 %>%
 
 
 update_latexnums("pkgsizemean",icpsr.stats$mean)
-update_latexnums("pkgsizeq50x",icpsr.stats$median)
-update_latexnums("pkgsizeq90x",icpsr.stats$q75)
+update_latexnums("pkgsizemedian",icpsr.stats$median)
+update_latexnums("pkgsizeqsvntyfv",icpsr.stats$q75)
 
 # graph it all
 

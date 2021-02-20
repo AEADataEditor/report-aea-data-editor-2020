@@ -107,7 +107,7 @@ Please cite as:
 `summarise()` ungrouping output (override with `.groups` argument)
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Fri, Feb 19, 2021 - 08:16:31 PM
+% Date and time: Fri, Feb 19, 2021 - 08:46:46 PM
 \begin{tabular}{@{\extracolsep{5pt}} cc} 
 \toprule 
 Response option & Frequency \\ 
