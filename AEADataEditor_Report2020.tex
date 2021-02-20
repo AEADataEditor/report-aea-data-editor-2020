@@ -36,8 +36,8 @@
 \togglefalse{fancy}
 
 \newtoggle{draft}
-\toggletrue{draft}
-%\togglefalse{draft}
+%\toggletrue{draft}
+\togglefalse{draft}
 
 \newtoggle{final}
 %\togglefalse{final}
@@ -63,9 +63,6 @@
 
 \usepackage{textcomp}
 
-\iftoggle{fancy}{
-\input{fancy-config.tex}
-}{}
 
 \iftoggle{final}{
 \usepackage[disable]{todonotes}
@@ -111,6 +108,8 @@
 \acrodef{CJE}{Canadian Journal of Economics}
 \acrodef{AJPS}{American Journal of Political Science}
 \acrodef{PII}{personally identifiable information}
+\acrodef{TIER}{Project TIER (Teaching Integrity in Empirical Research)}
+\acrodef{CSWEP}{AEA Committee on the Status of Women in the Economics Profession}
 \newcommand{\aeadcr}{AEA Data and Code Repository}
 
 % reset colors
@@ -341,25 +340,26 @@ Thanks to support from a research team at the University of Michigan, we were ab
 
 \subsection{Improving the \aeadcr{}}
 \label{sec:improvingaeadcr}
-\newcommand{\pkgsize2g}{2}
 
-We continually assess the technical performance of the \aeadcr{}. One of the pain points was that a significant number  of authors ran into a quota limit of 2GB, requiring manual adjustments, and resulting in delays and occasionally confusion. The default quota has been increased to 30GB, which  A new workflow has been developed, which provides greater clarity to journal managers on the back-end, and prevents errors that users frequently made. It lays the groundwork for further enhancements in the future. 
+We continually assess the technical performance of the \aeadcr{}. One of the pain points was a default quota limit of 2GB. While the median package size is \pkgsizemedian{} GB, a significant number of authors (\pkgsizetwog{} percent of deposits) had larger packages, requiring manual adjustments, and resulting in delays and occasionally confusion. However, only \pkgsizetwentyg{} percent of deposits were larger than 20GB. In collaboration with ICPSR, the default quota has been increased to 30GB, streamlining the process. Authors with larger packages, or packages with more than 1,000 files, should contact the AEA Data Editor.
+
+A new workflow has also been developed, which streamlines the process for journal managers on the back-end, and prevents errors that users frequently made. It lays the groundwork for further enhancements in the future. 
 
 % distribution of sizes - email from Jared
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=\textwidth]{images/plot_filesize_dist.png} 
-    \caption{Size distribution of replication packages deposited between  \firstday{} to \lastday{}, top-coded at 10GB.}
-    \label{fig:size_packages}
-\end{figure}
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=\textwidth]{images/plot_filesize_dist.png} 
+%    \caption{Size distribution of replication packages deposited between  \firstday{} to \lastday{}, top-coded at 10GB.}
+%    \label{fig:size_packages}
+%\end{figure}
 
 
 
 \section{Working with Other Providers of Scientific Infrastructure to Improve Support for Documenting Provenance and Replicability}
 \label{sec:coordination}
 
-An important component of the AEA Data Editor's position is to interact with other providers of scientific infrastructure. This involves other publishers and journals, archives such as ICPSR, providers of restricted or proprietary data, the AEA RCT Registry, metadata harvesters, and third-party verification services. 
+An important responsibility of the AEA Data Editor is to interact with other providers of scientific infrastructure. This involves other publishers and journals, archives such as ICPSR, providers of restricted or proprietary data, the AEA RCT Registry, metadata harvesters, and third-party verification services. 
 
 \subsection{Highlighting Data Resources}
 
@@ -368,13 +368,13 @@ While reviewing replication packages, we occasionally identify data, prepared in
 \subsection{Data Providers}
 \label{sec:producers}
 
-We regularly meet and communicate with academic and commercial data providers, on behalf of specific authors or because we have identified a data provider as a frequently used resource. Discussion topics include making data citations easier, clarifying licenses, requesting blanket or streamlined data redistribution authorizations, or suggesting improved curation of data to avoid repeatedly copying data from uncurated websites to the curated \aeadcr{}. As an example, after an email exchange with the leadership of the Economic Policy Uncertainty website \citep{10.1093/qje/qjw024}, the website changed its license to a liberal Creative Commons license, which allows broad re-use and facilitates reproducibility.
+We regularly meet and communicate with academic and commercial data providers, on behalf of specific authors or because we have identified a data provider as a frequently used resource. Discussion topics include making data citations easier, clarifying licenses, requesting blanket or streamlined data redistribution authorizations, or suggesting improved data curation practices to avoid repeatedly copying data from uncurated websites to the curated \aeadcr{}. As an example, after an email exchange with the leadership of the Economic Policy Uncertainty (EPU) website \citep{10.1093/qje/qjw024}, the website changed its license to a liberal Creative Commons license, which allows broad re-use and facilitates reproducibility.
 
-In the course of the past year, we have talked about some or all of these topics with IPUMS, EPU, the UNCTAD Division on International Trade and Commodities (TRAINS data), the World Bank, Standard and Poor's, Bloomberg, Tick Data, Haver Analytics, Federal Reserve of St. Louis data librarians,\footnote{I am indebted to  Adrienne Brennecke at the St. Louis Fed, who facilitated many of these conversations.} the World Management Survey, Ben Zipperer at the Economic Policy Institute, Jim Poterba and Dan Feenberg at the NBER, Lucia Foster (U.S. Census Bureau), Barbara Downs (U.S. Census Bureau and Federal Statistical Research Data Centers), the Research Data Centre (FDZ) of the German Federal Employment Agency (BA) at the Institute for Employment Research (IAB), the German Research Data Center of the SOEP, Research Data Center of the German Pension Insurance, the UK Data Archive, the Ministério da economia do Brasil, and the French \textit{Centre d'accès sécurisé de données} (CASD). 
+In the course of the past year, we have talked about some or all of these topics with IPUMS, EPU, the UNCTAD Division on International Trade and Commodities (TRAINS data), the World Bank, Standard and Poor's, Bloomberg, Tick Data, Haver Analytics, the Federal Reserve of St. Louis data librarians,\footnote{I am indebted to  Adrienne Brennecke at the St. Louis Fed, who facilitated many of these conversations.} the World Management Survey, Ben Zipperer at the Economic Policy Institute, Jim Poterba and Dan Feenberg at the NBER, Lucia Foster (U.S. Census Bureau), Barbara Downs (U.S. Census Bureau and Federal Statistical Research Data Centers), the Research Data Centre (FDZ) of the German Federal Employment Agency (BA) at the Institute for Employment Research (IAB), the German Research Data Center of the SOEP, Research Data Center of the German Pension Insurance, the UK Data Archive, the Ministério da economia do Brasil, and the French \textit{Centre d'accès sécurisé de données} (CASD). 
 
 \subsection{Economics Journals}
 
-We continue to coordinate with other data editors conducting similar activities at other journals. An informal mailing list managed by the AEA Data Editor is used occasionally to interact with others.\footnote{Journal editors wishing to join the mailing list should contact the AEA Data Editor.} Mailing list members who wish to be more actively involved can participate in the development of the \purlcite{socialsciencedataeditors.github.io}{website of the Social Science Data Editors} The website contains guidance on data citations and data availability statements, best practices for coding and data preparation, and links to various tools useful to replicators. The recently released template README is one example of collaboration, having benefited from contributions from Miklos Kóren (\acl{ReStud}), Joan Llull (\acl{EJ}), Peter Morrow and Marie Connolly (\acl{CJE}), Chris Paciorek (JASA), Ben Greiner (Management Science),  Kevin Lang (JOLE), Harald Uhlig (JPE). A somewhat newer group emerging from a group of data repositories at Data-PASS has also initiated a mailing list called the Journal Editors Discussion Interface (\urlcite{https://dpjedi.org/}{JEDI}).
+We continue to coordinate with other data editors conducting similar activities at other journals. An informal mailing list managed by the AEA Data Editor is used occasionally to interact with others.\footnote{Journal editors are encouraged to join the mailing list by contacting the AEA Data Editor.} Mailing list members who wish to be more actively involved can participate in the development of the \purlcite{socialsciencedataeditors.github.io}{website of the Social Science Data Editors} The website contains guidance on data citations and data availability statements, best practices for coding and data preparation, and links to various tools useful to replicators. The recently released template README is one example of collaboration, being co-authored with Miklos Kóren (\acl{ReStud}), Joan Llull (\acl{EJ}), Peter Morrow and Marie Connolly (\acl{CJE}), and having benefited from contributions from Chris Paciorek (JASA), Ben Greiner (Management Science),  Kevin Lang (JOLE), Harald Uhlig (JPE). The Data Editor has also engaged with a newer group of data repository leaders at Data-PASS organized as the Journal Editors Discussion Interface (\urlcite{https://dpjedi.org/}{JEDI}).
 
 
 \subsection{Third-party verification services}
@@ -385,12 +385,12 @@ We continue to rely on and have discussions with third-party verification servic
 
 \section{Working with the Economics Community to Enhance and Broaden Education on Replicable Science}
 
-We have already noted the outreach to other journals and repositories above. Educating the current and future generations of economists is one of the longer-term goals for improving reproducibility of research. The AEA Data Editor has presented at TIER, and at various regional economics conferences that connect to communities of junior and later-career economists. One of the successful CSWEP "Fireside chats" is scheduled with the AEA Data Editor in late January. Various recordings of such presentations by the AEA Data Editor are available on Youtube. Together with BITSS (UC Berkeley), a framework and platform to support teaching reproducibility is being developed, complementing other existing services such as the ReplicationWiki. Presentations at the CTREE conference are planned. 
+We have already noted the outreach to other journals and repositories above. Educating the current and future generations of economists is one of the longer-term goals for improving reproducibility of research. The AEA Data Editor has presented at Project TIER (Teaching Integrity in Empirical Research), and at various regional economics conferences that connect to communities of junior and later-career economists. The Data Editor participated in the \ac{CSWEP} ``\urlcite{https://www.aeaweb.org/about-aea/committees/cswep/programs/resources/webinars}{Fireside chats}'' on January 19, 2021 with the topic ``Demystifying Replication Requirements and Processes: Best Practices Viewed by AEA Data Editor.'' Various other recordings of  presentations by the AEA Data Editor are available on Youtube, linked from the \purlcite{https://aeadataeditor.github.io/talks/}{Data Editor's website} Together with BITSS (UC Berkeley), a framework and platform to support teaching reproducibility is being developed, complementing other existing services such as the ReplicationWiki. Presentations at the CTREE conference are planned. 
 
 \section{Data and Code Availability Statement}
 \label{sec:dcas}
 
-All data and code used to generate figures and tables in this article can be found at TBD.
+All publicly available data and code used to generate figures and tables in this article can be found at LINK TBD. Some detailed data from the editorial system, used for Table~\ref{tab:pre:rounds}, are considered confidential and cannot be made available in a way that preserves the privacy of the editorial process at this time.
 
 \FloatBarrier
 % Remove or comment out the next two lines if you are not using bibtex.
