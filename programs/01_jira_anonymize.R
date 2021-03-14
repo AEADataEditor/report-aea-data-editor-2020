@@ -27,7 +27,8 @@ if ( process_raw == TRUE ) {
   #base <- here::here()
   
   jira.conf.raw <- read.csv(file.path(jirabase,"export_12-22-2020.csv"), stringsAsFactors = FALSE) %>%
-    rename(ticket=Key) %>%
+    rename(ticket=ï..Key) %>%
+    select(-Change.Author) %>%
     mutate(mc_number = sub('\\..*', '', Manuscript.Central.identifier)) 
   
   # anonymize
