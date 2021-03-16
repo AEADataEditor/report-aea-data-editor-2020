@@ -8,23 +8,21 @@ This is the report for 2020.
 ## Locations
 The repository at [https://github.com/AEADataEditor/report-aea-data-editor-2020](https://github.com/AEADataEditor/report-aea-data-editor-2020) contains text, code, data, and output from running the code. 
 
-The deposit at [https://doi.org/10.3886/E117884V1xxxx](https://doi.org/10.3886/E117884V1xxxx) contains code and data, as well as output. 
+The deposit at [https://doi.org/10.3886/E135023V1](https://doi.org/10.3886/E135023V1) contains code and data, as well as output. 
 
 
 ## Citing the code and data
 
-> Vilhuber, Lars, and Hyuk Harry Son. 2021. “Code and Data for:  Report for 2020  by  the  AEA  Data  Editor.”  AmericanEconomic  Association  [publisher],https://doi.org/10.3886/E117884V1xxxx
+> Vilhuber, Lars. 2021b. “Code and Data for:  Report for 2020 by the AEA  Data  Editor.”  American Economic Association  [publisher],https://doi.org/10.3886/E135023V1
 
 
 ## External dependencies
 
-Two data sources are internal files, not otherwise made available. 
+A data source has internal files, not otherwise made available. 
 
-Two data sources are:
+The data source is:
 
-> Vilhuber,Lars. 2021a. “Data files for AEA Repository migration.”American Economic Association [publisher],https://doi.org/10.3886/E117873V1.
-
-> Vilhuber,  Lars. 2021b.  “Process  data  for  the AEA  Pre-publication  Verification  Service.” American Economic Association [publisher], https://doi.org/10.3886/E117876V1xxxx
+> Vilhuber,  Lars. 2021a.  “Process  data  for  the AEA  Pre-publication  Verification  Service.” American Economic Association [publisher], https://doi.org/10.3886/E117876V2
 
 ## Running code
 
@@ -49,18 +47,13 @@ Listed in the article appendix.
 #### Data for pre-production verification
 
 See `data/jira/anon/README.md` for more details. 
-Source: Vilhuber (2020b)
+Source: Vilhuber (2020a)
 
 ```
 data/jira/anon/jira.anon.RDS
 data/jira/anon/jira.anon.csv
 data/jira/anon/README.md
 ```
-
-#### Data on repository migration
-
-See `programs/README.md` file for further details.
-Source: Vilhuber(2020a)
 
 
 ### Programs
