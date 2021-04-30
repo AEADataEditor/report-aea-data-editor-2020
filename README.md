@@ -42,6 +42,15 @@ data/jira/anon/jira.anon.csv
 data/jira/anon/README.md
 ```
 
+### Data on processing time
+
+The data on processing times were extracted from the ScholarOne manuscript management system used by the AEA. Microdata are not available (even to the author), only summary statistics are provided as Excel sheets. These were simply reformatted for the report.
+
+```
+data/scholarone/dataEditorReport_20191128-20201127.xlsx
+data/scholarone/README.md
+```
+
 ## Computational requirements
 
 
