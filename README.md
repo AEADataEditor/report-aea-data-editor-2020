@@ -47,47 +47,57 @@ data/jira/anon/README.md
 
 ### Software Requirements
 
-
 - R 4.0.1
-  - Package versions set to 2021-01-01, using MRAN, except for Github installed versions
-  - `tidyr` (0.8.3)
-  - `rdrobust` (0.99.4)
-  - the file "`0_setup.R`" will install all dependencies (latest version), and should be run once prior to running other programs.
+  - Package versions set to as-of 2021-01-01, using MRAN, except for Github installed versions
+  - here
+  - dplyr
+  - tidyr
+  - splitstackshape
+  - tibble
+  - ggplot2
+  - remotes
+  - stringr
+  - readxl
+  - "data.table" (github)
+  - "Rdatatable" (github)
+  - github("markwestcott34/stargazer-booktabs") (overrides standard stargazer!)
 
-## Running code
-
-See the `programs/README.md` file for further details.
-
-Two additional utility scripts are present, for packaging up the contents of the git repository. They are not needed to either create figures and tables, or to compile the article.
+Packages are installed within each R program. 
 
 
 ### Programs
 
 All programs are in the `programs` subdirectory:
 ```
-programs/01_jira_anonymize.R
-programs/02_jira_anon_publish.R
 programs/03_jira_dataprep.R
 programs/04_table1_compliance.R
 programs/05_table2_stats.R
 programs/06_table3_response_options.R
 programs/07_table4.R
-programs/08_figure1_filesize.R
 programs/09_write_nums.R
 programs/README.md
 programs/config.R
 programs/run_all.sh
 ```
-See the `programs/README.md` file for further details.
 
-### Figures and Images
-All images, whether hand-created or generated, are in the `images` directory:
+### Running code
 
-```
-images/plot_filesize_dist.png
-```
+Each R file can be run independently (separate R sessions), in numerical order. See the `programs/README.md` file for further details.
 
-To map these to the relevant figures in the article, see `programs/README.md`  for further details.
+The script `run_all.sh` is used within a (Linux) shell to implement the above run order, but is optional.
+
+### Mapping tables and figures to article
+
+| Name of file | Figure/ Table in article | Program to create |
+|--------------|--------------------------|-------------------|
+|n_compliance_manuscript_mod.tex| Table 1 | 04_table1_compliance.R|
+|n_journal_numbers_mod.tex| Table 2 | 05_table2_stats.R|
+|jira_response_options_mod.tex| Table 3 | 06_table3_response_options.R|
+|n_rounds.tex| Table 4 | 07_table4.R|
+
+## License
+
+See LICENSE.txt for data and code license.
 
 ## References
 
