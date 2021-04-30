@@ -2,6 +2,8 @@
 
 This repository contains the code, data, and manuscript files for the 2020 report by the AEA Data Editor. If you are reading this on openICPSR, then only code and data are present.
 
+[![DOI](https://zenodo.org/badge/DOI/10.3886/E135023V1.svg)](https://doi.org/10.3886/E135023V1)
+
 
 ## Locations
 
