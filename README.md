@@ -1,11 +1,10 @@
 # 2020 Report by the AEA Data Editor
-This is the report for 2020. 
 
-## Published version
+This repository contains the code, data, and manuscript files for the 2020 report by the AEA Data Editor. If you are reading this on openICPSR, then only code and data are present.
 
-> Vilhuber, Lars. 2021. "Report by the AEA Data Editor." AEA Papers and Proceedings, 111: TBD. DOI: [10.1257/pandp.111.TBD](https://doi.org/10.1257/pandp.111.TBD)
 
 ## Locations
+
 The repository at [https://github.com/AEADataEditor/report-aea-data-editor-2020](https://github.com/AEADataEditor/report-aea-data-editor-2020) contains text, code, data, and output from running the code. 
 
 The deposit at [https://doi.org/10.3886/E135023V1](https://doi.org/10.3886/E135023V1) contains code and data, as well as output. 
@@ -13,47 +12,53 @@ The deposit at [https://doi.org/10.3886/E135023V1](https://doi.org/10.3886/E1350
 
 ## Citing the code and data
 
-> Vilhuber, Lars. 2021b. “Code and Data for:  Report for 2020 by the AEA  Data  Editor.”  American Economic Association  [publisher],https://doi.org/10.3886/E135023V1
+> Vilhuber, Lars. and Hyuk Son. 2021b. “Code and Data for:  Report for 2020 by the AEA  Data  Editor.”  American Economic Association  [publisher],https://doi.org/10.3886/E135023V1
 
 
-## External dependencies
+##  Data
 
-A data source has internal files, not otherwise made available. 
+### Summary of Availability
 
-The data source is:
+- [ ] All data **are** publicly available.
+- [X] Some data **cannot be made** publicly available.
+- [ ] **No data can be made** publicly available.
 
-> Vilhuber,  Lars. 2021a.  “Process  data  for  the AEA  Pre-publication  Verification  Service.” American Economic Association [publisher], https://doi.org/10.3886/E117876V2
 
-## Running code
-
-See the `programs/README.md` file for further details.
-
-Two additional utility scripts are present, for packaging up the contents of the git repository. They are not needed to either create figures and tables, or to compile the article.
-
-## Structure
-
-### Data
-
-Some data needs to be downloaded before being able to run programs; other data is provided within this repository:
-
-#### List of Lab members
+### List of Lab members
 
 ```
 data/replicationlab_members.txt
 ```
 
-Listed in the article appendix.
+Listed in the article appendix (which takes the data from the above file).
 
-#### Data for pre-production verification
+### Data for pre-production verification
 
-See `data/jira/anon/README.md` for more details. 
-Source: Vilhuber (2020a)
+Anonymized files from the internal production system are provided in this repository, sourced from Vilhuber (2021a). A copy is provided as part of this archive.
 
 ```
 data/jira/anon/jira.anon.RDS
 data/jira/anon/jira.anon.csv
 data/jira/anon/README.md
 ```
+
+## Computational requirements
+
+
+### Software Requirements
+
+
+- R 4.0.1
+  - Package versions set to 2021-01-01, using MRAN, except for Github installed versions
+  - `tidyr` (0.8.3)
+  - `rdrobust` (0.99.4)
+  - the file "`0_setup.R`" will install all dependencies (latest version), and should be run once prior to running other programs.
+
+## Running code
+
+See the `programs/README.md` file for further details.
+
+Two additional utility scripts are present, for packaging up the contents of the git repository. They are not needed to either create figures and tables, or to compile the article.
 
 
 ### Programs
@@ -84,13 +89,7 @@ images/plot_filesize_dist.png
 
 To map these to the relevant figures in the article, see `programs/README.md`  for further details.
 
-## Technical notes (apply only to the Github version)
+## References
 
-The repository references at least one external git repo. So do
 
-```
-git submodule update --init --recursive
-```
-
-after cloning it.
-
+- Vilhuber,  Lars. 2021a.  “Process  data  for  the AEA  Pre-publication  Verification  Service.” American Economic Association [publisher], https://doi.org/10.3886/E117876V2
