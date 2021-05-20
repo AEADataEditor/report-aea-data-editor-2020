@@ -11,6 +11,22 @@ The repository at [https://github.com/AEADataEditor/report-aea-data-editor-2020]
 
 The deposit at [https://doi.org/10.3886/E135023V1](https://doi.org/10.3886/E135023V1) contains code and data, as well as output. 
 
+## Citing the report
+
+> Vilhuber, Lars. 2021. "Report by the AEA Data Editor." AEA Papers and Proceedings, 111: 808-17. [https://doi.org/10.1257/pandp.111.808](https://doi.org/10.1257/pandp.111.808)
+
+```
+@article{ReportDE2021,
+Author = {Vilhuber, Lars},
+Title = {Report by the {AEA} Data Editor},
+Journal = {AEA Papers and Proceedings},
+Volume = {111},
+Year = {2021},
+Month = {May},
+Pages = {808-17},
+DOI = {10.1257/pandp.111.808},
+URL = {https://www.aeaweb.org/articles?id=10.1257/pandp.111.808}}
+```
 
 ## Citing the code and data
 
